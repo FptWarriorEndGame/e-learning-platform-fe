@@ -1,7 +1,7 @@
 import { Card, Col, Row } from 'antd';
 import CustomCard from './components/CustomCard';
 import PostTitle from './components/PostTitle';
-import Panigation from './components/panigation';
+import Panigation from './components/Panigation';
 
 const PagePost = () => {
   return (
