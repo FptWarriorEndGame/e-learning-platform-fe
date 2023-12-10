@@ -59,6 +59,7 @@ import { UserRole } from './types/user.type';
 import Blog from './pages/site/Blog/Blog';
 import PagePost from './pages/site/PagePost/PagePost';
 import Inbox from './pages/site/Inbox/Inbox';
+import WishlistPage from './pages/site/Wishlist/WishlistPage';
 
 function App() {
   if (!localStorage.getItem('cart')) {
@@ -195,6 +196,11 @@ function App() {
         {
           path: 'cookies',
           element: <Cookie />
+        }
+        ,
+        {
+          path: 'wishlist',
+          element: <WishlistPage />
         }
       ],
       errorElement: <ErrorPage page='/author' />
