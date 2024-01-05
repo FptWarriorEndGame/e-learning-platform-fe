@@ -1,16 +1,14 @@
-.comment-list {
-  .comment {
-    // Add styles for individual comments here
-    margin-bottom: 10px;
+.comments-container::-webkit-scrollbar {
+  width: 2px; /* width of the entire scrollbar */
+}
 
-    .comment-author {
-      // Add styles for the comment author
-    }
+.comments-container::-webkit-scrollbar-track {
+  background: transparent; /* color of the tracking area */
+}
 
-    .comment-content {
-      // Add styles for the comment content
-    }
-
-    // Add more elements and styles as needed
-  }
+/* Styling the scrollbar handle */
+.comments-container::-webkit-scrollbar-thumb {
+  background-color: #a0aec0; /* color of the scroll thumb */
+  border-radius: 2rem; /* roundness of the scroll thumb */
+  border: 3px solid transparent; /* creates padding around scroll thumb */
 }

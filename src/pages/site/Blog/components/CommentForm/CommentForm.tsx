@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
-import './CommentForm.scss';
-import Avatar from 'antd/es/avatar/avatar';
 import { UserOutlined } from '@ant-design/icons';
+import { message, Button } from 'antd';
+import Avatar from 'antd/es/avatar/avatar';
+import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // import styles
-import { Button } from 'antd';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { RootState } from '../../../../../store/store';
+import { useCreateCommentMutation } from '../../../client.service';
+import './CommentForm.scss';
 
 const CommentForm: React.FC = () => {
   const [comment, setComment] = useState('');
+  const [createComment, { isLoading }] = useCreateCommentMutation(); // Use the mutation hook
+  const userId = useSelector((state: RootState) => state.auth.userId);
+  const { id } = useParams<{ id: string }>();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Handle the submission logic here
-    console.log(comment);
-    setComment('');
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (comment && id) {
+      createComment({
+        postId: id,
+        content: comment,
+        userId: userId,
+        parentCommentId: ''
+      })
+        .then(() => {
+          setComment('');
+        })
+        .catch((error) => {
+          console.error('Failed to create comment:', error);
+        });
+    }
   };
 
   return (
@@ -23,10 +41,10 @@ const CommentForm: React.FC = () => {
         <ReactQuill className='comment-input' placeholder='Thêm bình luận...' value={comment} onChange={setComment} />
       </div>
       <div className='div flex justify-end'>
-        <Button className='comment-btn mr-8' type='primary' htmlType='submit'>
+        <Button className='comment-btn mr-8' type='default' htmlType='submit' loading={isLoading}>
           Bình luận
         </Button>
-        <Button className='comment-btn' type='primary' htmlType='submit'>
+        <Button className='comment-btn' type='primary' onClick={() => setComment('')}>
           Hủy
         </Button>
       </div>

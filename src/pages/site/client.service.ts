@@ -177,7 +177,6 @@ export interface GetOrderByIdResponse {
   order: IOrderHistory;
 }
 
-
 export interface GetAllBlogReponse {
   blogs: Blog[];
   message: string;
@@ -205,6 +204,14 @@ export interface CreateVnpayUrlResponse {
 export interface SuggestedCoursesResponse {
   message: string;
   suggestedCourses: ICourse[];
+}
+
+export interface CreateCommentResponse {
+  id: string;
+  postId: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const clientApi = createApi({
@@ -732,6 +739,25 @@ export const clientApi = createApi({
         method: 'GET'
       }),
       providesTags: () => [{ type: 'Courses', id: 'LIST' }]
+    }),
+
+    // CreateComments
+    createComment: build.mutation<
+      CreateCommentResponse,
+      { postId: string; content: string; userId: string; parentCommentId?: string }
+    >({
+      query: ({ postId, content, userId, parentCommentId }) => ({
+        url: `comments`,
+        method: 'POST',
+        body: { postId, content, userId, parentCommentId }
+      })
+    }),
+    // GetComments
+    getComments: build.query<CreateCommentResponse[], { postId: string }>({
+      query: ({ postId }) => ({
+        url: `comments/${postId}`,
+        method: 'GET'
+      })
     })
   })
 });
@@ -763,5 +789,7 @@ export const {
   useGetRelatedCoursesQuery,
   useCreateReviewMutation,
   useCreateVnpayUrlMutation,
-  useGetSuggestedCoursesQuery
+  useGetSuggestedCoursesQuery,
+  useCreateCommentMutation,
+  useGetCommentsQuery
 } = clientApi;

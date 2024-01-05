@@ -10,7 +10,6 @@ export default function Blog() {
   const { id } = useParams<{ id: string }>();
   const { data } = useGetBlogByIdQuery(id || 'default-id');
   const [isModalOpen, setModalOpen] = useState(false);
-  console.log(data);
   return (
     <>
       <div className='container mx-auto px-4 pb-20 pt-40'>
