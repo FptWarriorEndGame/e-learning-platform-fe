@@ -1,5 +1,5 @@
 import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Button, Modal, Popover, Space, Table, notification } from 'antd';
+import { Button, Popover, Space, Table, notification } from 'antd';
 import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
 import type { FilterValue } from 'antd/es/table/interface';
 import Link from 'antd/es/typography/Link';
@@ -10,7 +10,6 @@ import { BlogError } from '../../../../../utils/helpers';
 import { useSoftDeleteBlogMutation } from '../../blog.service';
 import { startEditBlog } from '../../blog.slice';
 import './BlogList.scss';
-import { ICategoryBlogs } from '../../../../../types/categoryBlogs.type';
 
 interface DataBlogType {
   key: React.Key;
@@ -20,7 +19,8 @@ interface DataBlogType {
   content: string;
   blogImg?: string;
   actions?: any;
-  category: string;
+  category: string[];
+  // isDeleted: boolean;
 }
 
 interface TableParams {
@@ -33,34 +33,26 @@ interface TableParams {
 interface BlogListProps {
   data: IBlog[];
   onBlogEdit: (blogId: string) => void;
-  categories: ICategoryBlogs[];
 }
 
 const SettingContent = (blogId: string) => {
   const [softDeleteBlog] = useSoftDeleteBlogMutation();
 
   const softDeleteBlogHandler = (blogId: string) => {
-    Modal.confirm({
-      title: 'Are you sure you want to delete this blog ?',
-      content: 'This action cannot be undone and will permanently delete the blog.',
-      okText: 'Yes, delete it',
-      okType: 'danger',
-      cancelText: 'No, cancel',
-      onOk: () => {
-        return softDeleteBlog(blogId)
-          .unwrap()
-          .then((result) => {
-            notification.success({
-              message: 'Blog deleted successfully'
-            });
-          })
-          .catch((error: BlogError) => {
-            notification.error({
-              message: 'Failed to delete blog'
-            });
-          });
-      }
-    });
+    softDeleteBlog(blogId)
+      .unwrap()
+      .then((result) => {
+
+        notification.success({
+          message: 'Blog delete successfully'
+        });
+      })
+      .catch((error: BlogError) => {
+
+        notification.error({
+          message: 'Failed to delete blog'
+        });
+      });
   };
 
   return (
@@ -71,13 +63,8 @@ const SettingContent = (blogId: string) => {
   );
 };
 
-const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) => {
+const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit }) => {
   const dispatch = useDispatch();
-
-  const getCategoryName = (categoryId: string) => {
-    const category = categories.find((c) => c._id === categoryId);
-    return category ? category.name : 'Unknown Category';
-  };
 
   const columns: ColumnsType<DataBlogType> = [
     {
@@ -91,8 +78,7 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
     {
       title: 'Category',
       dataIndex: 'category',
-      key: 'category',
-      render: (_, record) => getCategoryName(record.category)
+      key: 'category'
     },
     {
       title: 'Title',
@@ -130,7 +116,7 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
   const blogsSource = data
     .filter((blog) => !blog.isDeleted)
     .map((blogItem) => {
-      const { _id, title, author, createdAt, content, blogImg, categoryId } = blogItem;
+      const { _id, title, author, createdAt, content, blogImg, category } = blogItem;
       const blogTemplateItem: DataBlogType = {
         key: _id,
         title: title,
@@ -138,7 +124,7 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
         createdAt: createdAt,
         content: content,
         blogImg: blogImg,
-        category: categoryId,
+        category: category,
         actions: (
           <Space>
             <Button onClick={() => blogEditHandler(_id)}>

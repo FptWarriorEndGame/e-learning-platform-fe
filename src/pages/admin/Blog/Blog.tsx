@@ -6,7 +6,6 @@ import { startEditBlog } from './blog.slice';
 import { useGetAllBlogsQuery, useGetBlogsQuery } from './blog.service';
 import AddBlog from './Components/AddBlog/AddBlog';
 import BlogListDetail from './Components/BlogList/BlogList';
-import { useGetCategoriesQuery } from '../BlogCategories/categoriesBlog.service';
 
 const { Search } = Input;
 
@@ -14,7 +13,6 @@ type ParamsType = {
   _limit: number;
   _page: number;
   _q: string;
-  _blogName?: string;
   _author?: string;
 };
 
@@ -27,17 +25,13 @@ const Blogs = () => {
 
   const { data, isFetching } = useGetBlogsQuery(params);
   const { data: allBlogsData, isFetching: isAllBlogsFetching } = useGetAllBlogsQuery();
-  const { data: categoriesResponse, isFetching: isFetchingCategories } = useGetCategoriesQuery(params);
-
   const [open, setOpen] = useState(false);
 
   const blogFilterList =
-    allBlogsData?.blogs.map((blog) => {
-      return {
-        value: blog.author,
-        label: blog.author
-      };
-    }) || [];
+    Array.from(new Set(allBlogsData?.blogs.map((blog) => blog.author))).map((author) => ({
+      value: author,
+      label: author
+    })) || [];
 
   blogFilterList.unshift({
     value: 'all',
@@ -47,7 +41,7 @@ const Blogs = () => {
   const dispatch = useDispatch();
 
   const onSearchHandler = (value: string) => {
-    setParams({ ...params, _q: value, _page: 1 });
+    setParams({ ...params, _q: value });
   };
 
   const onSelectChange = (value: string) => {
@@ -72,7 +66,9 @@ const Blogs = () => {
   };
 
   const blogFilterHandler = (value: string) => {
+    console.log('value: ', value);
     setParams({ ...params, _author: value });
+    setParams({ ...params, _blogName: value });
   };
 
   return (
@@ -84,6 +80,7 @@ const Blogs = () => {
               New Blog
             </Button>
             <Search placeholder='Search blogs' onSearch={onSearchHandler} style={{ width: 200 }} />
+
             <Select
               size='middle'
               placeholder='Please select a authors'
@@ -96,18 +93,10 @@ const Blogs = () => {
         </div>
         <div className='blogs__show-result'></div>
         <div className='blogs__content'>
-          {isFetching ? (
-            <Skeleton />
-          ) : (
-            <BlogListDetail
-              onBlogEdit={blogEditHandler}
-              data={data?.blogs || []}
-              categories={categoriesResponse?.blogsCategories || []}
-            />
-          )}
+          {isFetching ? <Skeleton /> : <BlogListDetail onBlogEdit={blogEditHandler} data={data?.blogs || []} />}
         </div>
       </div>
-      <AddBlog isOpen={open} onClose={closeDrawerHandler} categories={categoriesResponse?.blogsCategories || []} />
+      <AddBlog isOpen={open} onClose={closeDrawerHandler} />
     </div>
   );
 };

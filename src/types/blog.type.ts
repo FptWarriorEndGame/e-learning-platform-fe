@@ -9,7 +9,7 @@ export interface IBlog {
   datePublished: string;
   content: string;
   userId: string;
-  categoryId: string;
+  category: string[];
   createdAt: string;
   updatedAt: string;
   __v: number;

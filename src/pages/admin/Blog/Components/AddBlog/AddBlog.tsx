@@ -1,42 +1,41 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useEffect } from 'react';
-import { Button, Col, Drawer, Form, Input, Row, Space, notification, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Drawer, Form, Input, Row, Space, notification } from 'antd';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
-import { useAddBlogMutation, useGetBlogQuery, useUpdateBlogMutation } from '../../blog.service';
-import { ICategoryBlogs } from '../../../../../types/categoryBlogs.type';
 import { IBlog } from '../../../../../types/blog.type';
-
-const { TextArea } = Input;
-const { Option } = Select;
+import { BlogError } from '../../../../../utils/helpers';
+import { useAddBlogMutation, useGetBlogQuery, useUpdateBlogMutation } from '../../blog.service';
 
 interface CreateBlogProps {
   isOpen: boolean;
   onClose: () => void;
-  categories: ICategoryBlogs[];
 }
-
-const AddBlog: React.FC<CreateBlogProps> = ({ isOpen, onClose, categories }) => {
+const AddBlog: React.FC<CreateBlogProps> = ({ isOpen, onClose }) => {
   const [addBlog] = useAddBlogMutation();
   const [updateBlog] = useUpdateBlogMutation();
   const blogId = useSelector((state: RootState) => state.blog.blogId);
   const adminId = useSelector((state: RootState) => state.auth.adminId);
-  const { data: blogData } = useGetBlogQuery(blogId, { skip: !blogId });
+  const { data: blogData, isFetching } = useGetBlogQuery(blogId, {
+    skip: !blogId
+  });
 
   const [form] = Form.useForm();
 
   useEffect(() => {
     if (blogId && blogData) {
-      form.setFieldsValue({ ...blogData.blog, tags: blogData.blog.tags.join(', ') });
+      form.setFieldsValue(blogData.blog);
     } else {
-      form.resetFields();
-      form.setFieldsValue({ userId: adminId });
+      form.setFieldsValue({
+        userId: adminId
+      });
     }
-  }, [blogId, blogData, form, adminId]);
+  }, [blogId, blogData, form, adminId]); // Include adminId in the dependency array
 
   const submitHandler = async (values: IBlog) => {
     try {
-      const blogToSubmit = blogId ? { ...values, _id: blogId } : values;
+      const blogToSubmit = blogId ? { ...values, _id: blogId } : { ...values, userId: adminId }; // Use adminId if creating a new blog
+
       if (blogId) {
         await updateBlog(blogToSubmit).unwrap();
         notification.success({ message: 'Blog updated successfully' });
@@ -60,13 +59,16 @@ const AddBlog: React.FC<CreateBlogProps> = ({ isOpen, onClose, categories }) => 
       bodyStyle={{ paddingBottom: 80 }}
     >
       <Form form={form} layout='vertical' onFinish={submitHandler}>
-        <Row gutter={16}>
-          <Col span={24}>
+        <Row>
+          <Col span={12}>
             <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Please enter blog title' }]}>
               <Input placeholder='Enter blog title' />
             </Form.Item>
             <Form.Item name='author' label='Author' rules={[{ required: true, message: 'Please enter author name' }]}>
               <Input placeholder='Enter author name' />
+            </Form.Item>
+            <Form.Item name='category' label='Category' rules={[{ required: true, message: 'Please enter category' }]}>
+              <Input placeholder='Enter category' />
             </Form.Item>
             <Form.Item name='tags' label='Tags'>
               <Input placeholder='Enter tags' />
@@ -77,19 +79,6 @@ const AddBlog: React.FC<CreateBlogProps> = ({ isOpen, onClose, categories }) => 
               rules={[{ required: true, message: 'Please enter technology used' }]}
             >
               <Input placeholder='Enter technology used' />
-            </Form.Item>
-            <Form.Item
-              name='categoryId'
-              label='Category'
-              rules={[{ required: true, message: 'Please select a category' }]}
-            >
-              <Select placeholder='Select a category'>
-                {categories.map((category) => (
-                  <Option key={category._id} value={category._id}>
-                    {category.name}
-                  </Option>
-                ))}
-              </Select>
             </Form.Item>
             <Form.Item
               name='blogImg'
