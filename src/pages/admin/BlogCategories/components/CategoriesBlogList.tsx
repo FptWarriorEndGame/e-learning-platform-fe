@@ -1,5 +1,5 @@
 import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Button, Popover, Space, Table, notification } from 'antd';
+import { Button, Modal, Popover, Space, Table, notification } from 'antd';
 import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
 import type { FilterValue } from 'antd/es/table/interface';
 import Link from 'antd/es/typography/Link';
@@ -15,6 +15,7 @@ interface DataCategoryType {
   name: string;
   description: string;
   createdAt?: string;
+  cateImage?: string;
   actions?: any;
 }
 
@@ -33,22 +34,33 @@ interface CategoryListProps {
 const SettingContent = (BlogcategoryId: string) => {
   const [softDeleteCategory] = useDeleteCategoryMutation();
 
-  const softDeleteCategoryHandler = (BlogcategoryId: string) => {
-    console.log(BlogcategoryId);
-    softDeleteCategory(BlogcategoryId)
-      .unwrap()
-      .then(() => {
-        notification.success({
-          message: 'Category delete successfully'
+  const softDeleteCategoryHandler = (categoryId: string) => {
+    Modal.confirm({
+      title: 'Are you sure you want to delete this category?',
+      content: 'Deleting this category will remove it permanently. This action cannot be undone.',
+      okText: 'Yes, delete it',
+      okType: 'danger',
+      cancelText: 'No, cancel',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          softDeleteCategory(categoryId)
+            .unwrap()
+            .then(() => {
+              notification.success({
+                message: 'Category deleted successfully'
+              });
+              resolve(undefined);
+            })
+            .catch((error: BlogsCategoryError) => {
+              console.error('error: ', error);
+              notification.error({
+                message: 'Failed to delete category'
+              });
+              reject(error);
+            });
         });
-      })
-      .catch((error: BlogsCategoryError) => {
-        console.log('error: ', error);
-
-        notification.error({
-          message: 'Failed to delete category'
-        });
-      });
+      }
+    });
   };
 
   return (
@@ -64,6 +76,19 @@ const CategoriesBlogList: React.FC<CategoryListProps> = ({ data, onCategoryEdit 
 
   const columns: ColumnsType<DataCategoryType> = [
     {
+      title: 'Cate Image',
+      dataIndex: 'cateImage',
+      render: (text: string, record: DataCategoryType) => (
+        <img
+          className='rounded-full'
+          src={record.cateImage}
+          alt='cateImage'
+          style={{ width: '50px', height: '50px' }}
+        />
+      ),
+      key: 'cateImage'
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
       key: 'name'
@@ -73,6 +98,7 @@ const CategoriesBlogList: React.FC<CategoryListProps> = ({ data, onCategoryEdit 
       dataIndex: 'description',
       key: 'description'
     },
+
     {
       title: 'Created at',
       dataIndex: 'createdAt',
@@ -91,9 +117,10 @@ const CategoriesBlogList: React.FC<CategoryListProps> = ({ data, onCategoryEdit 
   };
 
   const categoriesSource = data.map((categoryItem) => {
-    const { _id, name, description, createdAt } = categoryItem;
+    const { _id, cateImage, name, description, createdAt } = categoryItem;
     const categoryTemplateItem: DataCategoryType = {
       key: _id,
+      cateImage,
       name,
       description,
       createdAt,

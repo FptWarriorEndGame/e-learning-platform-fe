@@ -108,7 +108,6 @@ export interface adminLoginError {
     status: number;
   };
 }
-
 export interface BlogsCategoryError {
   status: number;
   data: {

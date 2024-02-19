@@ -12,7 +12,7 @@ import {
   UnorderedListOutlined,
   UserAddOutlined,
   UserOutlined,
-  StarOutlined 
+  StarOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, MenuProps } from 'antd';
 import React, { useState } from 'react';

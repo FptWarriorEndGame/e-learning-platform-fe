@@ -14,12 +14,10 @@ import UsersHeader from './components/UsersHeader';
 import UsersProgressHeader from './components/UsersProgress';
 import BlogHeader from './components/BlogHeader';
 
-import BlogCategory from '../../../pages/admin/Blog/Components/BlogCategory/BlogCategory';
 import BlogCategoryHeader from './components/BlogCategory';
 import FeedbacksHeader from './components/Feedbacks/Feedbacks';
 import ReviewsHeader from './components/Reviews/Reviews';
 import TransactionsHeader from './components/Transactions/Transactions';
-
 
 const { Header } = Layout;
 const AdminHeader = () => {

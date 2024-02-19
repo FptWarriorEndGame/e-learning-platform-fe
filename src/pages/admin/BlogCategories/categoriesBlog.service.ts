@@ -61,7 +61,7 @@ export const categoriesBlogApi = createApi({
       }),
       invalidatesTags: [{ type: CATEGORIES, id: 'LIST' }]
     }),
-    getCategoryById: build.query<getCategoriesResponse, string>({
+    getCategoryById: build.query<getCategoryResponse, string>({
       query: (id) => `/blogCategory/${id}`,
       providesTags: (result, error, id) => [{ type: CATEGORIES, id }]
     }),

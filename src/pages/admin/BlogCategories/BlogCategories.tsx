@@ -24,11 +24,16 @@ const BlogCategories = () => {
 
   const { data: categoriesResponse, isFetching: isFetchingCategories } = useGetCategoriesQuery(params);
 
+  const filteredCategories =
+    categoriesResponse?.blogsCategories.filter((category) =>
+      category.name.toLowerCase().includes(params._q.toLowerCase())
+    ) || [];
+
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
   const onSearchHandler = (value: string) => {
-    setParams({ ...params, _q: value });
+    setParams((prevParams) => ({ ...prevParams, _q: value.trim(), _page: 1 }));
   };
 
   const closeDrawerHandler = () => {
@@ -60,7 +65,7 @@ const BlogCategories = () => {
           {isFetchingCategories ? (
             <Skeleton />
           ) : (
-            <CategoriesBlogList onCategoryEdit={categoryEditHandler} data={categoriesResponse?.blogsCategories || []} />
+            <CategoriesBlogList onCategoryEdit={categoryEditHandler} data={filteredCategories} />
           )}
         </div>
       </div>
