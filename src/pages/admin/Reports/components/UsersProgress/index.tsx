@@ -1,5 +1,7 @@
 import { Button, Col, Input, InputNumber, Row, Select } from 'antd';
 import './UsersProgress.scss';
+import { Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
 import UsersProgressTable from './components/UserProgressTable';
 const UsersProgress = () => {
   const selectCourseChange = (value: string) => {
@@ -24,6 +26,21 @@ const UsersProgress = () => {
 
   return (
     <div className='users-progress'>
+      <div className='breakcrumb'>
+        <Breadcrumb
+          items={[
+            {
+              title: 'Reports Center'
+            },
+            {
+              title: 'User Analytics'
+            },
+            {
+              title: <Link to='#'>User Progress</Link>
+            }
+          ]}
+        />
+      </div>
       <div className='users-progress__wrap'>
         <Row className='users-progress__row' gutter={16}>
           <Col className='users-progress__col users-progress__select-course' md={12}>
