@@ -15,8 +15,8 @@ const PagePost = () => {
   };
 
   return (
-    <div>
-      <div className='container mx-auto px-4 pb-20 pt-40'>
+    <div className='mt-36 mb-8'>
+      <div className='container mx-auto px-4 pb-20'>
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={24} md={6} lg={18} xl={18} className='max-h-full relative'>
             <PostTitle

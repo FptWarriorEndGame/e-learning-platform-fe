@@ -14,8 +14,15 @@ import 'dayjs/locale/en'; // Import the English locale (you can replace 'en' wit
 
 export const transformDate = (apiDate: string) => {
   const parsedDate = dayjs(apiDate);
-  const formattedDate = parsedDate.format('M/YYYY');
+  const formattedDate = parsedDate.format('DD/MM/YYYY');
   return formattedDate;
+};
+
+export const formatTimeAndMinutes = (seconds: number) => {
+  const pad = (num: number) => num.toString().padStart(2, '0');
+  const minutes = pad(Math.floor(seconds / 60));
+  const secondsLeft = pad(Math.floor(seconds % 60));
+  return `${minutes}:${secondsLeft}`;
 };
 
 export function formatTime(seconds: number) {

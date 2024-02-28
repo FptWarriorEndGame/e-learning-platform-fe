@@ -23,7 +23,7 @@ import {
   default as CoursesRevenues
 } from './pages/admin/Reports/components/CoursesReveneue';
 import InstructorsRevene from './pages/admin/Reports/components/InstructorsRevenue';
-import ReviewsCenter from './pages/admin/Reports/components/ReviewsCenter';
+import ReviewsCenter from './pages/admin/Reports/components/ReviewsCenter/Reviews';
 import UsersProgress from './pages/admin/Reports/components/UsersProgress';
 import UsersSegment from './pages/admin/Reports/components/UsersSegments';
 import Settings from './pages/admin/Settings';
@@ -61,7 +61,6 @@ import PaymentMethod from './pages/site/PaymentMethod/PaymentMethod';
 import Social from './pages/site/Social';
 import BlogList from './pages/admin/Blog/Blog';
 import TransactionsPage from './pages/admin/Transactions/Transactions';
-import ReviewsPage from './pages/admin/Reviews/Reviews';
 import Permission from './pages/admin/Users/components/Permission';
 import BlogCategories from './pages/admin/BlogCategories/BlogCategories';
 
@@ -271,65 +270,53 @@ const RouterHooks = () => {
           ]
         },
         {
-          path: 'reviews',
+          path: 'reports',
           children: [
             {
               index: true,
-              element: <ReviewsPage />
+              element: <ReportsCenter />
+            },
+            {
+              path: 'users-progress',
+              element: <UsersProgress />
+            },
+            {
+              path: 'users-segment',
+              element: <UsersSegment />
+            },
+            {
+              path: 'course-insights',
+              element: <CourseInsights />
+            },
+            {
+              path: 'courses-revenue',
+              element: <CoursesRevenue />
+            },
+            {
+              path: 'instructors-revenue',
+              element: <InstructorsRevene />
+            },
+            {
+              path: 'cancelled-sales',
+              element: <CancelledSales />
+            },
+            {
+              path: 'courses-revenues',
+              element: <CoursesRevenues />
+            },
+            {
+              path: 'instructors-revenues',
+              element: <InstructorsRevenues />
+            },
+            {
+              path: 'certifications',
+              element: <Certifications />
+            },
+            {
+              path: 'reviews-center',
+              element: <ReviewsCenter />
             }
           ]
-        },
-        {
-          path: 'reports',
-          children:
-            adminRole === UserRole.ADMIN
-              ? [
-                  {
-                    index: true,
-                    element: <ReportsCenter />
-                  },
-                  {
-                    path: 'users-progress',
-                    element: <UsersProgress />
-                  },
-                  {
-                    path: 'users-segment',
-                    element: <UsersSegment />
-                  },
-                  {
-                    path: 'course-insights',
-                    element: <CourseInsights />
-                  },
-                  {
-                    path: 'courses-revenue',
-                    element: <CoursesRevenue />
-                  },
-                  {
-                    path: 'instructors-revenue',
-                    element: <InstructorsRevene />
-                  },
-                  {
-                    path: 'cancelled-sales',
-                    element: <CancelledSales />
-                  },
-                  {
-                    path: 'courses-revenues',
-                    element: <CoursesRevenues />
-                  },
-                  {
-                    path: 'instructors-revenues',
-                    element: <InstructorsRevenues />
-                  },
-                  {
-                    path: 'certifications',
-                    element: <Certifications />
-                  },
-                  {
-                    path: 'reviews-center',
-                    element: <ReviewsCenter />
-                  }
-                ]
-              : []
         },
         {
           path: 'settings',

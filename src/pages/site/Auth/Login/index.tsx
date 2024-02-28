@@ -1,4 +1,5 @@
-import { FacebookFilled, GithubOutlined, LinkedinFilled, LoadingOutlined } from '@ant-design/icons';
+import { LinkedinFilled, LoadingOutlined } from '@ant-design/icons';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Button, Divider, Form, Input, Space, Spin, notification } from 'antd';
 import jwtDecode from 'jwt-decode';
 import React, { Fragment, useState } from 'react';
@@ -6,11 +7,10 @@ import { useDispatch } from 'react-redux';
 import ButtonCmp from '../../../../components/Button';
 import { useLoginMutation, useUpdateLastLoginMutation } from '../../../auth.service';
 import { closeAuthModal, setAuthenticated } from '../../../auth.slice';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import GoogleLoginButton from './GoogleLoginButton/GoogleLoginButton';
 import '../Auth.scss';
-import GithubLoginButton from './GithubLoginButton/GithubLoginButton';
 import FacebookLoginButton from './FacebookLoginButton/FacebookLoginButton';
+import GithubLoginButton from './GithubLoginButton/GithubLoginButton';
+import GoogleLoginButton from './GoogleLoginButton/GoogleLoginButton';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 interface LoginProps {
   onClick: (authState: string) => void;

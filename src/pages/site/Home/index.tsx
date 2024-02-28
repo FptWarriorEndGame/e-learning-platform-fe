@@ -465,28 +465,29 @@ const HomePage = () => {
         </div>
       </div>
       {/* Blogs */}
-      <div className='blogs'>
+      <div className='blogs mb-8'>
         <div className='container'>
           <h2 className='blogs__title text-6xl font-bold mb-16'>Blogs</h2>
           <Slider {...settings}>
-            {data?.blogs?.map((blog) => (
-              <Link to={`/blog-detail/${blog._id}`}>
-                <Card>
-                  <div className='blogs__item border-dashed min-h-[400px]' key={blog._id}>
-                    <div className='div text-center mb-3 text-3xl'>
-                      <p className='mb-2'>{blog.author}</p>
-                    </div>
-                    <div className='blogs__item-img flex justify-center mb-8'>
-                      <img src={blog.blogImg} alt={blog.title} />
-                    </div>
-                    <div className='blogs__item-content'>
-                      <h3 className='blogs__item-title mb-6 text-3xl'>{blog.title}</h3>
-                      <p className='blogs__item-text opacity-75'>{blog.content}</p>
-                    </div>
-                  </div>
-                </Card>
-              </Link>
-            ))}
+            {isLoading ? (
+              <Skeleton />
+            ) : (
+              data?.blogs?.map((blog) => (
+                <div key={blog._id} className='px-1 inline-block'>
+                  <Link to={`/blog-detail/${blog._id}`}>
+                    <Card
+                      className='mx-4'
+                      key={blog._id}
+                      hoverable
+                      style={{ width: 280 }}
+                      cover={<img alt={blog.title} src={blog.blogImg} className='w-full object-cover' />} // Đảm bảo hình ảnh phủ đầy thẻ Card
+                    >
+                      <Card.Meta title={blog.title} description={blog.content} />
+                    </Card>
+                  </Link>
+                </div>
+              ))
+            )}
           </Slider>
           {/* Blogs */}
         </div>

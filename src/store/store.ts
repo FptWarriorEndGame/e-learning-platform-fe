@@ -21,7 +21,7 @@ import BlogcategoryReducer from '../pages/admin/BlogCategories/categoriesBlog.sl
 import { categoriesBlogApi } from '../pages/admin/BlogCategories/categoriesBlog.service';
 import { feedbackApi } from '../pages/admin/Feedbacks/feedback.service';
 import { transactionApi } from '../pages/admin/Transactions/transaction.service';
-import { reviewApi } from '../pages/admin/Reviews/review.service';
+import { reviewApi } from '../pages/admin/Reports/components/ReviewsCenter/review.service';
 const rootReducer = combineReducers({
   course: courseReducer,
   [courseApi.reducerPath]: courseApi.reducer,
@@ -44,6 +44,8 @@ const rootReducer = combineReducers({
   [feedbackApi.reducerPath]: feedbackApi.reducer,
   [transactionApi.reducerPath]: transactionApi.reducer,
   [reviewApi.reducerPath]: reviewApi.reducer
+  
+
 });
 
 export const store = configureStore({
@@ -64,7 +66,7 @@ export const store = configureStore({
       transactionApi.middleware,
       reviewApi.middleware,
       rtkQueryErrorLogger
-    ) 
+    )
 });
 
 // Optional, nhưng bắt buộc nếu dùng tính năng refetchOnFocus/refetchOnReconnect

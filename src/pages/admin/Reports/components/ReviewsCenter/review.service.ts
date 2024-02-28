@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BACKEND_URL } from '../../../constant/backend-domain';
-import { IReview } from '../../../types/review.type';
-import { IParams } from '../../../types/params.type';
+import { BACKEND_URL } from '../../../../../constant/backend-domain';
+import { IReview } from '../../../../../types/review.type';
+import { IParams } from '../../../../../types/params.type';
 
 interface GetReviewsResponse {
   reviews: IReview[];
@@ -18,6 +18,10 @@ interface GetReviewResponse {
 }
 
 interface DeleteReviewResponse {
+  message: string;
+}
+
+interface UndeleteReviewResponse {
   message: string;
 }
 
@@ -63,8 +67,15 @@ export const reviewApi = createApi({
         method: 'DELETE'
       }),
       invalidatesTags: [{ type: 'Reviews', id: 'LIST' }]
+    }),
+    undeleteReview: build.mutation<UndeleteReviewResponse, string>({
+      query: (reviewId) => ({
+        url: `review/undelete/${reviewId}`,
+        method: 'POST'
+      }),
+      invalidatesTags: [{ type: 'Reviews', id: 'LIST' }]
     })
   })
 });
 
-export const { useGetReviewsQuery, useGetReviewQuery, useDeleteReviewMutation } = reviewApi;
+export const { useGetReviewsQuery, useGetReviewQuery, useDeleteReviewMutation, useUndeleteReviewMutation } = reviewApi;

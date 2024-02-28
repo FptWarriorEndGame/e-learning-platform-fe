@@ -76,7 +76,7 @@ const GithubLoginButton: React.FC = () => {
       onSuccess={onSuccess}
       onFailure={onFailure}
       className='github-login-button'
-      scope='github'
+      scope='read:user'
       buttonText={<GithubOutlined />}
     />
   );

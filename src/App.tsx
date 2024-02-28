@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { FloatButton } from 'antd';
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client';
 import './assets/sass/_base.scss';
 import './assets/sass/reset.css';
 import './assets/sass/tailwind.css';
@@ -18,7 +18,6 @@ import {
 
 import RouterHooks from './router';
 import { BACKEND_URL } from './constant/backend-domain';
-
 
 function App() {
   if (!localStorage.getItem('cart')) {
@@ -69,13 +68,13 @@ function App() {
     }
   }, [dispatch]);
 
- const hookRouter = RouterHooks()
+  const hookRouter = RouterHooks();
   useMemo(() => {
     // const socket = io(`${BACKEND_URL} ` );
-  //   socket.on("connect", () => {
-  //    console.log("Socket connect!")
-  //  })
-  }, [])
+    //   socket.on("connect", () => {
+    //    console.log("Socket connect!")
+    //  })
+  }, []);
 
   return (
     <>

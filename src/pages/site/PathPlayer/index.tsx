@@ -18,7 +18,7 @@ import {
 import './PathPlayer.scss';
 import Discusses from './components/Discusses';
 import Learners from './components/Learners';
-import Notes from './components/Notes';
+import Notes from './components/Notes/Notes';
 import PathSections from './components/PathSections';
 import PlayerScreen from './components/PlayerScreen/PlayerScreen';
 // type Props = {};

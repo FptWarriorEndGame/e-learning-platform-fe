@@ -11,8 +11,7 @@ import {
   TagsOutlined,
   UnorderedListOutlined,
   UserAddOutlined,
-  UserOutlined,
-  StarOutlined
+  UserOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, MenuProps } from 'antd';
 import React, { useState } from 'react';
@@ -119,7 +118,6 @@ const SideBar = () => {
       getItem('Blog comments', 'blog/comments')
     ]),
     getItem('Feedbacks', 'feedbacks', <IdcardOutlined />, [getItem('Feedbacks', 'feedbacks/list')]),
-    getItem('Reviews', 'reviews', <StarOutlined />, [getItem('Reviews Manager', 'reviews')]),
     getItem('Setting', 'setting', <SettingOutlined />, [getItem('Settings', 'settings')]),
     getItem('My account', 'account', <UserAddOutlined />),
     getItem('Need Help ?', 'help', <FileOutlined />)

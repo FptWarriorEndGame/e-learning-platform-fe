@@ -13,8 +13,8 @@ interface AuthState {
   isOpenAuthModal: boolean;
   adminRole: UserRole | null;
   authState: string;
-  enumData?: any
-  listPermission?: string[]
+  enumData?: any;
+  listPermission?: string[];
 }
 
 const initialState: AuthState = {

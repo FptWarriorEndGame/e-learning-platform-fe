@@ -12,6 +12,8 @@ import { IContact } from '../../types/contact.type';
 import { IReview } from '../../types/review.type';
 import { CustomError } from '../../utils/errorHelpers';
 import { Blog } from '../../types/page.type';
+import { BlogComment } from '../../types/blogComments.type';
+import { INote } from '../../types/note.type';
 
 interface getCategoriesResponse {
   categories: ICategory[];
@@ -213,9 +215,41 @@ export interface CreateContactResponse {
   contact: IContact;
 }
 
+export interface GetBlogCommentsResponse {
+  comments: BlogComment[];
+  message: string;
+}
+
+export interface AddBlogCommentResponse {
+  comment: BlogComment;
+  message: string;
+}
+
+interface GetNotesResponse {
+  notes: INote[];
+  message: string;
+}
+
+interface CreateNoteRequest {
+  userId: string;
+  lessonId: string;
+  content: string;
+  videoMinute: number;
+}
+
+interface UpdateNoteRequest {
+  _id: string;
+  content: string;
+}
+
+interface NoteResponse {
+  note: INote;
+  message: string;
+}
+
 export const clientApi = createApi({
-  reducerPath: 'clientApi', 
-  tagTypes: ['Clients', 'Users', 'Orders', 'Courses', 'Reviews', 'Wishlist', 'Feedbacks'], 
+  reducerPath: 'clientApi',
+  tagTypes: ['Clients', 'Users', 'Orders', 'Courses', 'Reviews', 'Wishlist', 'Feedbacks', 'BlogComment', 'Note'],
   keepUnusedDataFor: 10,
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}`,
@@ -235,7 +269,7 @@ export const clientApi = createApi({
   }),
   endpoints: (build) => ({
     getCategories: build.query<getCategoriesResponse, void>({
-      query: () => '/categories', 
+      query: () => '/categories',
       providesTags(result) {
         if (Array.isArray(result) && result.map) {
           if (result) {
@@ -254,9 +288,8 @@ export const clientApi = createApi({
       query: (params) => ({
         url: '/courses',
         params: params
-      }), 
+      }),
       providesTags(result) {
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
@@ -275,9 +308,8 @@ export const clientApi = createApi({
       query: (params) => ({
         url: '/courses/popular',
         params: params
-      }), 
+      }),
       providesTags(result) {
-        
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
@@ -296,7 +328,6 @@ export const clientApi = createApi({
         url: '/users/authors'
       }),
       providesTags(result) {
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
@@ -308,7 +339,6 @@ export const clientApi = createApi({
           }
         }
 
-       
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
@@ -319,9 +349,8 @@ export const clientApi = createApi({
           _limit: params._limit,
           _page: params._page
         }
-      }), 
+      }),
       providesTags(result) {
-       
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
@@ -362,9 +391,8 @@ export const clientApi = createApi({
         params: {
           _courseIds: params.courseIds
         }
-      }), 
+      }),
       providesTags(result) {
-        
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
@@ -433,7 +461,6 @@ export const clientApi = createApi({
         url: `courses/course/enrolled/${id}`
       }),
       providesTags(result) {
-        
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
@@ -606,6 +633,109 @@ export const clientApi = createApi({
         body: contactDetails
       }),
       invalidatesTags: [{ type: 'Feedbacks', id: 'LIST' }]
+    }),
+    getBlogComments: build.query<GetBlogCommentsResponse, string>({
+      query: (blogId) => `/comments/${blogId}`,
+      providesTags: (result, error, blogId) => [{ type: 'BlogComment', id: blogId }]
+    }),
+    addBlogComment: build.mutation<AddBlogCommentResponse, { blogId: string; content: string; userId: string }>({
+      query: (commentData) => ({
+        url: '/comments',
+        method: 'POST',
+        body: commentData
+      }),
+      invalidatesTags: (result, error, commentData) => [{ type: 'BlogComment', id: commentData.blogId }]
+    }),
+    updateBlogComment: build.mutation<AddBlogCommentResponse, { commentId: string; content: string }>({
+      query: ({ commentId, content }) => ({
+        url: `/comments/${commentId}`,
+        method: 'PUT',
+        body: { content }
+      }),
+      invalidatesTags: (result, error, { commentId }) => [{ type: 'BlogComment', id: commentId }]
+    }),
+    deleteBlogComment: build.mutation<{ message: string }, { commentId: string }>({
+      query: ({ commentId }) => ({
+        url: `/comments/${commentId}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: (result, error, { commentId }) => [{ type: 'BlogComment', id: commentId }]
+    }),
+    toggleLikeComment: build.mutation<{ message: string }, { commentId: string; userId: string }>({
+      query: (likeData) => ({
+        url: `/comments/like`,
+        method: 'PATCH',
+        body: likeData
+      }),
+      invalidatesTags: (result, error, likeData) => [{ type: 'BlogComment', id: likeData.commentId }]
+    }),
+    // Thêm phản hồi cho một bình luận
+    addReplyToComment: build.mutation<
+      AddBlogCommentResponse,
+      { parentCommentId: string; content: string; userId: string; blogId: string }
+    >({
+      query: (replyData) => ({
+        url: '/comments/reply',
+        method: 'POST',
+        body: replyData
+      }),
+      invalidatesTags: (result, error, replyData) => [{ type: 'BlogComment', id: replyData.blogId }]
+    }),
+
+    getAllNotes: build.query<GetNotesResponse, void>({
+      query: () => ({
+        url: '/note'
+      }),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.notes.map(({ _id }) => ({ type: 'Note' as const, id: _id.toString() })),
+              { type: 'Note' as const, id: 'LIST' }
+            ]
+          : [{ type: 'Note' as const, id: 'LIST' }]
+    }),
+
+    // Fetch notes by user ID
+    getNotesByUserId: build.query<GetNotesResponse, string>({
+      query: (userId) => ({
+        url: `/note/${userId}`
+      }),
+      providesTags: (result, error, userId) =>
+        result
+          ? [
+              ...result.notes.map(({ _id }) => ({ type: 'Note' as const, id: _id.toString() })),
+              { type: 'Note' as const, id: 'LIST' }
+            ]
+          : [{ type: 'Note' as const, id: 'LIST' }]
+    }),
+
+    // Create a note
+    createNote: build.mutation<NoteResponse, CreateNoteRequest>({
+      query: (note) => ({
+        url: '/note/createNote',
+        method: 'POST',
+        body: note
+      }),
+      invalidatesTags: [{ type: 'Note', id: 'LIST' }]
+    }),
+
+    // Update a note
+    updateNote: build.mutation<NoteResponse, UpdateNoteRequest>({
+      query: ({ _id, ...rest }) => ({
+        url: `/note/update/${_id}`,
+        method: 'PUT',
+        body: rest
+      }),
+      invalidatesTags: (result, error, { _id }) => [{ type: 'Note', id: _id }]
+    }),
+
+    // Delete a note
+    deleteNote: build.mutation<{ message: string }, string>({
+      query: (noteId) => ({
+        url: `/note/delete/${noteId}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: (result, error, noteId) => [{ type: 'Note', id: noteId }]
     })
   })
 });
@@ -642,5 +772,16 @@ export const {
   useDeleteWishlistMutation,
   useGetCourseIdsFromWishlistByUserIdQuery,
   useGetCoursesFromWishlistByUserIdQuery,
-  useCreateFeedbackMutation
+  useCreateFeedbackMutation,
+  useGetBlogCommentsQuery,
+  useAddBlogCommentMutation,
+  useUpdateBlogCommentMutation,
+  useDeleteBlogCommentMutation,
+  useToggleLikeCommentMutation,
+  useAddReplyToCommentMutation,
+  useGetAllNotesQuery,
+  useGetNotesByUserIdQuery,
+  useCreateNoteMutation,
+  useUpdateNoteMutation,
+  useDeleteNoteMutation
 } = clientApi;
