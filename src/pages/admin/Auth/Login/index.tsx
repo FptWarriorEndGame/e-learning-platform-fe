@@ -6,9 +6,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { UserRole } from '../../../../types/user.type';
-import { adminLoginError } from '../../../../utils/helpers';
+import { adminLoginError } from '../../../../utils/errorHelpers';
 import { useAdminLoginMutation } from '../../../auth.service';
-import { setAdminAuthenticated } from '../../../auth.slice';
+import { setAdminAuthenticated} from '../../../auth.slice';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const AdminLogin: React.FC = () => {
@@ -31,11 +31,17 @@ const AdminLogin: React.FC = () => {
 
         if ('data' in result) {
 
-          const loginResponse: { token: string; message: string; userId: string } = result.data;
+          const loginResponse: { token: string; message: string; userId: string, enumData?: Record<string, Record<string, string>>, listPermission?: string[] } = result.data;
           const decodedToken: { exp: number; iat: number; userId: string; email: string; adminRole: UserRole } =
             jwtDecode(loginResponse.token);
 
           localStorage.setItem('adminToken', loginResponse.token);
+          if(loginResponse.enumData) {
+            localStorage.setItem('enumData', JSON.stringify(loginResponse.enumData));
+          }
+          if(loginResponse.listPermission) {
+            localStorage.setItem('listPermission', JSON.stringify(loginResponse.listPermission));
+          }
           const expirationTime = decodedToken.exp * 1000; // Expiration time in milliseconds
 
           // Check if the token has not expired

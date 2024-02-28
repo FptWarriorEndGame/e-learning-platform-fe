@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import jwtDecode from 'jwt-decode';
 import { UserRole } from '../types/user.type';
@@ -12,6 +13,8 @@ interface AuthState {
   isOpenAuthModal: boolean;
   adminRole: UserRole | null;
   authState: string;
+  enumData?: any;
+  listPermission?: string[];
 }
 
 const initialState: AuthState = {

@@ -7,7 +7,7 @@ import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { RootState } from '../../../store/store';
-import { useGetAuthorsQuery, useGetCategoriesQuery, useGetCoursesQuery } from '../client.service';
+import { useGetAuthorsQuery, useGetAuthorsSelectQuery, useGetCategoriesQuery, useGetCoursesQuery } from '../client.service';
 import CourseList from '../components/CourseList';
 import './Courses.scss';
 
@@ -57,15 +57,18 @@ const Courses = () => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
   const { data, isFetching } = useGetCoursesQuery(params);
-
+  
   const isFiltered = authorValue || levelValue || priceValue;
-
-  const numberOfResult = data?.pagination._totalRows || 0;
+  
+  const numberOfResult = data?.pagination?._totalRows || 0;
   // Get all categories at db
   const { data: categoriesData } = useGetCategoriesQuery();
-
+  
   // Get all authors at db
   const { data: authorsData } = useGetAuthorsQuery();
+  const { data: listAuthorSelect } = useGetAuthorsSelectQuery();
+
+  console.log("list author: ", listAuthorSelect)
 
   const categoriesList = categoriesData?.categories || [];
 
@@ -125,6 +128,10 @@ const Courses = () => {
   const paginateHandler = (page: number) => {
     setFilterParams({ _p: page });
   };
+
+  // Filter author select
+  const filterOption = (input: string, option?: { label: string; value: string }) =>
+  (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   return (
     <div className='courses'>
@@ -211,6 +218,13 @@ const Courses = () => {
                     );
                   })}
                 </ul>
+                <Select
+                showSearch
+                placeholder="Select a author to filter!"
+                optionFilterProp="children"
+                filterOption={filterOption}
+                options={listAuthorSelect}
+              />
               </div>
             </div>
             <div className='courses__filter-bar-item'>

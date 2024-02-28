@@ -43,7 +43,7 @@
 
   &__title {
     @include h-style('h1');
-    margin-bottom: .8rem;
+    margin-bottom: 0.8rem;
     @media (max-width: 1200px) {
       font-size: 4rem;
     }
@@ -164,12 +164,12 @@
   }
 
   &__item {
-    width: calc(100% * (4/12));
+    width: calc(100% * (4 / 12));
     @media (max-width: 768px) {
-      width: calc(100% * (6/12) - 1.6rem);
+      width: calc(100% * (6 / 12) - 1.6rem);
     }
     @media (max-width: 576px) {
-      width: calc(100% * (12/12));
+      width: calc(100% * (12 / 12));
     }
     &-icon {
       font-size: 2.4rem;
@@ -214,7 +214,7 @@
   }
 
   &__item {
-    width: calc(100% * (4/12));
+    width: calc(100% * (4 / 12));
     padding: 2.4rem 2.4rem;
     text-align: center;
     display: flex;
@@ -227,13 +227,13 @@
     }
     @media (max-width: 768px) {
       padding: 1.2rem;
-      gap: .6rem;
+      gap: 0.6rem;
     }
     @media (max-width: 400px) {
-      width: calc(100% * (12/12));
-      padding: .6rem;
-      margin-bottom: .6rem;
-      gap: .4rem;
+      width: calc(100% * (12 / 12));
+      padding: 0.6rem;
+      margin-bottom: 0.6rem;
+      gap: 0.4rem;
     }
 
     &-icon {
@@ -275,21 +275,20 @@
     display: flex;
     color: $light-text-color;
     gap: 1.6rem;
-    @media (max-width: 768px){
+    @media (max-width: 768px) {
       flex-direction: column;
     }
 
     &-img-cover {
       width: 30%;
-      img{
-      border-radius: 1rem;
-      box-shadow: 0 10px 20px 0 rgba(#999, .25);
+      img {
+        border-radius: 1rem;
+        box-shadow: 0 10px 20px 0 rgba(#999, 0.25);
       }
-      @media (max-width: 768px){
+      @media (max-width: 768px) {
         width: 100%;
       }
     }
-
 
     &-img {
       background-image: url('https://cdn.mycourse.app/images/site-templates/57ad0b239703f4b3e09108dc8e7ddfc5.jpeg');
@@ -299,7 +298,7 @@
 
     &-content {
       width: 70%;
-      @media (max-width: 768px){
+      @media (max-width: 768px) {
         width: 100%;
       }
       &-title {
@@ -326,7 +325,7 @@
           font-size: 1.2rem;
         }
         @media (max-width: 576px) {
-          font-size: 1.0rem;
+          font-size: 1rem;
         }
       }
     }
@@ -401,7 +400,6 @@
     }
   }
 
-
   @media (max-width: map-get($breakpoint, mobile)) {
     &__title {
       text-align: center;
@@ -414,6 +412,7 @@
 }
 
 .our-courses-carousel {
+  padding: 4rem 0;
   &__title {
     @include h-style('h2');
     @media (max-width: 1200px) {
@@ -439,11 +438,10 @@
 
   .slick-slider {
     .slick-list {
+      margin: 0 -0.8rem;
+      margin-bottom: -12rem;
       .ant-col {
         max-width: 100%;
-      }
-
-      .slick-slide {
         padding: 0 0.8rem;
       }
     }

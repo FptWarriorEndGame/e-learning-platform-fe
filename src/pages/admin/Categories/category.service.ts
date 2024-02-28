@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BACKEND_URL } from '../../../constant/backend-domain';
 import { ICategory } from '../../../types/category.type';
 import { IParams } from '../../../types/params.type';
-import { CustomError } from '../../../utils/helpers';
+import { CustomError } from '../../../utils/errorHelpers';
 
 interface getCategoriesResponse {
   categories: ICategory[];

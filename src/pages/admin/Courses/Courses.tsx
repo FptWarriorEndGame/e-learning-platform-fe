@@ -1,5 +1,5 @@
 import { AppstoreOutlined, EditOutlined, EllipsisOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { Button, Input, Popover, Select, Skeleton, Space, notification } from 'antd';
+import { Breadcrumb, Button, Input, Popover, Select, Skeleton, Space, notification } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -323,6 +323,18 @@ const Courses = () => {
 
   return (
     <Fragment>
+      <div>
+      <Breadcrumb
+          items={[
+            {
+              title: 'Course',
+            },
+            {
+              title: <Link to="/author/courses">Course Manager</Link>,
+            },
+          ]}
+        />
+      </div>
       <Header className='sub-header'>
         <Space className='sub-header__wrap'>
           <Search placeholder='Search courses' onSearch={onSearchHandler} style={{ width: 200 }} />
@@ -361,7 +373,7 @@ const Courses = () => {
         <div className='course-content__wrap'>
           <div className='course-content__show-result'>
             {viewTable === 'grid' && (
-              <span className='course-content__show-text'>Showing {dataList?.pagination._totalRows} courses</span>
+              <span className='course-content__show-text'>Showing {dataList?.pagination?._totalRows} courses</span>
             )}
           </div>
           <div className='course-content__list'>

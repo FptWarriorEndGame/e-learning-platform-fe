@@ -2,7 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BACKEND_URL } from '../../../constant/backend-domain';
 import { IParams } from '../../../types/params.type';
 import { IUser } from '../../../types/user.type';
-import { CustomError } from '../../../utils/helpers';
+import { CustomError } from '../../../utils/errorHelpers';
+import { TreeNode } from '../../../types/treeNode.type';
+import { ISelectBox } from '../../../types/selectBox.type';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -31,6 +33,16 @@ interface getUsersResponse {
   message: string;
 }
 
+interface getUsersSelectResponse {
+  users: ISelectBox[];
+  message: string;
+}
+
+interface getPermissionsResponse {
+  listPermission: TreeNode[][];
+  message: string;
+}
+
 interface getUserResponse {
   user: IUser;
   message: string;
@@ -38,8 +50,8 @@ interface getUserResponse {
 
 export const userApi = createApi({
   reducerPath: 'userApi', // Tên field trong Redux state
-  tagTypes: ['Users'], // Những kiểu tag cho phép dùng trong blogApi
-  keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
+  tagTypes: ['Users', 'Permissions'], // Những kiểu tag cho phép dùng trong userAPI, permissionAPI
+  // keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}/admin`,
     prepareHeaders(headers) {
@@ -94,6 +106,90 @@ export const userApi = createApi({
         return [{ type: 'Users', id: 'LIST' }];
       }
     }),
+    // Generic type theo thứ tự là kiểu response trả về và argument
+    getUsersSelect: build.query<getUsersSelectResponse, IParams>({
+      query: (params) => ({
+        url: '/users/select',
+        params: params
+      }), // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho Users method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Users chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "User";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Users' as const, _id })),
+              { type: 'Users' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Users' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Users', id: 'LIST' }];
+      }
+    }),
+    // Generic type theo thứ tự là kiểu response trả về và argument
+    getPermissions: build.query<getPermissionsResponse, IParams>({
+      query: (params) => ({
+        url: '/permissions',
+        params: params
+      }), // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho Users method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Users chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "User";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Permissions' as const, _id })),
+              { type: 'Permissions' as const, id: 'LIST_PERMISSION' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Users' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Permissions', id: 'LIST_PERMISSION' }];
+      }
+    }),
     /**
      * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
      * Post là response trả về và Omit<Post, 'id'> là body gửi lên
@@ -121,6 +217,28 @@ export const userApi = createApi({
        * Trong trường hợp này Users sẽ chạy lại
        */
       invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Users', id: 'LIST' }])
+    }),
+    updatePermission: build.mutation<any, {userId: string, listPermission: TreeNode[][] | undefined} >({
+      query(body) {
+        try {
+  
+          return {
+            url: '/permissions/update',
+            method: 'PUT',
+            body: body
+          };
+        } catch (error: any) {
+          console.log('error: ', error);
+
+          throw new CustomError((error as CustomError).message);
+        }
+      },
+      /**
+       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
+       * match với nó sẽ bị gọi lại
+       * Trong trường hợp này Permissions sẽ chạy lại
+       */
+      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Permissions', id: 'LIST_PERMISSION' }])
     }),
     getUser: build.query<getUserResponse, string>({
       query: (id) => ({
@@ -158,5 +276,5 @@ export const userApi = createApi({
   })
 });
 
-export const { useGetUsersQuery, useAddUserMutation, useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation } =
+export const { useGetUsersQuery, useGetUsersSelectQuery, useGetPermissionsQuery,  useAddUserMutation, useGetUserQuery, useUpdateUserMutation, useDeleteUserMutation, useUpdatePermissionMutation } =
   userApi;

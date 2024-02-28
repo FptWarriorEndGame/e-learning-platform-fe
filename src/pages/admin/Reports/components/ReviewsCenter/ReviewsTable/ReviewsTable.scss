@@ -1,8 +1,19 @@
 .reviews-table {
   padding: 20px;
 
-  .search-bar {
+  .search-bar-container {
+    display: flex;
+    align-items: center;
     margin-bottom: 16px;
+
+    .search-bar {
+      flex: 1;
+      margin-right: 8px;
+    }
+
+    .status-filter {
+      width: 120px;
+    }
   }
 
   .pagination {

@@ -3,7 +3,8 @@ import { Input, Table, Pagination, Button } from 'antd';
 import { useGetTransactionsQuery, TransactionResponse } from '../transaction.service';
 import TransactionDetailsModal from '../TransactionDetailsModal/TransactionDetailsModal';
 import './TransactionsTable.scss';
-
+import { Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
 const { Search } = Input;
 
 const TransactionsTable: React.FC = () => {
@@ -79,6 +80,19 @@ const TransactionsTable: React.FC = () => {
 
   return (
     <div className='transactions-table'>
+      <div className='breakcrumb'>
+        <Breadcrumb
+          items={[
+            {
+              title: 'Orders'
+            },
+            {
+              title: <Link to='#'>Transactions</Link>
+            }
+            
+          ]}
+        />
+      </div>
       <div className='search-bar'>
         <Search placeholder='Search by user name or email' onSearch={handleSearch} enterButton allowClear />
       </div>

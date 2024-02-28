@@ -108,3 +108,10 @@ export interface adminLoginError {
     status: number;
   };
 }
+export interface BlogsCategoryError {
+  status: number;
+  data: {
+    message: string;
+    errorType: string;
+  };
+}

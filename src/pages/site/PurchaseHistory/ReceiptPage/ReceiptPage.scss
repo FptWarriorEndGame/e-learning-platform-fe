@@ -1,6 +1,6 @@
 @import '../../../../assets/sass/base';
 
-.receiptPage {
+.receipt-page {
   margin-top: $header-height + 3rem;
   font-family: $text-font;
   font-size: 1.6rem;
@@ -8,14 +8,15 @@
 
   &__title {
     @include h-style('h2');
+    margin-top: 3rem;
   }
 
-  &__dateTitle {
+  &__date-title {
     @include h-style('h3');
     margin-top: 3rem;
   }
 
-  &__companyName {
+  &__company-name {
     font-size: 2rem;
     opacity: 0.9;
     margin-top: 3rem;
@@ -31,7 +32,7 @@
     justify-content: space-between;
   }
 
-  &__soldTo {
+  &__sold-to {
     margin-top: 3rem;
     font-weight: 400;
     opacity: 0.9;
@@ -41,11 +42,9 @@
     margin-top: 5rem;
     font-weight: 400;
 
-    :global {
-      .ant-table-thead {
-        font-weight: 800;
-        font-size: 1.6rem;
-      }
+    .ant-table-thead {
+      font-weight: 800;
+      font-size: 1.6rem;
     }
 
     &__footer {
@@ -54,14 +53,19 @@
     }
   }
 
-  &__taxNote {
+  &__tax-note {
     margin-top: 5rem;
     font-weight: 400;
     opacity: 0.9;
     line-height: 1.5;
 
-    &Item {
+    &-item {
       margin-bottom: 3rem;
     }
+  }
+
+  &__back-button {
+    display: flex;
+    align-items: center;
   }
 }

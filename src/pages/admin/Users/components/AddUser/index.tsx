@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { IUser, UserRole } from '../../../../../types/user.type';
-import { UserError } from '../../../../../utils/helpers';
+import { UserError } from '../../../../../utils/errorHelpers';
 import { useAddUserMutation, useGetUserQuery, useUpdateUserMutation } from '../../user.service';
 
 const { Option } = Select;

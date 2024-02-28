@@ -30,7 +30,7 @@ const CoursesGrid = (props: CoursesGridProps) => {
         className='courses-grid__pagination'
         onChange={onChange}
         defaultCurrent={current}
-        total={props.pagination._totalRows}
+        total={props?.pagination?._totalRows}
         pageSize={8}
       />
     </div>

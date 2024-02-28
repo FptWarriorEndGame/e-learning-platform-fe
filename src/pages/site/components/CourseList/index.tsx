@@ -158,12 +158,12 @@ const CourseList = (props: CourseListProps) => {
               />
             ))}
           </Row>
-          {props.pagination && (
+          {props?.pagination && (
             <div className='our-courses__pagination'>
               <Pagination
                 current={current}
                 onChange={paginationChangeHandler}
-                total={props.pagination._totalRows}
+                total={props?.pagination?._totalRows}
                 pageSize={props.pagination._limit || 12}
               />
             </div>

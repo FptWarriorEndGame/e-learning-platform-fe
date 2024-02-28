@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BACKEND_URL } from '../../../constant/backend-domain';
 import { IOrder, IOrderHistory } from '../../../types/order.type';
-import { CustomError } from '../../../utils/helpers';
+import { CustomError } from '../../../utils/errorHelpers';
 
 interface getOrdersResponse {
   orders: IOrder[];

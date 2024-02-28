@@ -4,7 +4,7 @@ import { ICourse } from '../../../types/course.type';
 import { ILesson, ISection } from '../../../types/lesson.type';
 import { IPagination } from '../../../types/pagination';
 import { IParams } from '../../../types/params.type';
-import { CustomError } from '../../../utils/helpers';
+import { CustomError } from '../../../utils/errorHelpers';
 
 interface getCoursesResponse {
   courses: ICourse[];
@@ -148,7 +148,7 @@ export const courseApi = createApi({
         try {
         
           return {
-            url: '/courses/course/create',
+            url: 'courses/course/create',
             method: 'POST',
             body
           };

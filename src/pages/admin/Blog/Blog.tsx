@@ -6,6 +6,7 @@ import { startEditBlog } from './blog.slice';
 import { useGetAllBlogsQuery, useGetBlogsQuery } from './blog.service';
 import AddBlog from './Components/AddBlog/AddBlog';
 import BlogListDetail from './Components/BlogList/BlogList';
+import { useGetCategoriesQuery } from '../BlogCategories/categoriesBlog.service';
 
 const { Search } = Input;
 
@@ -14,6 +15,7 @@ type ParamsType = {
   _page: number;
   _q: string;
   _blogName?: string;
+  _author?: string;
 };
 
 const Blogs = () => {
@@ -25,6 +27,8 @@ const Blogs = () => {
 
   const { data, isFetching } = useGetBlogsQuery(params);
   const { data: allBlogsData, isFetching: isAllBlogsFetching } = useGetAllBlogsQuery();
+  const { data: categoriesResponse, isFetching: isFetchingCategories } = useGetCategoriesQuery(params);
+
   const [open, setOpen] = useState(false);
 
   const blogFilterList =
@@ -43,7 +47,7 @@ const Blogs = () => {
   const dispatch = useDispatch();
 
   const onSearchHandler = (value: string) => {
-    setParams({ ...params, _q: value });
+    setParams({ ...params, _q: value, _page: 1 });
   };
 
   const onSelectChange = (value: string) => {
@@ -68,7 +72,7 @@ const Blogs = () => {
   };
 
   const blogFilterHandler = (value: string) => {
-    setParams({ ...params, _blogName: value });
+    setParams({ ...params, _author: value });
   };
 
   return (
@@ -80,7 +84,6 @@ const Blogs = () => {
               New Blog
             </Button>
             <Search placeholder='Search blogs' onSearch={onSearchHandler} style={{ width: 200 }} />
-
             <Select
               size='middle'
               placeholder='Please select a authors'
@@ -93,10 +96,18 @@ const Blogs = () => {
         </div>
         <div className='blogs__show-result'></div>
         <div className='blogs__content'>
-          {isFetching ? <Skeleton /> : <BlogListDetail onBlogEdit={blogEditHandler} data={data?.blogs || []} />}
+          {isFetching ? (
+            <Skeleton />
+          ) : (
+            <BlogListDetail
+              onBlogEdit={blogEditHandler}
+              data={data?.blogs || []}
+              categories={categoriesResponse?.blogsCategories || []}
+            />
+          )}
         </div>
       </div>
-      <AddBlog isOpen={open} onClose={closeDrawerHandler} />
+      <AddBlog isOpen={open} onClose={closeDrawerHandler} categories={categoriesResponse?.blogsCategories || []} />
     </div>
   );
 };

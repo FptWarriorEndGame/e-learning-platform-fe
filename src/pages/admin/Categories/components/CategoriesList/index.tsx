@@ -7,7 +7,7 @@ import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
 import Link from 'antd/es/typography/Link';
 import { useDispatch } from 'react-redux';
 import { ICategory } from '../../../../../types/category.type';
-import { CategoryError } from '../../../../../utils/helpers';
+import { CategoryError } from '../../../../../utils/errorHelpers';
 import { useDeleteCategoryMutation } from '../../category.service';
 import { startEditCategory } from '../../category.slice';
 
@@ -31,6 +31,7 @@ interface TableParams {
 interface CategoryListProps {
   data: ICategory[];
   onCateEdit: (cateId: string) => void;
+  permission: {isEdit: boolean, isDelete: boolean, isViewDetail: boolean}
 }
 const SettingContent = (cateId: string) => {
   const [deleteCategory, deleteCategoryResult] = useDeleteCategoryMutation();
@@ -56,9 +57,13 @@ const SettingContent = (cateId: string) => {
   };
 
   return (
+    // More action here!
+    // Xoá mềm (cập nhật trạng thái)
+    // Xem chi tiết (popup)
     <div>
       <p>Content</p>
-      <Link onClick={deleteCateHandler}>Delete</Link>
+      <div> <Link onClick={deleteCateHandler}>Delete</Link> </div>
+      <div> <Link >View Detail</Link> </div>
     </div>
   );
 };
@@ -124,9 +129,11 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
       tags: ['23432k', 'dsfdjsk'],
       actions: (
         <Space>
+         {props.permission.isEdit && (
           <Button onClick={() => cateEditHandler(_id)}>
-            <EditOutlined />
-          </Button>
+           <EditOutlined />
+         </Button>
+         )}
           <Popover placement='bottomRight' content={SettingContent(_id)} title='Actions'>
             <Button>
               <EllipsisOutlined />

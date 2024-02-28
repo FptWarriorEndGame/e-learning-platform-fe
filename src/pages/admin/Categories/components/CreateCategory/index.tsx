@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { ICategory } from '../../../../../types/category.type';
-import { CategoryError } from '../../../../../utils/helpers';
+import { CategoryError } from '../../../../../utils/errorHelpers';
 import { useAddCategoryMutation, useGetCategoryQuery, useUpdateCategoryMutation } from '../../category.service';
 
 const { Option } = Select;

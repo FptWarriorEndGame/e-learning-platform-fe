@@ -17,7 +17,8 @@ interface ClientState {
   currentProgress: number;
   certificatePath: string;
   isLessonChange: boolean;
-  percentHavePlayed: number; // Add this line
+  percentHavePlayed: number;
+  
 }
 
 const storedCart = JSON.parse(localStorage.getItem('cart') || '{}') as ICart;
@@ -49,7 +50,6 @@ const clientSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<string>) => {
       if (action.payload) {
-        
         const courseExistingIdx = state.cart.items.findIndex((item) => item.courseId === action.payload);
 
         if (courseExistingIdx === -1) {

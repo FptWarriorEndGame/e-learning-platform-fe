@@ -1,8 +1,23 @@
 import React from 'react';
+import { Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
 import './setting.scss';
 const Settings = () => {
   return (
     <div className='setting'>
+      <div className='breakcrumb'>
+        <Breadcrumb
+          items={[
+            {
+              title: 'Settings'
+            },
+            {
+              title: <Link to='#'>Settings</Link>
+            }
+            
+          ]}
+        />
+      </div>
       <div className='setting-flex'>
         <div className='setting-col col-7'>
           <section className='modify-profile'>

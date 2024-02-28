@@ -1,7 +1,8 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useGetOrderByIdQuery } from '../../client.service';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import './InvoicePage.scss';
 
@@ -18,6 +19,7 @@ type Params = { [key: string]: string | undefined };
 const InvoicePage: React.FC = () => {
   const { orderId } = useParams<Params>();
   const { data: orderDetails } = useGetOrderByIdQuery(orderId || '');
+  const navigate = useNavigate();
 
   if (!orderDetails) {
     return;
@@ -81,6 +83,14 @@ const InvoicePage: React.FC = () => {
   return (
     <div className='invoice-page'>
       <div className='container'>
+        <Button
+          type='primary'
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate(-1)}
+          className='receipt-page__back-button'
+        >
+          Back to Previous Page
+        </Button>
         <div className='invoice-page__header'>
           <div className='invoice-page__logo'>
             <img src='https://i.imgur.com/NZj5m3U.png' alt='E-Leaning' className='invoice-page__logo-img' />
