@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Typography } from 'antd';
 import { TransactionResponse } from '../transaction.service';
+import moment from 'moment';
 import './TransactionDetailsModal.scss';
 
 const { Text } = Typography;
@@ -69,7 +70,7 @@ const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ trans
 
           <div className='transaction-details__section'>
             <Text className='transaction-details__label'>Pay Date:</Text>
-            <Text>{new Date(transaction.transaction.payDate).toLocaleString()}</Text>
+            <Text>{moment(transaction.transaction.payDate).format('YYYY-MM-DD HH:mm:ss')}</Text>
           </div>
 
           <div className='transaction-details__section'>

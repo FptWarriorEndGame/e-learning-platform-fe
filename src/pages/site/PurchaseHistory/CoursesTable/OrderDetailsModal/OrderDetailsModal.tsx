@@ -5,6 +5,7 @@ import { useCreateReviewMutation, useGetOrderByIdQuery } from '../../../client.s
 import CourseReviewModal from './CourseReviewModal/CourseReviewModal';
 import styles from './OrderDetailsModal.module.scss';
 import { message } from 'antd';
+import moment from 'moment';
 
 interface OrderDetailsModalProps {
     orderId: string | null;
@@ -107,7 +108,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ orderId, isOpen, 
                     </div>
                     <div className={styles.orderDetails__item}>
                         <strong>Created At:</strong>
-                        <span>{order.createdAt}</span>
+                        <span>{moment(order.createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
                     </div>
                     <div className={styles.orderDetails__item}>
                         <strong>Total Price:</strong>

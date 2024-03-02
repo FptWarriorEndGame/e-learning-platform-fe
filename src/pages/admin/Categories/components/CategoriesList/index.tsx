@@ -10,6 +10,7 @@ import { ICategory } from '../../../../../types/category.type';
 import { CategoryError } from '../../../../../utils/errorHelpers';
 import { useDeleteCategoryMutation } from '../../category.service';
 import { startEditCategory } from '../../category.slice';
+import moment from 'moment';
 
 interface DataCategoryType {
   key: React.Key;
@@ -126,7 +127,7 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
         </a>
       ),
       description: <div className='txt-desc'>{description}</div>,
-      createdAt: <div className='txt-desc'>{createdAt || ''}</div>,
+      createdAt: <div className='txt-desc'>{moment(createdAt).format('YYYY-MM-DD HH:mm:ss') || ''}</div>,
       courses:  <div className='txt-desc'>{courses || 0}</div>,
       tags:  <div className='txt-desc'>{['23432k', 'dsfdjsk']}</div>,
       actions: (

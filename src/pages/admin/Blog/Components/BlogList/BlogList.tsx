@@ -11,6 +11,7 @@ import { useSoftDeleteBlogMutation } from '../../blog.service';
 import { startEditBlog } from '../../blog.slice';
 import './BlogList.scss';
 import { ICategoryBlogs } from '../../../../../types/categoryBlogs.type';
+import moment from 'moment';
 
 interface DataBlogType {
   key: React.Key;
@@ -113,7 +114,8 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
     {
       title: 'Created at',
       dataIndex: 'createdAt',
-      key: 'createdAt'
+      key: 'createdAt',
+      render: (createdAt: string) => moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
     },
     {
       title: 'Manage',

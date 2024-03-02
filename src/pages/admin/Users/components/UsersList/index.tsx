@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { useDeleteUserMutation, useGetUsersQuery } from '../../user.service';
 import { startEditUser } from '../../user.slice';
 import UserDetail from './components/UserDetail';
+import moment from 'moment';
 interface DataUserType {
   key: React.Key;
   name: JSX.Element;
@@ -147,8 +148,8 @@ const UsersList: React.FC<UserListProps> = (props) => {
             </a>
           </>
         ),
-        lastLogin:   <div className='txt-desc'>{user?.lastLogin || ''}</div>,
-        createdAt:  <div className='txt-desc'>{user?.createdAt}</div>,
+        lastLogin:   <div className='txt-desc'>{moment(user?.lastLogin).format('YYYY-MM-DD HH:mm:ss') || ''}</div>,
+        createdAt:  <div className='txt-desc'>{moment(user?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</div>,
         courses: (
           <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
             {(user.courses || []).map((course) => (

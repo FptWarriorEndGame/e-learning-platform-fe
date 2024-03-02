@@ -7,6 +7,7 @@ import './OrdersList.scss';
 import { DownloadOutlined } from '@ant-design/icons';
 import { IOrder } from '../../../../../types/order.type';
 import OrderDetailModal from '../OrderDetailModal/OrderDetailModal';
+import moment from 'moment';
 interface DataOrderType {
   key: React.Key;
   name: JSX.Element;
@@ -119,7 +120,7 @@ const OrdersList: React.FC<OrdersListProps> = (props) => {
             </div>
           </a>
         ),
-        register: <div className='txt-desc'>{order.createdAt || ''}</div>,
+        register: <div className='txt-desc'>{moment(order.createdAt).format('YYYY-MM-DD HH:mm:ss') || ''}</div>,
         courses: (
           <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
             {(items || []).map((course) => (

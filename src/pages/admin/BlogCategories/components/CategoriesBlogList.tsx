@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { ICategoryBlogs } from '../../../../types/categoryBlogs.type';
 import { useDeleteCategoryMutation } from '../categoriesBlog.service';
 import { startEditCategory } from '../categoriesBlog.slice';
+import moment from 'moment';
 
 interface DataCategoryType {
   key: React.Key;
@@ -101,7 +102,8 @@ const CategoriesBlogList: React.FC<CategoryListProps> = ({ data, onCategoryEdit 
     {
       title: 'Created at',
       dataIndex: 'createdAt',
-      key: 'createdAt'
+      key: 'createdAt',
+      render: (createdAt: string) => moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
     },
     {
       title: 'Manage',
