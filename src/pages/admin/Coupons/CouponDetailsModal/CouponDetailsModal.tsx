@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Typography, List, Image } from 'antd';
+import { Modal, Typography, List, Image, Spin } from 'antd';
 import moment from 'moment';
 import { useGetCouponByIdQuery } from '../coupon.service';
 import './CouponDetailsModal.scss';
@@ -18,7 +18,9 @@ const CouponDetailsModal: React.FC<CouponDetailsModalProps> = ({ couponId, isOpe
   if (isFetching || !data) {
     return (
       <Modal className='coupon-details-modal' title='Coupon Details' open={isOpen} onCancel={onClose} footer={null}>
-        <Text className='coupon-details__empty'>Loading...</Text>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+          <Spin size='large' />
+        </div>
       </Modal>
     );
   }
@@ -43,7 +45,7 @@ const CouponDetailsModal: React.FC<CouponDetailsModalProps> = ({ couponId, isOpe
         </div>
         <div className='coupon-details__section'>
           <Text className='coupon-details__label'>Description:</Text>
-          <Text>{data.coupon.description}</Text>
+          <Text style={{ maxWidth: '350px' }}>{data.coupon.description}</Text>
         </div>
         <div className='coupon-details__section'>
           <Text className='coupon-details__label'>Discount Amount:</Text>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Drawer, Form, Button, Input, message } from 'antd';
+import React, { useState } from 'react';
+import { Drawer, Form, Button, Input, message, Spin } from 'antd';
 import { useCreateFeedbackReplyMutation } from '../feedback.service';
 
 interface CreateFeedbackReplyDrawerProps {
@@ -10,9 +10,12 @@ interface CreateFeedbackReplyDrawerProps {
 
 const CreateFeedbackReplyDrawer: React.FC<CreateFeedbackReplyDrawerProps> = ({ isOpen, onClose, feedbackId }) => {
   const [form] = Form.useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [createFeedbackReply] = useCreateFeedbackReplyMutation();
 
   const handleSubmit = (values: { contentReply: string }) => {
+    setIsSubmitting(true);
+
     createFeedbackReply({ feedbackId, contentReply: values.contentReply })
       .unwrap()
       .then(() => {
@@ -22,6 +25,9 @@ const CreateFeedbackReplyDrawer: React.FC<CreateFeedbackReplyDrawerProps> = ({ i
       })
       .catch(() => {
         void message.error('Failed to create feedback reply');
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -37,8 +43,8 @@ const CreateFeedbackReplyDrawer: React.FC<CreateFeedbackReplyDrawerProps> = ({ i
           <Button onClick={onClose} style={{ marginRight: 8 }}>
             Cancel
           </Button>
-          <Button onClick={() => form.submit()} type='primary'>
-            Submit
+          <Button onClick={() => form.submit()} type='primary' disabled={isSubmitting}>
+            {isSubmitting ? <Spin /> : 'Submit'}
           </Button>
         </div>
       }

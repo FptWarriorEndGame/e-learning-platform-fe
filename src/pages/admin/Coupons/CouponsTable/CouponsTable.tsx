@@ -72,18 +72,21 @@ const CouponsTable: React.FC = () => {
       title: 'Code',
       dataIndex: 'code',
       key: 'code',
+      width: '15%',
       ellipsis: true
     },
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      width: '50%',
       ellipsis: true
     },
     {
       title: 'Discount Amount',
       dataIndex: 'discountAmount',
       key: 'discountAmount',
+      width: '10%',
       render: (_: ICoupon, record: ICoupon) => <span>{record.discountAmount}</span>
     },
     {
@@ -96,8 +99,9 @@ const CouponsTable: React.FC = () => {
     {
       title: 'Actions',
       key: 'actions',
+      width: '15%',
       render: (_: ICoupon, record: ICoupon) => (
-        <Space size='middle'>
+        <Space size='small'>
           <Button icon={<EditOutlined style={{ color: '#1890ff' }} />} onClick={() => handleUpdate(record._id)} />
           <Button icon={<EyeOutlined style={{ color: '#1890ff' }} />} onClick={() => handleViewDetails(record._id)} />
           <Button
@@ -180,6 +184,7 @@ const CouponsTable: React.FC = () => {
         rowKey='_id'
         pagination={false}
         loading={isFetching}
+        scroll={{ y: 400 }}
       />
       <Pagination
         className='pagination'

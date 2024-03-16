@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Typography } from 'antd';
+import { Modal, Typography, Spin } from 'antd';
 import moment from 'moment';
 import { useGetCouponTypeByIdQuery } from '../couponType.service';
 import './CouponTypeDetailsModal.scss';
@@ -24,7 +24,9 @@ const CouponTypeDetailsModal: React.FC<CouponTypeDetailsModalProps> = ({ couponT
         onCancel={onClose}
         footer={null}
       >
-        <Text className='coupon-type-details__empty'>Loading...</Text>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+          <Spin size='large' />
+        </div>
       </Modal>
     );
   }
@@ -46,12 +48,16 @@ const CouponTypeDetailsModal: React.FC<CouponTypeDetailsModalProps> = ({ couponT
           <Text>{data.couponType._id}</Text>
         </div>
         <div className='coupon-type-details__section'>
+          <Text className='coupon-type-details__label'>Coupon Type Code:</Text>
+          <Text>{data.couponType.code}</Text>
+        </div>
+        <div className='coupon-type-details__section'>
           <Text className='coupon-type-details__label'>Coupon Type Name:</Text>
           <Text>{data.couponType.name}</Text>
         </div>
         <div className='coupon-type-details__section'>
           <Text className='coupon-type-details__label'>Description:</Text>
-          <Text>{data.couponType.description}</Text>
+          <Text style={{ maxWidth: '350px' }}>{data.couponType.description}</Text>
         </div>
         <div className='coupon-type-details__section'>
           <Text className='coupon-type-details__label'>Created By:</Text>

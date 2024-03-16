@@ -1,183 +1,158 @@
-@import "../../../assets/sass/container";
-@import "../../../assets/sass/base";
+@import '../../../assets/sass/container';
+@import '../../../assets/sass/base';
 
 .view-cart {
-    margin-top: $header-height;
-    // background-color: $light-bg-color;
+  margin-top: $header-height;
+  // background-color: $light-bg-color;
 
-    
-    &__wrap {
-        padding: 8rem 0;
+  &__wrap {
+    padding: 8rem 0;
+  }
+  .row-wrap {
+    display: flex;
+    gap: 1.6rem;
+    flex-wrap: nowrap;
+    @media (max-width: 768px) {
+      flex-direction: column;
+      flex-wrap: wrap;
     }
-    .row-wrap{
-        display: flex;
-        gap: 1.6rem;
-        flex-wrap: nowrap;
-        @media(max-width: 768px){
-            flex-direction: column;
-            flex-wrap: wrap;
+  }
+  &__title {
+    @include h-style('h2');
+  }
+
+  &__content {
+    margin-top: 2rem;
+  }
+
+  &__list {
+    &-title {
+      font-size: 1.7rem;
+    }
+
+    &-wrap {
+    }
+
+    &-item {
+      &-divider {
+        margin: 1rem 0;
+      }
+
+      &-thumb {
+      }
+
+      &-img {
+        width: 12rem;
+        height: 6.8rem;
+      }
+
+      &-info {
+        font-size: 1.6rem;
+        font-weight: 400;
+        line-height: 1.4;
+
+        &-line {
+          margin-bottom: 0.4rem;
         }
+        &-name {
+          color: $dark-text-color;
+          font-weight: bold;
+        }
+
+        &-author {
+        }
+
+        &-rating {
+        }
+
+        .info-rating {
+          display: flex;
+          &__point {
+          }
+
+          &__icons {
+            margin-left: 1rem;
+            &-item {
+              color: $brand-secondary-color;
+            }
+          }
+
+          &__ratings {
+            margin-left: 1rem;
+            color: rgba($color: #000000, $alpha: 0.8);
+          }
+        }
+
+        &-statistic {
+          &-item {
+            margin-right: 1rem;
+            color: rgba($color: #000000, $alpha: 0.8);
+          }
+        }
+
+        &__btns {
+        }
+      }
+
+      &-price {
+        &-text {
+        }
+
+        &-icon {
+        }
+      }
     }
-    &__title {
-        @include h-style("h2");
+  }
+  &__right {
+    background-color: #f2f2f2;
+    padding: 3.2rem 2.4rem !important;
+    height: -moz-fit-content;
+    height: fit-content;
+    position: sticky;
+    top: 10rem;
+  }
+  &__summary {
+    &-title {
+      font-size: 2rem;
     }
 
-    &__content {
+    &-price {
+      @include h-style('h2');
+      margin: 1rem 0;
+    }
+
+    &-btn {
+      text-align: center;
+    }
+
+    &-promo {
+      &-title {
+        font-size: 1.7rem;
+      }
+
+      &-input-group {
         margin-top: 2rem;
+      }
+
+      &-btn {
+      }
+    }
+  }
+
+  @media (max-width: map-get($breakpoint, tablet)) {
+    padding: 0rem 2rem;
+
+    &__list-item-info {
+      padding: 0rem 1rem;
     }
 
-    &__list {
-
-        &-title {
-           font-size: 1.7rem;
-        }
-
-        &-wrap {
-
-        }
-
-        &-item {
-
-            &-divider {
-                margin: 1rem 0;
-            }
-
-            &-thumb {
-
-            }
-
-            &-img {
-                width: 12rem;
-                height: 6.8rem;
-            }
-
-            &-info {
-                font-size: 1.6rem;
-                font-weight: 400;
-                line-height: 1.4;
-
-                &-line {
-                    margin-bottom: 0.4rem;
-                }
-                &-name {
-                    color: $dark-text-color;
-                    font-weight: bold;
-                }
-
-                &-author {
-
-                }
-
-                &-rating {
-
-                }
-
-                .info-rating {
-                   display: flex;
-                    &__point {
-
-                    }
-
-                    &__icons {
-                        margin-left: 1rem;
-                        &-item {
-                            color: $brand-secondary-color;
-                        }   
-                    }
-
-                    &__ratings {
-                        margin-left: 1rem;
-                        color: rgba($color: #000000, $alpha: 0.8);
-                    }
-
-                }
-
-                &-statistic {
-
-                    &-item {
-                        margin-right: 1rem;
-                        color: rgba($color: #000000, $alpha: 0.8)
-                    }
-                }
-
-                &__btns {
-
-                }
-            }
-
-          
-
-            &-price {
-
-                &-text {
-
-                }
-
-                &-icon {
-
-                }
-            }
-        }
-    }
-    &__right{
-            background-color: #f2f2f2;
-            padding: 3.2rem 2.4rem !important;
-            height: -moz-fit-content;
-            height: fit-content;
-            position: sticky;
-            top: 10rem;
-    }
     &__summary {
-        &-title {
-            font-size: 2rem;
-        }
-
-        &-price {
-            @include h-style("h2");
-            margin: 1rem 0;
-        }
-
-        &-btn {
-            text-align: center;
-        }
-
-        &-promo {
-
-            &-title {
-                font-size: 1.7rem;
-
-            }
-
-            &-input-group {
-                margin-top: 2rem;
-            }
-
-            &-btn {
-
-            }
-        }
+      margin-top: 2rem;
+      &-title {
+      }
     }
+  }
 
-
-    @media (max-width: map-get($breakpoint, tablet)) {
-        padding: 0rem 2rem;
-
-        &__list-item-info {
-            padding: 0rem 1rem;
-        }
-
-
-        &__summary {
-            margin-top: 2rem;
-            &-title {
-            
-            }
-        }
-
-       
-    }
-
-    @media (max-width: map-get($breakpoint, mobile)) {
-        
-    }
+  @media (max-width: map-get($breakpoint, mobile)) {
+  }
 }

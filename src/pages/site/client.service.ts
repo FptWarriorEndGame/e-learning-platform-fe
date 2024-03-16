@@ -1,4 +1,5 @@
 import { IReview, IReviewReply } from '../../types/review.type';
+import { ICoupon } from '../../types/coupon.type';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import jwtDecode from 'jwt-decode';
 import { BACKEND_URL } from '../../constant/backend-domain';
@@ -293,6 +294,11 @@ export interface GetReviewRepliesByReviewIdResponse {
   replies: IReviewReply[];
 }
 
+export interface GetCouponsValidForCoursesResponse {
+  message: string;
+  coupons: ICoupon[];
+}
+
 export interface GetAllDiscussionsResponse {
   message: string;
   discuss: IDiscuss[];
@@ -341,6 +347,7 @@ export const clientApi = createApi({
     'Reviews',
     'Wishlist',
     'Feedbacks',
+    'Coupons',
     'BlogComment',
     'Note',
     'Discussions'
@@ -885,6 +892,12 @@ export const clientApi = createApi({
       }),
       providesTags: () => [{ type: 'Reviews', id: 'LIST' }]
     }),
+    getCouponsValidForCourses: build.query<GetCouponsValidForCoursesResponse, string>({
+      query: (courseIds) => ({
+        url: `coupons/valid-for-courses?courseIds=${courseIds}`
+      }),
+      providesTags: () => [{ type: 'Coupons', id: 'LIST' }]
+    }),
     // Discuss
     getAllDiscussions: build.query<GetAllDiscussionsResponse, void>({
       query: () => ({
@@ -1003,6 +1016,7 @@ export const {
   useGetAverageRatingByCourseIdQuery,
   useGetRatingPercentageByCourseIdQuery,
   useGetReviewRepliesByReviewIdQuery,
+  useGetCouponsValidForCoursesQuery,
   // Discuss
   useGetAllDiscussionsQuery,
   useGetDiscussionsByLessonIdQuery,

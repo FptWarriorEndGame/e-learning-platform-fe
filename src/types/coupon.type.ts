@@ -7,7 +7,7 @@ export interface ICoupon extends IBase {
   code: string;
   description: string;
   discountAmount: number;
-  couponTypeId: ICouponType;
+  couponTypeId: string | ICouponType;
   dateStart: Date;
   dateEnd: Date;
   dateRangeStart: {

@@ -72,25 +72,29 @@ const CouponTypesTable: React.FC = () => {
       title: 'Coupon Type Name',
       dataIndex: 'name',
       key: 'name',
+      width: '20%',
       ellipsis: true
     },
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      width: '55%',
       ellipsis: true
     },
     {
       title: 'Status',
       dataIndex: 'isDeleted',
       key: 'isDeleted',
+      width: '10%',
       render: (_: ICouponType, record: ICouponType) => <span>{record.isDeleted ? 'Inactive' : 'Active'}</span>
     },
     {
       title: 'Actions',
       key: 'actions',
+      width: '15%',
       render: (_: ICouponType, record: ICouponType) => (
-        <Space size='middle'>
+        <Space size='small'>
           <Button icon={<EditOutlined style={{ color: '#1890ff' }} />} onClick={() => handleUpdate(record._id)} />
           <Button icon={<EyeOutlined style={{ color: '#1890ff' }} />} onClick={() => handleViewDetails(record._id)} />
           <Button
@@ -173,6 +177,7 @@ const CouponTypesTable: React.FC = () => {
         rowKey='_id'
         pagination={false}
         loading={isFetching}
+        scroll={{ y: 400 }}
       />
       <Pagination
         className='pagination'
