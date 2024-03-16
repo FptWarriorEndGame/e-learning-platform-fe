@@ -44,16 +44,11 @@ const ViewCart = () => {
   }, [cartData]);
 
   useEffect(() => {
-    if (isTotalPriceLoaded) {
+    if (isTotalPriceLoaded && couponsData && totalPrice !== -1) {
       const currentTotalPrice = totalPrice;
-
-      console.log('selectedCoupon', selectedCoupon);
-
       const maxDiscountInfo = getMaxDiscountAmount(currentTotalPrice, couponsData);
-
       setSelectedCoupon(maxDiscountInfo.couponCode);
       setTotalPrice(currentTotalPrice - maxDiscountInfo.discountAmount);
-
       setIsTotalPriceLoaded(false);
     }
   }, [couponsData, totalPrice, isTotalPriceLoaded]);
@@ -134,9 +129,8 @@ const ViewCart = () => {
     if (couponsData && couponsData.coupons) {
       couponsData.coupons.forEach((coupon) => {
         if (coupon.couponTypeId === COUPON_TYPE_PERCENT) {
-          const percentDiscount = (totalPrice * coupon.discountAmount) / 100;
-          if (percentDiscount > maxPercentDiscount) {
-            maxPercentDiscount = percentDiscount;
+          if (coupon.discountAmount > maxPercentDiscount) {
+            maxPercentDiscount = coupon.discountAmount;
             selectedPercentCouponType = COUPON_TYPE_PERCENT;
             selectedPercentCouponCode = coupon.code;
           }
@@ -149,6 +143,8 @@ const ViewCart = () => {
         }
       });
     }
+
+    maxPercentDiscount = (totalPrice * maxPercentDiscount) / 100;
 
     const percentDiscountedPrice = totalPrice - maxPercentDiscount;
     const fixedAmountDiscountedPrice = totalPrice - maxFixedAmountDiscount;
