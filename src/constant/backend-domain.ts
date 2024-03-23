@@ -8,10 +8,11 @@
    let BACKEND_API: string;
 if (process.env.NODE_ENV === 'development') {
     // Development
-    BACKEND_API = 'https://e-learning-api-dev.trannhatsang.com'; // Dev API site
-    // BACKEND_API = 'http://localhost:9000'; // Local or Development API URL
+    // BACKEND_API = 'https://e-learning-api-dev.trannhatsang.com'; // Dev API site
+    // BACKEND_API = 'https://e-learning-api-prod.trannhatsang.com'; // Dev API site
+    BACKEND_API = 'http://localhost:9000'; // Local or Development API URL
   } else {
     // Production (assume process.env.BACKEND_URL is set on your server)
-    BACKEND_API = process.env.BACKEND_URL ?? ""; 
+    BACKEND_API = process.env.BACKEND_URL ?? "https://e-learning-api-prod.trannhatsang.com"; 
   }
   export const BACKEND_URL = BACKEND_API
