@@ -7,7 +7,9 @@ import { RootState } from '../../../store/store';
 import {
   useCreateCertificateMutation,
   useGetCertificateQuery,
-  useGetCourseEnrolledByUserQuery
+  useGetCourseEnrolledByUserQuery,
+  useGetDiscussionsByLessonIdQuery,
+  useGetNotesByLessonIdQuery
 } from '../client.service';
 import {
   createCertificatePath,
@@ -18,7 +20,7 @@ import {
 import './PathPlayer.scss';
 import Discusses from './components/Discusses';
 import Learners from './components/Learners';
-import Notes from './components/Notes';
+import Notes from './components/Notes/Notes';
 import PathSections from './components/PathSections';
 import PlayerScreen from './components/PlayerScreen/PlayerScreen';
 // type Props = {};
@@ -28,7 +30,6 @@ const PathPlayer = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const courseId = searchParams.get('courseId');
   const userId = useSelector<RootState, string>((state: RootState) => state.auth.userId);
-
   const { data, isFetching } = useGetCourseEnrolledByUserQuery(courseId as string);
   const dispatch = useDispatch();
   const [createCertificate, createCertificateResult] = useCreateCertificateMutation();
@@ -44,6 +45,13 @@ const PathPlayer = () => {
   const [currProgress, setCurrProgress] = useState(Number(progressPercent));
 
   const lessonIdsDone = useSelector((state: RootState) => state.client.lessonIdsDoneByCourseId);
+
+  const lessonId = useSelector((state: RootState) => state.client.lessonId);
+  const { data: discussData, isFetching: isFetchingDiscuss } = useGetDiscussionsByLessonIdQuery(lessonId);
+
+  const { data: NotesData, isFetching: isFetchingNotesData } = useGetNotesByLessonIdQuery(lessonId, {
+    skip: !lessonId
+  });
 
   // const isLessonDone = useSelector((state: RootState) => state.client.isLessonDone);
 
@@ -64,7 +72,6 @@ const PathPlayer = () => {
       createCertificate(newCertificate)
         .unwrap()
         .then((result) => {
-          console.log('create certificate successfully!', result);
           notification.success({
             message:
               'Congratulation! You have completed the course. Let check the certificate section to get your achievement!'
@@ -83,8 +90,6 @@ const PathPlayer = () => {
   // First initital first lesson of course
 
   useEffect(() => {
-    // console.log('lesson id: ', data?.course.lessons[0]._id || '');
-    // console.log('content: ', data?.course.lessons[0].content || '');
     let currentPlayingVideo = {
       lessonId: '',
       content: ''
@@ -146,7 +151,7 @@ const PathPlayer = () => {
     },
     {
       key: 'discuss',
-      label: `Discuss`,
+      label: `Discuss (${discussData?.discuss?.length || 0})`,
       children: <Discusses className='path-player__menu-content' />
     },
     {
@@ -156,7 +161,7 @@ const PathPlayer = () => {
     },
     {
       key: 'note',
-      label: `Note`,
+      label: `Notes (${NotesData?.notes?.length || 0})`,
       children: <Notes className='path-player__menu-content' />
     }
   ];
@@ -169,7 +174,7 @@ const PathPlayer = () => {
     <div className='path-player'>
       <div className='path-player__wrap'>
         <Row className='path-player__row'>
-          <Col md={24} lg={6} xl={6}>
+          <Col className='col col-left' md={24} lg={6} xl={6}>
             <div className='path-player__menu'>
               {/* Menu Header  */}
               <div className='path-player__menu-header'>
@@ -177,13 +182,10 @@ const PathPlayer = () => {
                   <Link className='path-player__menu-header-nav-back' to='/start'>
                     <ArrowLeftOutlined className='path-player__menu-header-nav-back-icon' /> Back to course page
                   </Link>
-                  {/* <Button className='path-player__menu-header-nav-collapse'>
-                    <DoubleLeftOutlined className='path-player__menu-header-nav-collapse-btn' />
-                  </Button> */}
                 </div>
                 <h3 className='path-player__menu-header-title'>{data?.course.name}</h3>
                 <div className='path-player__menu-progress'>
-                  <Progress percent={currProgress as unknown as number} status='active' />
+                  <Progress percent={(currProgress as unknown as number).toFixed(1)} status='active' />
                 </div>
               </div>
               {/* Menu Content  */}
@@ -192,7 +194,7 @@ const PathPlayer = () => {
               </div>
             </div>
           </Col>
-          <Col md={24} lg={18} xl={18}>
+          <Col className='col col-right' md={24} lg={18} xl={18}>
             <div className='path-player__player'>
               <div className='path-player__player-nav'>
                 <div className='path-player__player-nav-item'>

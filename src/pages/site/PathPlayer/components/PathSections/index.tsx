@@ -60,7 +60,6 @@ const PathSections = (props: Props) => {
       <div className='path-sections__wrap'>
         <div className='path-sections-item'>
           <div className='section'>
-            {/* <h3 className='section__title'>1. Section 01 - How to deal with SEO page</h3> */}
             <div className='section__content'>
               {isFetching && <Skeleton />}
               {!isFetching && (

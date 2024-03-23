@@ -15,10 +15,28 @@ import { authApi } from '../pages/auth.service';
 import authReducer from '../pages/auth.slice';
 import { reportApi } from '../pages/admin/report.service';
 import reportReducer from '../pages/admin/report.slice';
+import blogReducer from '../pages/admin/Blog/blog.slice';
+import { blogApi } from '../pages/admin/Blog/blog.service';
+import BlogcategoryReducer from '../pages/admin/BlogCategories/categoriesBlog.slice';
+import { blogCategoryApi } from '../pages/admin/BlogCategories/categoriesBlog.service';
+import { feedbackApi } from '../pages/admin/Feedbacks/feedback.service';
+import { transactionApi } from '../pages/admin/Transactions/transaction.service';
+import { reviewApi } from '../pages/admin/Reports/components/ReviewsCenter/review.service';
+import notesCourseReducer from '../pages/admin/CourseNotes/courseNotes.slice';
+import { courseNoteApi } from '../pages/admin/CourseNotes/courseNotes.service';
+import { couponApi } from '../pages/admin/Coupons/coupon.service';
+import { couponTypeApi } from '../pages/admin/CouponTypes/couponType.service';
+import { authorReportApi } from '../pages/admin/AuthorReport/authorReport.service';
+import BlogCommentsReducer from '../pages/admin/BlogComments/blogComments.slice';
+import { blogCommentsApi } from '../pages/admin/BlogComments/blogComments.service';
+import DiscussReducer from '../pages/admin/Discuss/discuss.slice';
+import { discussApi } from '../pages/admin/Discuss/discuss.service';
 
 const rootReducer = combineReducers({
   course: courseReducer,
   [courseApi.reducerPath]: courseApi.reducer,
+  // course: courseReducer,
+  [authorReportApi.reducerPath]: authorReportApi.reducer,
   order: orderReducer,
   [orderApi.reducerPath]: orderApi.reducer,
   category: categoryReducer,
@@ -30,7 +48,22 @@ const rootReducer = combineReducers({
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
   report: reportReducer,
-  [reportApi.reducerPath]: reportApi.reducer
+  [reportApi.reducerPath]: reportApi.reducer,
+  blog: blogReducer,
+  [blogApi.reducerPath]: blogApi.reducer,
+  blogCategories: BlogcategoryReducer,
+  [blogCategoryApi.reducerPath]: blogCategoryApi.reducer,
+  [feedbackApi.reducerPath]: feedbackApi.reducer,
+  [transactionApi.reducerPath]: transactionApi.reducer,
+  [reviewApi.reducerPath]: reviewApi.reducer,
+  noteCourse: notesCourseReducer,
+  [courseNoteApi.reducerPath]: courseNoteApi.reducer,
+  [couponApi.reducerPath]: couponApi.reducer,
+  [couponTypeApi.reducerPath]: couponTypeApi.reducer,
+  blogComments: BlogCommentsReducer,
+  [blogCommentsApi.reducerPath]: blogCommentsApi.reducer,
+  discuss: DiscussReducer,
+  [discussApi.reducerPath]: discussApi.reducer
 });
 
 export const store = configureStore({
@@ -40,11 +73,22 @@ export const store = configureStore({
     getDefaultMiddleware().concat(
       courseApi.middleware,
       orderApi.middleware,
+      authorReportApi.middleware,
       categoryApi.middleware,
       userApi.middleware,
       clientApi.middleware,
       authApi.middleware,
       reportApi.middleware,
+      blogApi.middleware,
+      blogCategoryApi.middleware,
+      feedbackApi.middleware,
+      transactionApi.middleware,
+      reviewApi.middleware,
+      courseNoteApi.middleware,
+      couponApi.middleware,
+      couponTypeApi.middleware,
+      blogCommentsApi.middleware,
+      discussApi.middleware,
       rtkQueryErrorLogger
     )
 });

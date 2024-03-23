@@ -1,0 +1,47 @@
+/* OrderDetailModal.scss */
+
+/* Modal */
+.order-detail-modal {
+  max-width: 600px;
+  margin: 0 auto;
+
+  /* Content */
+  .order-detail-content {
+    padding: 20px;
+
+    /* Information */
+    .order-detail-info {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.6;
+
+      /* Label */
+      .info-label {
+        font-weight: bold;
+      }
+    }
+
+    /* List */
+    .order-detail-list {
+      margin-top: 16px;
+
+      /* List Item */
+      .order-detail-item {
+        padding: 16px 0;
+        border-bottom: 1px solid #e8e8e8;
+
+        /* List Item Meta */
+        .order-detail-meta {
+          display: flex;
+          align-items: center;
+
+          /* Item Price */
+          .item-price {
+            margin-left: auto;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

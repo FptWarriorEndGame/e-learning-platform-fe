@@ -5,7 +5,8 @@ import OrdersList from './components/OrdersList';
 
 import { useGetCoursesQuery } from '../Courses/course.service';
 import { useGetOrdersQuery } from './order.service';
-
+import { Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
 const { Search } = Input;
 
 const Orders = () => {
@@ -35,10 +36,8 @@ const Orders = () => {
     value: 'all'
   });
 
-  console.log(open);
 
   const onSearchHandler = (value: string) => {
-    console.log(value);
 
     setOrdersParams({
       ...ordersParams,
@@ -51,7 +50,6 @@ const Orders = () => {
   };
 
   const orderDateFilterChange = (value: string) => {
-    console.log('value: ', value);
 
     setOrdersParams({
       ...ordersParams,
@@ -60,7 +58,6 @@ const Orders = () => {
   };
 
   const filterProductsChange = (value: string) => {
-    console.log('change: ', value);
 
     setOrdersParams({
       ...ordersParams,
@@ -74,13 +71,23 @@ const Orders = () => {
 
   return (
     <div className='orders'>
+      <div className='breakcrumb'>
+        <Breadcrumb
+          items={[
+            {
+              title: 'Orders'
+            },
+            {
+              title: <Link to='#'>Order Manager</Link>
+            },
+            
+          ]}
+        />
+      </div>
       <div className='orders__wrap'>
         <div className='orders__filter'>
           <Space className='sub-header__wrap'>
-            {/* <Button onClick={() => setOpen(true)} type='primary' icon={<PlusOutlined />}>
-              New account
-            </Button> */}
-            <Search placeholder='input search text' onSearch={onSearchHandler} style={{ width: 200 }} />
+            <Search placeholder='Input search text' onSearch={onSearchHandler} style={{ width: 200 }} className='search-wrap'/>
 
             <Select
               size='middle'

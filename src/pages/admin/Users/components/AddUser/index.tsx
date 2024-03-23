@@ -1,10 +1,13 @@
-import { Button, Col, Drawer, Form, Input, Row, Select, Space, notification } from 'antd';
+import { Button, Col, Drawer, Form, Input, Row, Select, Space, Upload, notification } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { IUser, UserRole } from '../../../../../types/user.type';
-import { UserError } from '../../../../../utils/helpers';
+import { UserError } from '../../../../../utils/errorHelpers';
 import { useAddUserMutation, useGetUserQuery, useUpdateUserMutation } from '../../user.service';
+import type { UploadFile } from 'antd/es/upload/interface';
+import { UploadOutlined } from '@ant-design/icons';
+import { UploadChangeParam } from 'antd/lib/upload/interface';
 
 const { Option } = Select;
 
@@ -22,39 +25,43 @@ const initialState: IUser = {
   role: UserRole.USER
 };
 
+interface FormValues extends Omit<IUser, '_id' | 'avatar'> {
+  avatar?: UploadFile[];
+}
+
 const AddUser: React.FC<AddUserProps> = (props) => {
   const [formData, setFormData] = useState<IUser>(initialState);
   const [addUser, addUserResult] = useAddUserMutation();
   const [updateUser, updateUserResult] = useUpdateUserMutation();
   const [form] = Form.useForm();
   const userId = useSelector((state: RootState) => state.user.userId);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const { data } = useGetUserQuery(userId, {
     skip: !userId
   });
 
   const submitHandler = (formData: Omit<IUser, '_id'>) => {
-    console.log('submit', formData);
-
     const newUser: Omit<IUser, '_id'> = {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
       role: formData.role,
-      avatar: formData.avatar,
-      password: formData.password
+      password: formData.password,
+      avatar: formData.avatar
     };
 
-    if (userId) {
-      console.log('update user');
+    if (fileList.length > 0 && fileList[0].originFileObj) {
+      newUser.avatar = fileList[0].originFileObj;
+    }
 
+    if (userId) {
       updateUser({
         _id: userId,
         body: newUser
       })
         .unwrap()
         .then((result) => {
-          console.log('result: ', result);
           props.onClose();
 
           notification.success({
@@ -68,24 +75,13 @@ const AddUser: React.FC<AddUserProps> = (props) => {
     } else {
       addUser(newUser)
         .then((result) => {
-          console.log(result);
           props.onClose();
           notification.success({
             message: 'Add User',
             description: 'Add user successfully!'
           });
-          // if(result.status === 401) {
-          //   notification.error({
-          //     message: 'Add User',
-          //     description: 'Add user failed!'
-          //   });
-          // }else {
-
-          // }
         })
         .catch((error: UserError) => {
-          console.log(error);
-
           notification.error({
             message: 'Add User failed',
             description: error.data.message
@@ -99,7 +95,6 @@ const AddUser: React.FC<AddUserProps> = (props) => {
       setFormData(data.user);
       form.setFieldsValue(data.user);
     } else {
-      // setFormData(initialState);
       form.setFieldsValue({
         _id: '',
         name: '',
@@ -111,6 +106,10 @@ const AddUser: React.FC<AddUserProps> = (props) => {
       });
     }
   }, [data, form, userId]);
+
+  const handleFileChange = (info: UploadChangeParam<UploadFile>) => {
+    setFileList(info.fileList);
+  };
 
   return (
     <>
@@ -165,7 +164,9 @@ const AddUser: React.FC<AddUserProps> = (props) => {
                 </Col>
                 <Col span={24}>
                   <Form.Item name='avatar' label='Avatar'>
-                    <Input placeholder='Your avatar' />
+                    <Upload beforeUpload={() => false} onChange={handleFileChange} fileList={fileList}>
+                      <Button icon={<UploadOutlined style={{ color: '#000' }} />}>Select File</Button>
+                    </Upload>
                   </Form.Item>
                 </Col>
                 <Col span={12}>

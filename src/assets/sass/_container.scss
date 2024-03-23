@@ -1,0 +1,21 @@
+.container-lg .container {
+    position: relative;
+    width: 100%;
+    max-width: 146.4rem;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 3.2rem;
+    @media (min-width: 1921px) {
+        max-width: 188rem;
+    }
+    @media (max-width: 1727px) {
+        max-width: 126.4rem;
+    }
+    @media (max-width: 1200px) {
+        max-width: 100%;
+    }
+    @media (max-width: 576px) {
+        padding: 0 1.6rem;
+    }
+}
+

@@ -11,8 +11,6 @@ type CourseDetailLessonItemProps = {
 const CourseDetailLessonItem = (props: CourseDetailLessonItemProps) => {
   const { _id, name, description, access, content, videoLength } = props.lessonItem;
 
-  // console.log('video Length: ');
-
   return (
     <div className='course-detail__lesson-item'>
       {!props.lessonItem && (

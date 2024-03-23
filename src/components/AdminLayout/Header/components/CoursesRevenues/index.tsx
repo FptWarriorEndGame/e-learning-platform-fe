@@ -43,7 +43,7 @@ const CoursesRevenues = () => {
       <Space>
         <h3 className='admin-header__page-title'>Courses revenue</h3>
 
-        <Button onClick={openCreateCourseHandler}>
+        <Button onClick={openCreateCourseHandler} className='btn-wrap'>
           <PlusCircleOutlined />
           Export Data
         </Button>

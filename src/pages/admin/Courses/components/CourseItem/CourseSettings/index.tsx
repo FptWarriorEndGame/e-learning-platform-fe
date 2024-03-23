@@ -3,6 +3,7 @@ import './CourseSettings.scss';
 
 type Props = {
   _id: string;
+  isDeleted: boolean | undefined;
   onClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
@@ -26,7 +27,7 @@ const CourseSettings = (props: Props) => {
       </div>
       <div className='course-settings__item'>
         <a data-action='delete' onClick={props.onClick} className='' href='#'>
-          Delete Course
+          {props.isDeleted ? 'Activate Course' : 'Deactivate Course'}
         </a>
       </div>
     </div>

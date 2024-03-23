@@ -1,0 +1,56 @@
+@import '../../../../assets/sass/base';
+
+.invoice-page {
+  margin-top: $header-height + 3rem;
+  font-family: $text-font;
+  font-size: 1.6rem;
+  padding: 0 10rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5rem;
+  }
+
+  &__logo {
+    width: 40%;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &__title {
+    @include h-style('h2');
+    margin-right: 5rem;
+  }
+
+  &__provided {
+    display: flex;
+    justify-content: space-between;
+    line-height: 2;
+    margin-top: 5rem;
+  }
+
+  &__provided-title {
+    @include h-style('h3');
+    margin-right: 5rem;
+  }
+
+  &__table {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    font-weight: 400;
+
+    .ant-table-thead {
+      font-weight: 800;
+      font-size: 1.6rem;
+    }
+
+    &-footer {
+      margin-left: 70%;
+      font-weight: 500;
+    }
+  }
+}

@@ -1,0 +1,295 @@
+.payment-form-container {
+  font-family: Arial, sans-serif;
+  max-width: 1200px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  line-height: 1.8em;
+  font-size: 18px;
+  margin-top: 50px;
+
+  .payment-methods-list, .payment-method-form { 
+    flex: 1;
+    width: 100%;
+    
+    h3 {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+  }
+.payment-form{
+  width: 100%;
+}
+  .saved-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+
+    .card-actions {
+      button {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .form-header {
+    background-color: #f5f5f5;
+    padding: 16px;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      font-size: 18px;
+      margin: 0;
+    }
+  }
+
+  .form-body {
+    padding: 16px;
+
+    .radio-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+
+      input[type='radio'] {
+        margin-right: 8px;
+      }
+
+      label {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      // Placeholder for credit card logos
+      .credit-card-logos {
+        // Add styles for the credit card logos here
+      }
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+
+      label {
+        margin-bottom: 8px;
+      }
+
+      input[type='text'],
+      input[type='tel'],
+      input[type='number'] {
+        font-size: 18px;
+        padding: 10px;
+        border: 1px solid #dcdcdc;
+        border-radius: 4px;
+        &:focus {
+          border-color: #a0a0a0;
+          outline: none;
+        }
+      }
+    }
+
+    .expiry-cvc-group {
+      display: flex;
+      justify-content: space-between;
+      
+      .expiry-group,
+      .cvc-group {
+        width: 48%;
+
+        input {
+          width: calc(50% - 4px);
+
+          &:first-child {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+
+      input[type='checkbox'] {
+        margin-right: 8px;
+      }
+
+      label {
+        font-size: 1.8em;
+        margin: 0;
+      }
+    }
+  }
+
+  .form-footer {
+    background-color: #f5f5f5;
+    padding: 16px;
+    text-align: center;
+
+    button {
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+
+      &:hover {
+        background-color: #003d82;
+      }
+    }
+  }
+  .saved-cards {
+  margin-bottom: 20px;
+}
+
+.saved-card {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-details {
+  font-size: 14px;
+  // Thêm style cho chi tiết thẻ tại đây
+}
+
+.card-actions {
+  button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken(#007bff, 5%);
+    }
+
+    &:last-child {
+      background-color: #dc3545;
+      
+      &:hover {
+        background-color: darken(#dc3545, 5%);
+      }
+    }
+  }
+}
+
+}
+
+.saved-cards {
+  margin-bottom: 20px;
+}
+
+.saved-card {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-details {
+  font-size: 14px;
+  // Thêm style cho chi tiết thẻ tại đây
+}
+
+.card-actions {
+  button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken(#007bff, 5%);
+    }
+
+    &:last-child {
+      background-color: #dc3545;
+      
+      &:hover {
+        background-color: darken(#dc3545, 5%);
+      }
+    }
+  }
+}
+
+.payment-method-wrapper {
+  max-width: 1200px;
+  margin-top: 30px;
+
+  .payment-methods-header {
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+    }
+  }
+
+  .payment-methods-content {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 1.6em;
+
+    .payment-methods-list {
+      h2 {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        padding: 10px 0;
+        border-bottom: 1px dashed #ccc;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .no-cards {
+        text-align: center;
+        padding: 20px;
+        font-style: italic;
+        color: #999;
+      }
+    }
+  }
+ 
+}
+.add-payment-method-button{
+  margin-top: 2em;
+  margin-bottom: 1.5em;
+}

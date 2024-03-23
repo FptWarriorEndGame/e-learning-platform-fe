@@ -1,17 +1,22 @@
 @import "../../../../../assets/sass/base";
 
 .header__categories {
-
+    overflow: hidden;
+    .header__categories-wrap{
+    @media(max-width: 768px) {
+        overflow-x: auto;
+        overflow-y: hidden;
+        .header__categories-item {
+            flex-shrink: 0;
+        }
+    }
+}
     @media (max-width: map-get($breakpoint, tablet)) {
         &-wrap {
             padding: 0rem 2rem;  
         }
     }
 
-    @media (max-width: map-get($breakpoint, mobile)) {
-        display: none;
-        
-    }
 
     
 }

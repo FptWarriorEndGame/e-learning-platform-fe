@@ -1,44 +1,443 @@
 @import "../../../assets/sass/base";
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,700&subset=latin-ext');
 
+body {
+  font-family: 'Quicksand', sans-serif;
+  color: #324e63;
+}
 
 .about {
-
-    margin-top: $header-height;
+    background: #cbd5e1;
+    margin-top: 8rem;
+    padding: 8rem 0;
+    text-align: center;
+    line-height: 1.3;
+    @media screen and (max-width: 1200px) {
+        padding: 4.8rem 0;
+      }
     
-    &__title {
-        @include h-style("h2");
-    }
-
-    &__sub-title {
-        @include h-style("h3");
-    }
-    
-    &__intro {
-        font-size: 1.6rem;
-        font-weight: normal;
-        line-height: 1.4;
-    }
-
-    &__member{
-
-        &-item {
-            border: 1px solid #ccc;
-            padding-bottom: 2rem;
-        }
-
-        &-img {
-            height: 36rem;
-            object-fit: cover;
-        }
-
-        &-desc {
-            line-height: 1.4;
-            font-size: 1.4rem;
-        }
-    }
-
-
-    &__wrapper {
-        margin-top: 2rem;
-    }
 }
+.about__intro{
+
+}
+.about__intro-header{
+    margin-bottom: 4rem;
+}
+.about__title{
+    font-size: 3.8rem;
+    color: #3a3a3a;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+.abou-desc{
+    font-size: 1.8rem;
+    color: #3a3a3a;
+    font-weight: 400;
+}
+// 
+.about__intro-content{
+
+}
+.about__sub-title{
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: #3a3a3a;
+}
+
+// 
+
+
+
+
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+  &.icon-fb{
+    width: 2em;
+    height: 2em;
+  }
+}
+.about__intro-list{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.wrapper {
+  width: calc(100% * (4/12));
+  height: auto;
+  padding: 5rem 1.2rem;
+  padding-top: 100px;
+  display: flex;
+  @media screen and (max-width: 1200px) {
+    padding: 5rem .75rem;
+    width: calc(100% * (6/12));
+  }
+  @media screen and (max-width: 768px) {
+    padding-top: 70px;
+    width: calc(100% * (12/12));
+
+  }
+
+}
+
+.profile-card {
+  width: 100%;
+  margin: auto;
+  box-shadow: 0px 8px 60px -10px rgba(13,28,39,0.6);
+  background: #fff;
+  border-radius: 12px;
+  position: relative;
+
+  &.active {
+    .profile-card__cnt {
+      filter: blur(6px);
+    }
+
+    .profile-card-message,
+    .profile-card__overlay {
+      opacity: 1;
+      pointer-events: auto;
+      transition-delay: .1s;
+    }
+
+    .profile-card-form {
+      transform: none;
+      transition-delay: .1s;
+    }
+  }
+
+  &__img {
+    width: 150px;
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    z-index: 4;
+    box-shadow: 0px 5px 50px 0px #194583, 0px 0px 0px 7px #324e63;
+
+    @media screen and (max-width: 576px) {
+      width: 120px;
+      height: 120px;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+  }
+
+  &__cnt {
+    margin-top: -35px;
+    text-align: center;
+    padding: 0 20px;
+    padding-bottom: 40px;
+    transition: all .3s;
+    @media screen and (max-width: 1200px) {
+        padding: 0 1.4rem 3.2rem;
+
+      }
+  }
+
+  &__name {
+    font-weight: 700;
+    font-size: 24px;
+    color: #194583;
+    margin-bottom: 15px;
+  }
+
+  &__txt {
+    font-size: 18px;
+    font-weight: 500;
+    color: #324e63;
+    margin-bottom: 15px;
+
+    strong {
+      //color: #ff2846;
+      font-weight: 700;
+    }
+
+  }
+
+  &-loc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+
+    &__icon {
+      display: inline-flex;
+      font-size: 27px;
+      margin-right: 10px;
+      //color: #6944ff;
+    }
+
+  }
+
+  &-inf {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-top: 35px;
+
+    &__item {
+      padding: 10px 32px;
+
+      @media screen and (max-width: 768px) {
+        padding: 10px 20px;
+        min-width: 120px;
+      }
+
+    }
+
+    &__title {
+      font-weight: 700;
+      font-size: 27px;
+      //color: #6944ff;
+      color: #324e63;
+    }
+
+    &__txt {
+      font-weight: 500;
+      margin-top: 7px;
+    }
+
+  }
+
+  &-social {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    &__item {
+      display: inline-flex;
+      width: 55px;
+      height: 55px;
+      margin: 15px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      background: #405de6;
+      box-shadow: 0px 7px 30px rgba(43,98,169,0.5);
+      position: relative;
+      font-size: 21px;
+      flex-shrink: 0;
+      transition: all .3s;
+
+      @media screen and (max-width: 768px) {
+        width: 50px;
+        height: 50px;
+        margin: 10px;
+      }
+
+      @media screen and (min-width: 768px){
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+
+      &.facebook {
+        background: linear-gradient(45deg, #3b5998, #0078d7);
+        box-shadow: 0px 4px 30px rgba(43, 98, 169, 0.5);
+      }
+
+      &.github {
+        background: linear-gradient(45deg, #333333, #626b73);
+        box-shadow: 0px 4px 30px rgba(63, 65, 67, 0.6);
+      }
+
+
+      &.link {
+        background: linear-gradient(45deg, #d5135a, #f05924);
+        box-shadow: 0px 4px 30px rgba(223, 45, 70, 0.6);
+      }
+
+    }
+
+    .icon-font {
+      display: inline-flex;
+    }
+
+  }
+
+  &-ctr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    gap: 1.8rem;
+    @media screen and (max-width: 576px) {
+      flex-wrap: wrap;
+      gap: .8rem;
+    }
+
+  }
+
+  &__button {
+
+    background: none;
+    border: none;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    padding: 15px 40px;
+    border-radius: 50px;
+    color: #fff;
+    cursor: pointer;
+    backface-visibility: hidden;
+    transition: all .3s;
+
+
+    @media screen and (max-width: 576px) {
+      width: 100%;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &:focus {
+      outline: none!important;
+    }
+
+    @media screen and (min-width: 768px) {
+      &:hover {
+        transform: translateY(-5px);
+      }
+    }
+
+    &.button--blue {
+      background: linear-gradient(45deg, #194583, #324e63);
+      box-shadow: 0px 4px 30px rgba(19, 127, 212, 0.4);
+
+      &:hover {
+        box-shadow: 0px 7px 30px rgba(19, 127, 212, 0.75);
+      }
+
+    }
+
+    &.button--orange {
+      background: linear-gradient(45deg, #d5135a, #f05924);
+      box-shadow: 0px 4px 30px rgba(223, 45, 70, 0.35);
+
+      &:hover {
+        box-shadow: 0px 7px 30px rgba(223, 45, 70, 0.75);
+      }
+
+    }
+
+    &.button--gray {
+      box-shadow: none;
+      background: #dcdcdc;
+      color: #142029;
+    }
+
+  }
+
+  &-message {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 130px;
+    padding-bottom: 100px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all .3s;
+  }
+
+  &-form {
+    box-shadow: 0 4px 30px rgba(15, 22, 56, 0.35);
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    background: #fff;
+    border-radius: 10px;
+    padding: 35px;
+    transform: scale(.8);
+    position: relative;
+    z-index: 3;
+    transition: all .3s;
+
+    @media screen and (max-width: 768px) {
+      max-width: 90%;
+      height: auto;
+    }
+
+    @media screen and (max-width: 576px) {
+      padding: 20px;
+    }
+
+    &__bottom {
+      justify-content: space-between;
+      display: flex;
+
+      @media screen and (max-width: 576px) {
+        flex-wrap: wrap;
+      }
+
+    }
+
+  }
+
+  textarea {
+    width: 100%;
+    resize: none;
+    height: 210px;
+    margin-bottom: 20px;
+    border: 2px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 15px 20px;
+    color: #324e63;
+    font-weight: 500;
+    font-family: 'Quicksand', sans-serif;
+    outline: none;
+    transition: all .3s;
+
+    &:focus {
+      outline: none;
+      border-color: #8a979e;
+    }
+
+  }
+
+  &__overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: rgba(22, 33, 72, 0.35);
+    border-radius: 12px;
+    transition: all .3s;
+  }
+
+}
+
+
+
+
+
+
+
+

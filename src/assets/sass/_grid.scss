@@ -1,0 +1,40 @@
+.container-lg {
+    .d-flex {
+        &.f-ctn {
+            width: calc(100% + 2.4rem);
+            margin-left: -1.2rem;
+    
+            @media(max-width: 1200px) {
+                width: calc(100% + 1.5rem);
+                margin-left: -0.75rem;
+            }
+    
+            @media(max-width: 768px) {
+                width: calc(100% + 0.8rem);
+                margin-left: -0.4rem;
+            }
+        }
+    }
+    
+    .col {
+        padding: 0 1.2rem;
+    
+        @media(max-width: 1200px) {
+            padding: 0 0.75rem;
+        }
+    
+        @media(max-width: 768px) {
+            padding: 0 0.4rem;
+        }
+    }   
+    
+    .sec-com-tt {
+        font-size: 4rem;
+        @include max(1200px){
+            font-size: 2.4rem;
+        }
+        @include max(550px){
+            font-size: 1.8rem;
+        }
+    }
+}

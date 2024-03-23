@@ -1,9 +1,222 @@
+@import '../../../assets/sass/admin-base';
+
 .admin-auth {
-    margin-top: 10rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
 
+  &__content {
+    color: $light-text-color;
+    background: linear-gradient(180deg, #0575e6 0%, #02298a 84.79%, #021b79 100%);
 
-    &__title {
-        font-size: 2.4rem;
-        margin-bottom: 2rem;
+    &-container {
+      padding-top: 39vh;
+      padding-right: 5rem;
+      margin-left: 20%;
+
+      @media (max-width: 1440px) {
+        margin-left: 15%;
+      }
     }
+  }
+
+  &__title {
+    font-size: 4rem;
+    line-height: 1.2;
+    font-weight: bold;
+    padding-bottom: 1rem;
+  }
+
+  &__description {
+    font-size: 1.8rem;
+    line-height: 1.2;
+    font-weight: 400;
+    padding-bottom: 2rem;
+  }
+
+  &__read-more {
+    display: flex;
+    padding: 0.8rem 3rem;
+    gap: 1rem;
+    border-radius: 3rem;
+    background-color: #0575e6;
+    transition: all 0.3s ease;
+
+    span {
+      padding: 0 0.4rem;
+      line-height: 1.5;
+      font-weight: 400;
+      font-size: 1.4rem;
+    }
+
+    &:hover {
+      background-color: lighten(#0575e6, 10%);
+      box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+  }
+
+  &__ellipse {
+    width: 55.7rem;
+    height: 55.7rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 0.1rem solid #0575e6;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    &--first {
+      transform: translate(-37%, 48%);
+    }
+
+    &--second {
+      transform: translate(-23%, 54%);
+    }
+
+    @media (max-width: 1440px) {
+      &--first {
+        transform: translate(-54%, 65%);
+      }
+
+      &--second {
+        transform: translate(-40%, 71%);
+      }
+    }
+
+    @media (max-width: 1200px) {
+      &--first {
+        transform: translate(-64%, 75%);
+      }
+
+      &--second {
+        transform: translate(-50%, 81%);
+      }
+    }
+
+    @media (max-width: 992px) {
+      &--first {
+        transform: translate(-68%, 79%);
+      }
+
+      &--second {
+        transform: translate(-55%, 85%);
+      }
+    }
+  }
+
+  &__login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &-container {
+      color: #333;
+      width: 47%;
+      margin-right: 15%;
+
+      @media (max-width: 1440px) {
+        width: 60%;
+        margin-right: 5%;
+      }
+
+      @media (max-width: 992px) {
+        width: 70%;
+        margin-right: 0;
+      }
+
+      @media (max-width: 768px) {
+        width: 60%;
+      }
+
+      @media (max-width: 576px) {
+        width: 80%;
+      }
+    }
+  }
+
+  &__welcome {
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-bottom: 0.3rem;
+  }
+
+  &__welcome-back {
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 4rem;
+  }
+
+  &__login-form {
+    &__item {
+      margin-bottom: 1.6rem;
+
+      .ant-input-prefix {
+        margin-inline-end: 0.8rem;
+      }
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 30px white inset !important;
+    }
+
+    input:-moz-autofill,
+    input:-moz-autofill:hover,
+    input:-moz-autofill:focus,
+    input:-moz-autofill:active {
+      -webkit-box-shadow: 0 0 0 30px white inset !important;
+    }
+
+    &__input {
+      padding: 1.8rem 2.6rem;
+      border-radius: 3rem;
+      border: 0.1rem solid #eee;
+      background: #fff;
+      font-size: 1.4rem;
+      font-weight: 400;
+
+      &::placeholder {
+        font-size: 1.4rem;
+        font-weight: 400;
+        opacity: 0.3;
+      }
+    }
+
+    &__button.ant-btn.ant-btn-primary {
+      width: 100%;
+      height: 6.2rem;
+      border-radius: 3rem;
+      background-color: #0575e6;
+      transition: all 0.3s ease;
+      span {
+        font-size: 1.4rem;
+        font-weight: 400;
+      }
+
+      &:hover {
+        background-color: darken(#0575e6, 10%);
+      }
+    }
+  }
+
+  &__forgot-password {
+    color: #333;
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-top: 0.1rem;
+    opacity: 0.7;
+    text-align: center;
+
+    a {
+      &:hover {
+        color: #333;
+        text-decoration: underline;
+      }
+    }
+  }
 }

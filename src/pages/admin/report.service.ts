@@ -59,12 +59,16 @@ export interface getReportsCourseInsightsResponse {
   reports: {
     _id: string;
     name: string;
+    author: string;
     learners: number;
     avgStudyTime: number;
     views: number;
-    socialInteractions: number;
+    socialInteractions?: number;
     totalVideosLength: number;
     lessons: number;
+    numberOfWishlist: number;
+    numberOfRatings: number;
+    avgRatings: number;
   }[];
 }
 
@@ -75,8 +79,10 @@ export const reportApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}/admin`,
     prepareHeaders(headers) {
-      headers.set('authorization', 'Bearer ABCXYZ');
-      // Set some headers here !
+      const adminToken = localStorage.getItem('adminToken');
+      if (adminToken) {
+        headers.set('authorization', `Bearer ${adminToken}`);
+      }
       return headers;
     }
   }),
@@ -246,9 +252,10 @@ export const reportApi = createApi({
         return [{ type: 'Reports', id: 'LIST' }];
       }
     }),
-    getReportsUserProgress: build.query<getReportsUserProgressResponse, void>({
-      query: () => ({
-        url: `/reports/users-progress`
+    getReportsUserProgress: build.query<getReportsUserProgressResponse, {dateStart: string, dateEnd: string, authorId: string}>({
+      query: (params) => ({
+        url: `/reports/users-progress`,
+        params
       }), // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
@@ -286,9 +293,51 @@ export const reportApi = createApi({
         return [{ type: 'Reports', id: 'LIST' }];
       }
     }),
-    getReportsCourseInsights: build.query<getReportsCourseInsightsResponse, void>({
-      query: () => ({
-        url: `/reports/course-insights`
+    getReportsCourseInsights: build.query<getReportsCourseInsightsResponse, {dateStart: string, dateEnd: string, authorId: string}>({
+      query: (params) => ({
+        url: `/reports/course-insights`,
+        params
+      }), // method không có argument
+      /**
+       * providesTags có thể là array hoặc callback return array
+       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
+       * thì sẽ làm cho categories method chạy lại
+       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
+       */
+      providesTags(result) {
+        /**
+         * Cái callback này sẽ chạy mỗi khi Categories chạy
+         * Mong muốn là sẽ return về một mảng kiểu
+         * ```ts
+         * interface Tags: {
+         *    type: "User";
+         *    id: string;
+         *  }[]
+         *```
+         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
+         */
+
+        if (Array.isArray(result) && result.map) {
+          if (result) {
+            const final = [
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Reports' as const, _id })),
+              { type: 'Reports' as const, id: 'LIST' }
+            ];
+            console.log('final: ', final);
+
+            return final;
+          }
+        }
+
+        // const final = [{ type: 'Categories' as const, id: 'LIST' }]
+        // return final
+        return [{ type: 'Reports', id: 'LIST' }];
+      }
+    }),
+    getCoursesReportByAuthor: build.query<any, {dateStart?: string, dateEnd?: string}>({
+      query: (params) => ({
+        url: `/reports/courses-report-by-author`,
+        params
       }), // method không có argument
       /**
        * providesTags có thể là array hoặc callback return array
@@ -335,5 +384,6 @@ export const {
   useGetNewSignupsQuery,
   useGetRevenueQuery,
   useGetReportsUserProgressQuery,
-  useGetReportsCourseInsightsQuery
+  useGetReportsCourseInsightsQuery,
+  useGetCoursesReportByAuthorQuery
 } = reportApi;

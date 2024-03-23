@@ -1,7 +1,5 @@
 import { Button, Modal, Spin } from 'antd';
 
-// type Props = {}
-
 const BigSpinner = () => {
   return (
     <div>

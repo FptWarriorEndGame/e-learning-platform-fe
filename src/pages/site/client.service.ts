@@ -1,3 +1,5 @@
+import { IReview, IReviewReply } from '../../types/review.type';
+import { ICoupon } from '../../types/coupon.type';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import jwtDecode from 'jwt-decode';
 import { BACKEND_URL } from '../../constant/backend-domain';
@@ -5,32 +7,16 @@ import { ICategory } from '../../types/category.type';
 import { ICertificate } from '../../types/certificate';
 import { ICourse } from '../../types/course.type';
 import { ILesson, ISection } from '../../types/lesson.type';
-import { IOrder } from '../../types/order.type';
+import { IOrder, IOrderHistory } from '../../types/order.type';
 import { IParams } from '../../types/params.type';
 import { IUser } from '../../types/user.type';
-import { CustomError } from '../../utils/helpers';
-
-/**
- * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
- * Thường sẽ có 2 cách tiếp cận
- * Cách 1: Đây là cách những video trước đây mình dùng
- * 1. Sau khi thêm 1 bài post thì server sẽ trả về data của bài post đó
- * 2. Chúng ta sẽ tiến hành lấy data đó thêm vào state redux
- * 3. Lúc này UI chúng ta sẽ được sync
- *
- * ====> Rủi ro cách này là nếu khi gọi request add post mà server trả về data không đủ các field để
- * chúng ta hiển thị thì sẽ gặp lỗi. Nếu có nhiều người cùng add post thì data sẽ sync thiếu,
- * Chưa kể chúng ta phải quản lý việc cập nhật state nữa, hơi mệt!
- *
- *
- * Cách 2: Đây là cách thường dùng với RTK query
- * 1. Sau khi thêm 1 bài post thì server sẽ trả về data của bài post đó
- * 2. Chúng ta sẽ tiến hành fetch lại API get Orders để cập nhật state redux
- * 3. Lúc này UI chúng ta sẽ được sync
- *
- * =====> Cách này giúp data dưới local sẽ luôn mới nhất, luôn đồng bộ với server
- * =====> Khuyết điểm là chúng ta sẽ tốn thêm một lần gọi API. Thực ra thì điều này có thể chấp nhận được
- */
+import { IContact } from '../../types/contact.type';
+import { CustomError } from '../../utils/errorHelpers';
+import { Blog } from '../../types/page.type';
+import { IBlogComment } from '../../types/blogComments.type';
+import { INote } from '../../types/note.type';
+import { IDataSelect } from '../../types/dataSelect.type';
+import { IDiscuss } from '../../types/discuss.type';
 
 interface getCategoriesResponse {
   categories: ICategory[];
@@ -62,6 +48,7 @@ export interface getRetrieveCartResponse {
     items: ICourseDetail[];
     totalPrice: number;
   };
+  duplicatedIds: string[];
   message: string;
 }
 
@@ -74,6 +61,13 @@ export interface getAuthorsResponse {
       _id: string;
     }
   ][];
+}
+export interface getAuthorsSelectResponse {
+  message: string;
+  authors: {
+    name: string;
+    label: string;
+  }[];
 }
 
 export interface getSectionsResponse {
@@ -117,6 +111,11 @@ export interface ICourseDetail extends ICourse {
   updatedAt: string;
 }
 
+interface UpdateDiscussionRequest {
+  discussId: string;
+  comments: string;
+}
+
 export interface getCourseDetailResponse {
   course: ICourseDetail;
   message: string;
@@ -157,10 +156,212 @@ export interface getCertificateResponse {
   message: string;
 }
 
+export interface UpdateUserResponse {
+  message: string;
+  userId: string;
+}
+
+export interface getOrdersByUserIdResponse {
+  orders: IOrderHistory[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  message: string;
+}
+
+export interface GetOrderByIdResponse {
+  message: string;
+  order: IOrderHistory;
+}
+
+export interface GetAllBlogReponse {
+  blogs: Blog[];
+  message: string;
+  totalPages: number;
+}
+
+export interface GetBlogByIdResponse {
+  blog: Blog;
+  message: string;
+}
+export interface RelatedCoursesResponse {
+  message: string;
+  relatedCourses: ICourse[];
+}
+
+export interface CreateReviewResponse {
+  message: string;
+  review: IReview;
+}
+
+export interface CreateVnpayUrlResponse {
+  redirectUrl: string;
+}
+
+export interface SuggestedCoursesResponse {
+  message: string;
+  suggestedCourses: ICourse[];
+}
+
+export interface CreateWishlistResponse {
+  message: string;
+  wishlist: {
+    _id: string;
+    courseId: string;
+    userId: string;
+  };
+}
+
+export interface DeleteWishlistResponse {
+  message: string;
+}
+
+export interface GetCourseIdsFromWishlistByUserIdResponse {
+  message: string;
+  data: string[];
+}
+
+export interface GetCoursesFromWishlistByUserIdResponse {
+  message: string;
+  courses: ICourse[];
+}
+
+export interface CreateContactResponse {
+  message: string;
+  contact: IContact;
+}
+
+export interface GetBlogCommentsResponse {
+  comments: IBlogComment[];
+  message: string;
+}
+
+export interface AddBlogCommentResponse {
+  comment: IBlogComment;
+  message: string;
+}
+
+interface GetNotesResponse {
+  notes: INote[];
+  message: string;
+}
+
+interface CreateNoteRequest {
+  userId: string;
+  lessonId: string;
+  content: string;
+  videoMinute: number;
+  courseId: string;
+}
+
+interface UpdateNoteRequest {
+  _id: string;
+  content: string;
+}
+
+interface NoteResponse {
+  note: INote;
+  message: string;
+}
+
+interface GetReviewsByCourseIdResponse {
+  message: string;
+  reviews: IReview[];
+  total: number;
+}
+
+export interface GetTotalReviewsByCourseIdResponse {
+  message: string;
+  totalReviews: number;
+}
+
+export interface GetAverageRatingByCourseIdResponse {
+  message: string;
+  averageRating: number;
+}
+
+export interface GetRatingPercentageByCourseIdResponse {
+  message: string;
+  ratingPercentages: {
+    '1': string;
+    '2': string;
+    '3': string;
+    '4': string;
+    '5': string;
+  };
+}
+
+export interface GetReviewRepliesByReviewIdResponse {
+  message: string;
+  replies: IReviewReply[];
+}
+
+export interface GetCouponsValidForCoursesResponse {
+  message: string;
+  coupons: ICoupon[] | null;
+  maxDiscountCoupon: ICoupon | null;
+}
+
+export interface GetTotalPriceResponse {
+  message: string;
+  totalPrice: number;
+  discountPrice: number;
+}
+
+export interface GetAllDiscussionsResponse {
+  message: string;
+  discuss: IDiscuss[];
+}
+
+export interface GetDiscussionsByLessonIdResponse {
+  message: string;
+  discuss: IDiscuss[];
+}
+
+export interface GetDiscussionsBySectionIdResponse {
+  message: string;
+  discuss: IDiscuss[];
+}
+
+export interface AddDiscussionResponse {
+  message: string;
+  discuss: IDiscuss;
+}
+
+interface AddDiscussionRequest {
+  comments: string;
+  userId: string;
+  parentDiscussId: string;
+  lessonId: string;
+  courseId: string;
+  title: string;
+}
+
+export interface UpdateDiscussionResponse {
+  message: string;
+  discuss: IDiscuss;
+}
+
+export interface DeleteDiscussionResponse {
+  message: string;
+}
+
 export const clientApi = createApi({
-  reducerPath: 'clientApi', // Tên field trong Redux state
-  tagTypes: ['Clients'], // Những kiểu tag cho phép dùng trong blogApi
-  keepUnusedDataFor: 10, // Giữ data trong 10s sẽ xóa (mặc định 60s)
+  reducerPath: 'clientApi',
+  tagTypes: [
+    'Clients',
+    'Users',
+    'Orders',
+    'Courses',
+    'Reviews',
+    'Wishlist',
+    'Feedbacks',
+    'Coupons',
+    'BlogComment',
+    'Note',
+    'Discussions'
+  ],
+  keepUnusedDataFor: 10,
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}`,
     prepareHeaders(headers) {
@@ -170,53 +371,27 @@ export const clientApi = createApi({
 
       if (token) {
         const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(token);
-
+        headers.set('authorization', `Bearer ${token}`);
         headers.set('UserId', decodedToken.userId);
       }
 
-      // Add the userId header
-
-      // Set some headers here !
       return headers;
     }
   }),
   endpoints: (build) => ({
-    // Generic type theo thứ tự là kiểu response trả về và argument
     getCategories: build.query<getCategoriesResponse, void>({
-      query: () => '/categories', // method không có argument
-      /**
-       * providesTags có thể là array hoặc callback return array
-       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
-       * thì sẽ làm cho Orders method chạy lại
-       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
-       */
+      query: () => '/categories',
       providesTags(result) {
-        /**
-         * Cái callback này sẽ chạy mỗi khi Orders chạy
-         * Mong muốn là sẽ return về một mảng kiểu
-         * ```ts
-         * interface Tags: {
-         *    type: "User";
-         *    id: string;
-         *  }[]
-         *```
-         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
-         */
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
               ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
-
             return final;
           }
         }
 
-        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
-        // return final
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
@@ -224,40 +399,19 @@ export const clientApi = createApi({
       query: (params) => ({
         url: '/courses',
         params: params
-      }), // method không có argument
-      /**
-       * providesTags có thể là array hoặc callback return array
-       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
-       * thì sẽ làm cho Orders method chạy lại
-       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
-       */
+      }),
       providesTags(result) {
-        /**
-         * Cái callback này sẽ chạy mỗi khi Orders chạy
-         * Mong muốn là sẽ return về một mảng kiểu
-         * ```ts
-         * interface Tags: {
-         *    type: "User";
-         *    id: string;
-         *  }[]
-         *```
-         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
-         */
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
               ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
 
             return final;
           }
         }
 
-        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
-        // return final
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
@@ -265,227 +419,118 @@ export const clientApi = createApi({
       query: (params) => ({
         url: '/courses/popular',
         params: params
-      }), // method không có argument
-      /**
-       * providesTags có thể là array hoặc callback return array
-       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
-       * thì sẽ làm cho Orders method chạy lại
-       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
-       */
+      }),
       providesTags(result) {
-        /**
-         * Cái callback này sẽ chạy mỗi khi Orders chạy
-         * Mong muốn là sẽ return về một mảng kiểu
-         * ```ts
-         * interface Tags: {
-         *    type: "User";
-         *    id: string;
-         *  }[]
-         *```
-         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
-         */
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
               ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
-
             return final;
           }
         }
-
-        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
-        // return final
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
 
     getAuthors: build.query<getAuthorsResponse, void>({
       query: () => ({
-        url: '/authors'
-      }), // method không có argument
-      /**
-       * providesTags có thể là array hoặc callback return array
-       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
-       * thì sẽ làm cho Orders method chạy lại
-       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
-       */
+        url: '/users/authors'
+      }),
       providesTags(result) {
-        /**
-         * Cái callback này sẽ chạy mỗi khi Orders chạy
-         * Mong muốn là sẽ return về một mảng kiểu
-         * ```ts
-         * interface Tags: {
-         *    type: "User";
-         *    id: string;
-         *  }[]
-         *```
-         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
-         */
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
               ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
 
             return final;
           }
         }
 
-        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
-        // return final
+        return [{ type: 'Clients', id: 'LIST' }];
+      }
+    }),
+    getAuthorsSelect: build.query<IDataSelect[], void>({
+      query: () => ({
+        url: '/users/authors/select'
+      }),
+      providesTags() {
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
     getCoursesOrderedByUser: build.query<getCoursesResponse, IParams>({
       query: (params) => ({
-        url: `/courses/${params._userId as string}/ordered`,
+        url: `/courses/ordered/${params._userId as string}`,
         params: {
           _limit: params._limit,
           _page: params._page
         }
-      }), // method không có argument
-      /**
-       * providesTags có thể là array hoặc callback return array
-       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
-       * thì sẽ làm cho Orders method chạy lại
-       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
-       */
+      }),
       providesTags(result) {
-        /**
-         * Cái callback này sẽ chạy mỗi khi Orders chạy
-         * Mong muốn là sẽ return về một mảng kiểu
-         * ```ts
-         * interface Tags: {
-         *    type: "User";
-         *    id: string;
-         *  }[]
-         *```
-         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
-         */
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
               ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
-
             return final;
           }
         }
 
-        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
-        // return final
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
     getUserDetail: build.query<getUserDetailResponse, IParams>({
       query: (params) => ({
-        url: `/users/${params._userId as string}/detail`,
+        url: `/users/user/detail/${params._userId as string}`,
         params: {
           _limit: params._limit,
           _page: params._page
         }
-      }), // method không có argument
-      /**
-       * providesTags có thể là array hoặc callback return array
-       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
-       * thì sẽ làm cho Orders method chạy lại
-       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
-       */
+      }),
       providesTags(result) {
-        /**
-         * Cái callback này sẽ chạy mỗi khi Orders chạy
-         * Mong muốn là sẽ return về một mảng kiểu
-         * ```ts
-         * interface Tags: {
-         *    type: "User";
-         *    id: string;
-         *  }[]
-         *```
-         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
-         */
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
-              ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
-              { type: 'Clients' as const, id: 'LIST' }
+              ...result.map(({ _id }: { _id: string }) => ({ type: 'Users' as const, _id })),
+              { type: 'Users' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
-
             return final;
           }
         }
-
-        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
-        // return final
-        return [{ type: 'Clients', id: 'LIST' }];
+        return [{ type: 'Users', id: 'LIST' }];
       }
     }),
-    /**
-     * Chúng ta dùng mutation đối với các trường hợp POST, PUT, DELETE
-     * Post là response trả về và Omit<Post, 'id'> là body gửi lên
-     */
-    getRetrieveCart: build.query<getRetrieveCartResponse, { courseIds: string[] }>({
+    getRetrieveCart: build.query<getRetrieveCartResponse, { courseIds: string[]; userId: string }>({
       query: (params) => ({
-        url: `/cart/retrieve`,
+        url: `/carts/retrieve`,
         params: {
-          _courseIds: params.courseIds
+          _courseIds: params.courseIds,
+          _userId: params.userId
         }
-      }), // method không có argument
-      /**
-       * providesTags có thể là array hoặc callback return array
-       * Nếu có bất kỳ một invalidatesTag nào match với providesTags này
-       * thì sẽ làm cho Orders method chạy lại
-       * và cập nhật lại danh sách các bài post cũng như các tags phía dưới
-       */
+      }),
       providesTags(result) {
-        /**
-         * Cái callback này sẽ chạy mỗi khi Orders chạy
-         * Mong muốn là sẽ return về một mảng kiểu
-         * ```ts
-         * interface Tags: {
-         *    type: "User";
-         *    id: string;
-         *  }[]
-         *```
-         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
-         */
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
               ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
-
             return final;
           }
         }
 
-        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
-        // return final
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
     createOrder: build.mutation<createOrderResponse, Omit<IOrder, '_id'>>({
       query(body) {
         try {
-          // throw Error('hehehehe')
-          // let a: any = null
-          // a.b = 1
           return {
-            url: 'order',
+            url: 'orders/order/create',
             method: 'POST',
             body
           };
@@ -493,21 +538,21 @@ export const clientApi = createApi({
           throw new CustomError((error as CustomError).message);
         }
       },
-      /**
-       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
-       * match với nó sẽ bị gọi lại
-       * Trong trường hợp này Orders sẽ chạy lại
-       */
-      invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Clients', id: 'LIST' }])
+
+      invalidatesTags: (result, error, body) =>
+        error
+          ? []
+          : [
+              { type: 'Orders' as const, id: 'LIST' },
+              { type: 'Clients' as const, id: 'LIST' },
+              { type: 'Courses' as const, id: 'LIST' }
+            ]
     }),
     updateLessonDoneByUser: build.mutation<createOrderResponse, { userId: string; lessonId: string }>({
       query(body) {
         try {
-          // throw Error('hehehehe')
-          // let a: any = null
-          // a.b = 1
           return {
-            url: `lesson-done/${body.lessonId}`,
+            url: `lessons/lesson/done/${body.lessonId}`,
             method: 'POST',
             body: {
               userId: body.userId
@@ -517,16 +562,10 @@ export const clientApi = createApi({
           throw new CustomError((error as CustomError).message);
         }
       }
-      /**
-       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
-       * match với nó sẽ bị gọi lại
-       * Trong trường hợp này Orders sẽ chạy lại
-       */
-      // invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Clients', id: 'LIST' }])
     }),
     getCategory: build.query<ICategory, string>({
       query: (id) => ({
-        url: `categories/${id}`,
+        url: `categories/category/${id}`,
         headers: {
           hello: 'Im Sang'
         }
@@ -534,75 +573,50 @@ export const clientApi = createApi({
     }),
     getCourse: build.query<getCourseResponse, string>({
       query: (id) => ({
-        url: `courses/${id}`
+        url: `courses/course/${id}`
       })
     }),
     getCourseEnrolledByUser: build.query<getCourseEnrolledByUserResponse, string>({
       query: (id) => ({
-        url: `courses/${id}/enrolled`
-        // headers: {
-        //   hello: 'Im Sang'
-        // }
+        url: `courses/course/enrolled/${id}`
       }),
       providesTags(result) {
-        /**
-         * Cái callback này sẽ chạy mỗi khi Orders chạy
-         * Mong muốn là sẽ return về một mảng kiểu
-         * ```ts
-         * interface Tags: {
-         *    type: "User";
-         *    id: string;
-         *  }[]
-         *```
-         * vì thế phải thêm as const vào để báo hiệu type là Read only, không thể mutate
-         */
-
         if (Array.isArray(result) && result.map) {
           if (result) {
             const final = [
               ...result.map(({ _id }: { _id: string }) => ({ type: 'Clients' as const, _id })),
               { type: 'Clients' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
-
             return final;
           }
         }
 
-        // const final = [{ type: 'Orders' as const, id: 'LIST' }]
-        // return final
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
     getCourseDetail: build.query<getCourseDetailResponse, { courseId: string; userId: string }>({
       query: (params) => {
         return {
-          url: `courses/${params.courseId}/detail?userId=${params.userId}`
+          url: `courses/course/detail/${params.courseId}?userId=${params.userId}`
         };
       }
     }),
     getSectionsByCourseId: build.query<getSectionsResponse, string>({
       query: (courseId) => ({
-        url: `sections/${courseId}/course`
-        // headers: {
-        //   userId: 'Im Sang'
-        // }
+        url: `sections/course/${courseId}`
       })
     }),
     getCertificate: build.query<getCertificateResponse, { courseId: string; userId: string }>({
       query: (params) => ({
-        url: `get-certificate`,
+        url: `certificates/certificate/get`,
         params: params
       })
     }),
     createCertificate: build.mutation<createCertificateResponse, certificateRequest>({
       query(body) {
         try {
-          // throw Error('hehehehe')
-          // let a: any = null
-          // a.b = 1
           return {
-            url: `generate-certificate`,
+            url: `certificates/certificate/generate`,
             method: 'POST',
             body: body
           };
@@ -610,25 +624,22 @@ export const clientApi = createApi({
           throw new CustomError((error as CustomError).message);
         }
       },
-      /**
-       * invalidatesTags cung cấp các tag để báo hiệu cho những method nào có providesTags
-       * match với nó sẽ bị gọi lại
-       * Trong trường hợp này Orders sẽ chạy lại
-       */
       invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Clients', id: 'LIST' }])
     }),
-
     getLessonsBySectionId: build.query<getLessonsResponse, { sectionId: string; userId: string }>({
       query: (payload) => ({
-        url: `lessons/${payload.sectionId}/section`,
+        url: `lessons/section/${payload.sectionId}`,
         headers: {
           userId: payload.userId
         }
       })
     }),
+    getAllLessons: build.query<getLessonsResponse, void>({
+      query: () => 'lessons/getAllLesson'
+    }),
     getLessonsBySectionIdEnrolledCourse: build.query<getLessonsResponse, { sectionId: string; userId: string }>({
       query: (payload) => ({
-        url: `lessons/${payload.sectionId}/section/course-enrolled`,
+        url: `lessons/section/course-enrolled/${payload.sectionId}`,
         headers: {
           userId: payload.userId
         }
@@ -636,12 +647,355 @@ export const clientApi = createApi({
     }),
     getUser: build.query<getUserResponse, string>({
       query: (id) => ({
-        url: `users/${id}`
-        // headers: {
-        //   hello: 'Im Sang'
-        // }
+        url: `users/user/${id}`
+      }),
+      providesTags: (result, error, id) => [{ type: 'Users', id }]
+    }),
+    updateUser: build.mutation<UpdateUserResponse, { userId: string; formData: FormData }>({
+      query: ({ userId, formData }) => ({
+        url: `users/user/${userId}`,
+        method: 'PUT',
+        body: formData
+      }),
+      invalidatesTags: (result, error, { userId }) => [{ type: 'Users', id: userId }]
+    }),
+    getOrderById: build.query<GetOrderByIdResponse, string>({
+      query: (orderId) => ({
+        url: `orders/order/${orderId}`
+      }),
+      providesTags: (result, error, orderId) => [{ type: 'Orders', id: orderId }]
+    }),
+    getOrdersByUserId: build.query<getOrdersByUserIdResponse, { userId: string; page: number; limit: number }>({
+      query: ({ userId, page, limit }) => `orders/user/${userId}?page=${page}&limit=${limit}`,
+      providesTags: (result, error, { userId }) => [{ type: 'Orders', id: userId }]
+    }),
+
+    getAllBlogs: build.query<GetAllBlogReponse, IParams>({
+      query: ({ _page = 1, _limit = 5 }) => ({
+        url: `blog/?page=${_page}&limit=${_limit}`
       })
+    }),
+
+    getBlogById: build.query<GetBlogByIdResponse, string>({
+      query: (_id) => ({
+        url: `/blog/${_id}`
+      })
+    }),
+
+    getRelatedCourses: build.query<RelatedCoursesResponse, { courseId: string; limit: number; userId?: string }>({
+      query: ({ courseId, limit, userId }) => ({
+        url: `courses/related/${courseId}`,
+        params: { limit, userId },
+        method: 'GET'
+      }),
+      providesTags: () => [{ type: 'Courses', id: 'LIST' }]
+    }),
+    createReview: build.mutation<
+      CreateReviewResponse,
+      { courseId: string; title: string; content: string; ratingStar: number; orderId: string; userId: string }
+    >({
+      query: ({ courseId, title, content, ratingStar, orderId, userId }) => ({
+        url: `reviews/review/create`,
+        method: 'POST',
+        body: { courseId, title, content, ratingStar, orderId, userId }
+      }),
+      invalidatesTags: (result, error, { orderId }) => [
+        { type: 'Reviews', id: 'LIST' },
+        { type: 'Orders', id: orderId }
+      ]
+    }),
+    createVnpayUrl: build.mutation<CreateVnpayUrlResponse, { orderId: string; amount: number; bankCode?: string }>({
+      query: ({ orderId, amount, bankCode }) => ({
+        url: `payments/vnpay/create_vnpayment_url`,
+        method: 'POST',
+        body: { orderId, amount, bankCode }
+      })
+    }),
+    getSuggestedCourses: build.query<SuggestedCoursesResponse, { userId: string; limit?: number }>({
+      query: ({ userId, limit = 5 }) => ({
+        url: `courses/suggested/${userId}`,
+        params: { limit },
+        method: 'GET'
+      }),
+      providesTags: () => [{ type: 'Courses', id: 'LIST' }]
+    }),
+    getCourseIdsFromWishlistByUserId: build.query<GetCourseIdsFromWishlistByUserIdResponse, string>({
+      query: (userId) => `courses/id/wishlist/${userId}`,
+      providesTags: () => [{ type: 'Wishlist', id: 'LIST' }]
+    }),
+    getCoursesFromWishlistByUserId: build.query<GetCoursesFromWishlistByUserIdResponse, string>({
+      query: (userId) => `courses/wishlist/${userId}`,
+      providesTags: () => [
+        { type: 'Courses', id: 'LIST' },
+        { type: 'Wishlist', id: 'CREATE' }
+      ]
+    }),
+    createWishlist: build.mutation<CreateWishlistResponse, { courseId: string; userId: string }>({
+      query: ({ courseId, userId }) => ({
+        url: `wishlists/wishlist/create`,
+        method: 'POST',
+        body: { courseId, userId }
+      }),
+      invalidatesTags: () => [
+        { type: 'Wishlist', id: 'LIST' },
+        { type: 'Wishlist', id: 'CREATE' }
+      ]
+    }),
+    deleteWishlist: build.mutation<DeleteWishlistResponse, { courseId: string; userId: string }>({
+      query: ({ courseId, userId }) => ({
+        url: `wishlists/wishlist/delete/${courseId}`,
+        method: 'DELETE',
+        body: { userId }
+      }),
+      invalidatesTags: () => [{ type: 'Wishlist', id: 'LIST' }]
+    }),
+    createFeedback: build.mutation<CreateContactResponse, IContact>({
+      query: (contactDetails) => ({
+        url: 'feedbacks/feedback/create',
+        method: 'POST',
+        body: contactDetails
+      }),
+      invalidatesTags: [{ type: 'Feedbacks', id: 'LIST' }]
+    }),
+    getBlogComments: build.query<GetBlogCommentsResponse, string>({
+      query: (blogId) => `/comments/${blogId}`,
+      providesTags: (result, error, blogId) => [{ type: 'BlogComment', id: blogId }]
+    }),
+    addBlogComment: build.mutation<AddBlogCommentResponse, { blogId: string; content: string; userId: string }>({
+      query: (commentData) => ({
+        url: '/comments',
+        method: 'POST',
+        body: commentData
+      }),
+      invalidatesTags: (result, error, commentData) => [{ type: 'BlogComment', id: commentData.blogId }]
+    }),
+    updateBlogComment: build.mutation<AddBlogCommentResponse, { commentId: string; content: string }>({
+      query: ({ commentId, content }) => ({
+        url: `/comments/${commentId}`,
+        method: 'PUT',
+        body: { content }
+      }),
+      invalidatesTags: (result, error, { commentId }) => [{ type: 'BlogComment', id: commentId }]
+    }),
+    deleteBlogComment: build.mutation<{ message: string }, { commentId: string }>({
+      query: ({ commentId }) => ({
+        url: `/comments/${commentId}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: (result, error, { commentId }) => [{ type: 'BlogComment', id: commentId }]
+    }),
+    toggleLikeComment: build.mutation<{ message: string }, { commentId: string; userId: string }>({
+      query: (likeData) => ({
+        url: `/comments/like`,
+        method: 'PATCH',
+        body: likeData
+      }),
+      invalidatesTags: (result, error, likeData) => [{ type: 'BlogComment', id: likeData.commentId }]
+    }),
+    // Thêm phản hồi cho một bình luận
+    addReplyToComment: build.mutation<
+      AddBlogCommentResponse,
+      { parentCommentId: string; content: string; userId: string; blogId: string }
+    >({
+      query: (replyData) => ({
+        url: '/comments/reply',
+        method: 'POST',
+        body: replyData
+      }),
+      invalidatesTags: (result, error, replyData) => [{ type: 'BlogComment', id: replyData.blogId }]
+    }),
+
+    getAllNotes: build.query<GetNotesResponse, void>({
+      query: () => ({
+        url: '/note'
+      }),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.notes.map(({ _id }) => ({ type: 'Note' as const, id: _id.toString() })),
+              { type: 'Note' as const, id: 'LIST' }
+            ]
+          : [{ type: 'Note' as const, id: 'LIST' }]
+    }),
+    getNotesByLessonId: build.query<GetNotesResponse, string>({
+      query: (lessonId) => `/note/lesson/${lessonId}`,
+      providesTags: (result, error, lessonId) =>
+        result
+          ? [
+              ...result.notes.map(({ _id }) => ({ type: 'Note' as const, id: _id.toString() })),
+              { type: 'Note', id: 'LIST' }
+            ]
+          : [{ type: 'Note', id: 'LIST' }]
+    }),
+    // Fetch notes by user ID
+    getNotesByUserId: build.query<GetNotesResponse, string>({
+      query: (userId) => ({
+        url: `/note/${userId}`
+      }),
+      providesTags: (result, error, userId) =>
+        result
+          ? [
+              ...result.notes.map(({ _id }) => ({ type: 'Note' as const, id: _id.toString() })),
+              { type: 'Note' as const, id: 'LIST' }
+            ]
+          : [{ type: 'Note' as const, id: 'LIST' }]
+    }),
+
+    // Create a note
+    createNote: build.mutation<NoteResponse, CreateNoteRequest>({
+      query: ({ userId, lessonId, content, videoMinute, courseId }) => ({
+        url: `/note/createNote/${lessonId}`,
+        method: 'POST',
+        body: {
+          userId,
+          lessonId,
+          content,
+          videoMinute,
+          courseId
+        }
+      }),
+      invalidatesTags: [{ type: 'Note', id: 'LIST' }]
+    }),
+
+    // Update a note
+    updateNote: build.mutation<NoteResponse, UpdateNoteRequest>({
+      query: ({ _id, ...rest }) => ({
+        url: `/note/update/${_id}`,
+        method: 'PUT',
+        body: rest
+      }),
+      invalidatesTags: (result, error, { _id }) => [{ type: 'Note', id: _id }]
+    }),
+
+    // Delete a note
+    deleteNote: build.mutation<{ message: string }, string>({
+      query: (noteId) => ({
+        url: `/note/delete/${noteId}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: (result, error, noteId) => [{ type: 'Note', id: noteId }]
+    }),
+    getReviewsByCourseId: build.query<GetReviewsByCourseIdResponse, { courseId: string; params?: IParams }>({
+      query: ({ courseId, params }) => ({
+        url: `reviews/course/${courseId}`,
+        params: params
+      }),
+      providesTags: (result, error, { courseId }) => [{ type: 'Reviews', id: courseId }]
+    }),
+    getTotalReviewsByCourseId: build.query<GetTotalReviewsByCourseIdResponse, string>({
+      query: (courseId) => ({
+        url: `reviews/course/count/${courseId}`
+      }),
+      providesTags: () => [{ type: 'Reviews', id: 'LIST' }]
+    }),
+    getAverageRatingByCourseId: build.query<GetAverageRatingByCourseIdResponse, string>({
+      query: (courseId) => ({
+        url: `reviews/course/average-rating/${courseId}`
+      }),
+      providesTags: () => [{ type: 'Reviews', id: 'LIST' }]
+    }),
+    getRatingPercentageByCourseId: build.query<GetRatingPercentageByCourseIdResponse, string>({
+      query: (courseId) => ({
+        url: `reviews/course/percentage-rating/${courseId}`
+      }),
+      providesTags: () => [{ type: 'Reviews', id: 'LIST' }]
+    }),
+    getReviewRepliesByReviewId: build.query<GetReviewRepliesByReviewIdResponse, string>({
+      query: (reviewId) => ({
+        url: `reviews/review/replies/${reviewId}`
+      }),
+      providesTags: () => [{ type: 'Reviews', id: 'LIST' }]
+    }),
+    getCouponsValidForCourses: build.query<GetCouponsValidForCoursesResponse, string>({
+      query: (courseIds) => ({
+        url: `coupons/valid-for-courses?courseIds=${courseIds}`
+      }),
+      providesTags: () => [{ type: 'Coupons', id: 'LIST' }]
+    }),
+    getTotalPrice: build.query<GetTotalPriceResponse, { courseIds: string; couponCode?: string }>({
+      query: ({ courseIds, couponCode }) => ({
+        url: `carts/get-total-price`,
+        params: { courseIds, couponCode }
+      }),
+      providesTags: () => [{ type: 'Clients', id: 'LIST' }]
+    }),
+    getValidCouponsForCoursesWithoutUser: build.query<GetCouponsValidForCoursesResponse, string>({
+      query: (courseIds) => ({
+        url: `coupons/valid-for-courses-without-user?courseIds=${courseIds}`
+      }),
+      providesTags: () => [{ type: 'Coupons', id: 'LIST' }]
+    }),
+    getTotalPriceWithoutUser: build.query<GetTotalPriceResponse, { courseIds: string; couponCode?: string }>({
+      query: ({ courseIds, couponCode }) => ({
+        url: `carts/get-total-price-without-user`,
+        params: { courseIds, couponCode }
+      }),
+      providesTags: () => [{ type: 'Clients', id: 'LIST' }]
+    }),
+    // Discuss
+    getAllDiscussions: build.query<GetAllDiscussionsResponse, void>({
+      query: () => ({
+        url: `discuss/getAll`
+      }),
+      providesTags: () => [{ type: 'Discussions', id: 'LIST' }]
+    }),
+    getDiscussionsByLessonId: build.query<GetDiscussionsByLessonIdResponse, string>({
+      query: (lessonId) => ({
+        url: `discuss/lesson/${lessonId}`
+      }),
+      providesTags: () => [{ type: 'Discussions', id: 'LIST' }]
+    }),
+    getDiscussionsBySectionId: build.query<GetDiscussionsBySectionIdResponse, string>({
+      query: (sectionId) => ({
+        url: `discuss/section/${sectionId}`
+      }),
+      providesTags: () => [{ type: 'Discussions', id: 'LIST' }]
+    }),
+    getDiscussionsById: build.query<GetDiscussionsBySectionIdResponse, string>({
+      query: (id) => ({
+        url: `discuss/discuss/${id}`
+      }),
+      providesTags: () => [{ type: 'Discussions', id: 'LIST' }]
+    }),
+    addDiscussion: build.mutation<AddDiscussionResponse, AddDiscussionRequest>({
+      query: (newDiscussion) => ({
+        url: `discuss/add`,
+        method: 'POST',
+        body: newDiscussion
+      }),
+      invalidatesTags: () => [{ type: 'Discussions', id: 'LIST' }]
+    }),
+    updateDiscussion: build.mutation<UpdateDiscussionResponse, { discussId: string; comments: string }>({
+      query: ({ discussId, comments }) => ({
+        url: `discuss/update/${discussId}`,
+        method: 'PUT',
+        body: { comments }
+      }),
+      invalidatesTags: () => [{ type: 'Discussions', id: 'LIST' }]
+    }),
+    deleteDiscussion: build.mutation<DeleteDiscussionResponse, string>({
+      query: (discussId) => ({
+        url: `discuss/delete/${discussId}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: () => [{ type: 'Discussions', id: 'LIST' }]
+    }),
+    addReplyToDiscuss: build.mutation<
+      AddDiscussionResponse,
+      {
+        parentDiscussId: string;
+        comments: string;
+        userId: string;
+      }
+    >({
+      query: (replyData) => ({
+        url: '/discuss/reply',
+        method: 'POST',
+        body: replyData
+      }),
+      invalidatesTags: () => [{ type: 'Discussions', id: 'LIST' }]
     })
+    // Discuss
   })
 });
 
@@ -650,6 +1004,7 @@ export const {
   useGetCoursesQuery,
   useGetPopularCoursesQuery,
   useGetAuthorsQuery,
+  useGetAuthorsSelectQuery,
   useGetCourseEnrolledByUserQuery,
   useGetCoursesOrderedByUserQuery,
   useGetSectionsByCourseIdQuery,
@@ -663,5 +1018,50 @@ export const {
   useUpdateLessonDoneByUserMutation,
   useGetRetrieveCartQuery,
   useGetCertificateQuery,
-  useCreateCertificateMutation
+  useCreateCertificateMutation,
+  useUpdateUserMutation,
+  useGetOrdersByUserIdQuery,
+  useGetOrderByIdQuery,
+  useGetAllBlogsQuery,
+  useGetBlogByIdQuery,
+  useGetRelatedCoursesQuery,
+  useCreateReviewMutation,
+  useCreateVnpayUrlMutation,
+  useGetSuggestedCoursesQuery,
+  useCreateWishlistMutation,
+  useDeleteWishlistMutation,
+  useGetCourseIdsFromWishlistByUserIdQuery,
+  useGetCoursesFromWishlistByUserIdQuery,
+  useCreateFeedbackMutation,
+  useGetBlogCommentsQuery,
+  useAddBlogCommentMutation,
+  useUpdateBlogCommentMutation,
+  useDeleteBlogCommentMutation,
+  useToggleLikeCommentMutation,
+  useAddReplyToCommentMutation,
+  useGetAllNotesQuery,
+  useGetNotesByUserIdQuery,
+  useCreateNoteMutation,
+  useUpdateNoteMutation,
+  useDeleteNoteMutation,
+  useGetNotesByLessonIdQuery,
+  useGetReviewsByCourseIdQuery,
+  useGetTotalReviewsByCourseIdQuery,
+  useGetAverageRatingByCourseIdQuery,
+  useGetRatingPercentageByCourseIdQuery,
+  useGetReviewRepliesByReviewIdQuery,
+  useGetCouponsValidForCoursesQuery,
+  useGetTotalPriceQuery,
+  useGetValidCouponsForCoursesWithoutUserQuery,
+  useGetTotalPriceWithoutUserQuery,
+  // Discuss
+  useGetAllDiscussionsQuery,
+  useGetDiscussionsByLessonIdQuery,
+  useGetDiscussionsBySectionIdQuery,
+  useGetDiscussionsByIdQuery,
+  useAddDiscussionMutation,
+  useUpdateDiscussionMutation,
+  useDeleteDiscussionMutation,
+  useAddReplyToDiscussMutation,
+  useGetAllLessonsQuery
 } = clientApi;

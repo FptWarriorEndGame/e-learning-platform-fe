@@ -36,11 +36,6 @@ const acitivityItems: TabsProps['items'] = [
   }
 ];
 const ActivitiesTab: React.FC = () => {
-  //   const [tabPosition, setTabPosition] = useState<TabPosition>('left');
-
-  //   const changeTabPosition = (e: RadioChangeEvent) => {
-  //     // setTabPosition(e.target.value);
-  //   };
 
   return <Tabs tabPosition={'left'} items={acitivityItems} />;
 };

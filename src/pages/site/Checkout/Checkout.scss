@@ -1,30 +1,60 @@
 @import "../../../assets/sass/base";
+@import "../../../assets/sass/container";
 
 .checkout {
     margin-top: $header-height;
     font-size: 1.6rem;
+    .row-wrap{
+        gap: 0 2.4rem;
+        flex-wrap: nowrap;
+          @media(max-width: 768px){
+            width: 100%;
+            flex-direction: column;
+            gap: 2.4rem;
+        }
+    }
     &__col {
         &--left {
-            padding-right: 4rem!important;
+            width: 60%;
+              @media(max-width: 768px){
+                width: 100%;
+            }
         }
 
         &--right {
             background-color: $light-bg-color;
-            padding: 8rem 4rem!important;        
+            padding: 3.2rem 2.4rem!important;  
+            height: fit-content;
+            position: sticky;
+            top: 10rem;     
+            width: 40%; 
+              @media(max-width: 768px){
+                width: 100%;
+                top: unset;
+                position: relative;
+            }
+            &-wrap{
+                width: 100%;
+                .col{
+                    width: 100%;
+                }
+            }
         }
     }
 
     &__wrap {
-
+        padding: 8rem 0;
     }
 
     &__title {
         @include h-style("h2");
+        line-height: 1.3;
+        margin-bottom: 1.6rem;
     }
 
     &__billing-title {
         @include h-style("h3");
-        margin-top: 2rem;
+        line-height: 1.3;
     }
 
     &__countries {
@@ -82,6 +112,11 @@
 
         &-body {
             margin-top: 2rem;
+        }
+        &-content{
+            display: flex;
+            flex-direction: column; 
+            gap: 1.2rem 0;
         }
     }
     

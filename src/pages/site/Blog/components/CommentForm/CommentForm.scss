@@ -1,0 +1,22 @@
+.comment-form {
+  display: flex;
+  flex-direction: column;
+
+  .comment-input {
+    width: 100%;
+    min-height: 100px;
+    // Add more styling here
+  }
+
+  .comment-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    .cancel-btn,
+    .submit-btn {
+      padding: 10px 20px;
+      // Add more styling here
+    }
+  }
+}

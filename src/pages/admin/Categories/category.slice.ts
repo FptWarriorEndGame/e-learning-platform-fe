@@ -3,21 +3,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface CategoryState {
   categoryId: string;
   isOpenCreateCategory: boolean;
-  //   formData: ICategory;
 }
 
 const initialState: CategoryState = {
   categoryId: '',
   isOpenCreateCategory: false
-  //   formData: {
-  //     _id: '',
-  //     name: '',
-  //     description: '',
-  //     price: 0,
-  //     finalPrice: 0,
-  //     access: AccessStatus.FREE,
-  //     level: CategoryLevel.BEGINNER,
-  //   }
 };
 
 const categorySlice = createSlice({
@@ -33,9 +23,6 @@ const categorySlice = createSlice({
     cancelEditCategory: (state) => {
       state.categoryId = '';
     }
-    // handleFormData: (state, action: PayloadAction<ICategory>) => {
-    //   state.formData = action.payload;
-    // }
   }
 });
 

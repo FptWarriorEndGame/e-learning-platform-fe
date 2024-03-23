@@ -1,5 +1,5 @@
 const AuthorProfile = () => {
-  return <div>AuthorProfile</div>;
+  return <div></div>;
 };
 
 export default AuthorProfile;

@@ -61,6 +61,13 @@
     &__author {
         display: flex;
         align-items: center;
+        justify-content: space-between; 
+
+        &-details {
+            display: flex;
+            align-items: center;
+        }
+
         &-img {
             width: 4rem;
             height: 4rem;

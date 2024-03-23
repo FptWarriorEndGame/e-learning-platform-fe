@@ -3,14 +3,14 @@ import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/tab
 import type { FilterValue } from 'antd/es/table/interface';
 import React, { useState } from 'react';
 import './CategoriesList.scss';
-// import { useGetCourseQuery, useGetCoursesQuery } from '../../course.service';
 import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
 import Link from 'antd/es/typography/Link';
 import { useDispatch } from 'react-redux';
 import { ICategory } from '../../../../../types/category.type';
-import { CategoryError } from '../../../../../utils/helpers';
+import { CategoryError } from '../../../../../utils/errorHelpers';
 import { useDeleteCategoryMutation } from '../../category.service';
 import { startEditCategory } from '../../category.slice';
+import moment from 'moment';
 
 interface DataCategoryType {
   key: React.Key;
@@ -18,7 +18,7 @@ interface DataCategoryType {
   courses: number;
   tags: string[];
   createdAt: string; // Convert to date: Example: 18 jun 2023
-  description: string;
+  description: any;
   actions?: any;
 }
 
@@ -32,26 +32,21 @@ interface TableParams {
 interface CategoryListProps {
   data: ICategory[];
   onCateEdit: (cateId: string) => void;
+  permission: { isEdit: boolean; isDelete: boolean; isViewDetail: boolean };
 }
 const SettingContent = (cateId: string) => {
   const [deleteCategory, deleteCategoryResult] = useDeleteCategoryMutation();
 
   const deleteCateHandler = () => {
-    console.log(cateId);
-
     deleteCategory(cateId)
       .unwrap()
       .then((result) => {
-        console.log(result);
-
         notification.success({
           message: 'Delete cate successfully',
           description: result.message
         });
       })
       .catch((error: CategoryError) => {
-        console.log('error: ', error);
-
         notification.error({
           message: 'Delete cate failed',
           description: error.data.message
@@ -60,9 +55,19 @@ const SettingContent = (cateId: string) => {
   };
 
   return (
+    // More action here!
+    // Xoá mềm (cập nhật trạng thái)
+    // Xem chi tiết (popup)
     <div>
       <p>Content</p>
-      <Link onClick={deleteCateHandler}>Delete</Link>
+      <div>
+        {' '}
+        <Link onClick={deleteCateHandler}>Delete</Link>{' '}
+      </div>
+      <div>
+        {' '}
+        <Link>View Detail</Link>{' '}
+      </div>
     </div>
   );
 };
@@ -70,10 +75,6 @@ const SettingContent = (cateId: string) => {
 const CategoriesList: React.FC<CategoryListProps> = (props) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  //   const showUserDetail = () => {
-  //     console.log('click');
-  //     setOpen(true);
-  //   };
 
   const columns: ColumnsType<DataCategoryType> = [
     {
@@ -93,10 +94,6 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
       title: 'Courses',
       dataIndex: 'courses',
       sorter: (a, b) => Number(a.courses) - Number(b.courses)
-    },
-    {
-      title: 'Tags',
-      dataIndex: 'tags'
     },
     {
       title: 'Manage',
@@ -120,20 +117,21 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
             <img alt='' src={cateImage} className='category-info__avatar' />
 
             <div className='category-info__content'>
-              <div className='category-info__name'>{name}</div>
+              <div className='category-info__name txt-tt'>{name}</div>
             </div>
           </div>
         </a>
       ),
-      description: description,
-      createdAt: createdAt || '',
-      courses: courses || 0,
-      tags: ['23432k', 'dsfdjsk'],
+      description: <div className='txt-desc'>{description}</div>,
+      createdAt: <div className='txt-desc'>{moment(createdAt).format('YYYY-MM-DD HH:mm:ss') || ''}</div>,
+      courses:  <div className='txt-desc'>{courses || 0}</div>,
       actions: (
         <Space>
-          <Button onClick={() => cateEditHandler(_id)}>
-            <EditOutlined />
-          </Button>
+          {props.permission.isEdit && (
+            <Button onClick={() => cateEditHandler(_id)}>
+              <EditOutlined />
+            </Button>
+          )}
           <Popover placement='bottomRight' content={SettingContent(_id)} title='Actions'>
             <Button>
               <EllipsisOutlined />
@@ -154,8 +152,6 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
   });
 
   const onChange: TableProps<DataCategoryType>['onChange'] = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
-
     setTableParams({
       pagination
     });
@@ -163,8 +159,7 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
 
   return (
     <div className='users-list'>
-      {/* {isFetching && <Skeleton />} */}
-      <Table columns={columns} dataSource={categoriesSource} onChange={onChange} pagination={tableParams.pagination} />
+      <Table scroll={{ x: 'max-content', y: 'calc(100vh - 300px)' }}  columns={columns} dataSource={categoriesSource} onChange={onChange} pagination={tableParams.pagination} />
     </div>
   );
 };

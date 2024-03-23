@@ -42,32 +42,12 @@ const CoursesHeader = () => {
     <Fragment>
       <Space>
         <h3 className='admin-header__page-title'>Courses</h3>
-
-        <Button onClick={openCreateCourseHandler}>
+        <Button onClick={openCreateCourseHandler} className='btn-wrap'>
           <PlusCircleOutlined />
           Create Course
         </Button>
-        {/* <Button>
-          <PlusCircleOutlined />
-          Preview Hompage
-        </Button>
-        <Button>
-          <PlusCircleOutlined />
-          Preview Hompage after login
-        </Button> */}
       </Space>
       <Space className='admin-header__notify'>
-        {/* <Button>
-          <BellOutlined />
-          <span>What's new</span>
-        </Button>
-        <Button>
-          <QuestionOutlined />
-          <span>Help</span>
-        </Button>
-        <Dropdown menu={{ items: adminInfoItems }} placement='bottom' arrow>
-          <Avatar style={{ backgroundColor: '#87d068', cursor: 'pointer' }} icon={<UserOutlined />} />
-        </Dropdown> */}
       </Space>
     </Fragment>
   );

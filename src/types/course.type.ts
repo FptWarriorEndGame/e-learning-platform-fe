@@ -1,3 +1,5 @@
+import { IBase } from './base.type';
+
 export enum AccessStatus {
   PAID = 'PAID',
   DRAFT = 'DRAFT',
@@ -14,7 +16,7 @@ export enum CourseLevel {
   EXPERT = 'EXPERT'
 }
 
-export interface ICourse {
+export interface ICourse extends IBase {
   _id: string;
   name: string;
   subTitle?: string;

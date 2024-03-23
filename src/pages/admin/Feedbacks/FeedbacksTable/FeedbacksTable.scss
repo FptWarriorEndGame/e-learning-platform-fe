@@ -1,0 +1,26 @@
+.feedbacks-table {
+  padding: 20px;
+
+  .search-bar-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .search-bar {
+      flex: 1;
+      margin-right: 8px;
+    }
+
+    .status-filter {
+      width: 120px;
+    }
+  }
+
+  .pagination {
+    margin-top: 16px;
+  }
+
+  .ant-modal-content {
+    padding: 20px;
+  }
+}

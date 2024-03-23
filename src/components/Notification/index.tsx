@@ -30,13 +30,6 @@ const Notification: React.FC = () => {
     });
   };
 
-  // notification.open({
-  //   message: 'Notification Title',
-  //   description:
-  //     'A function will be be called after the notification is closed (automatically after the "duration" time of manually).',
-  //   key: 'openNotify'
-  // });
-
   return (
     <>
       {contextHolder}

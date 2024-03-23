@@ -1,9 +1,6 @@
 import AddLesson from '../../../../AddLesson';
 import YoutubeMedia from './Youtube';
 
-// interface MediaItemProps {
-//   onCloseActivies: () => void;
-// }
 
 const MediaItem = () => {
   return (

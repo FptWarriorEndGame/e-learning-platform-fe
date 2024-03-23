@@ -1,4 +1,4 @@
-
+@import "../../../assets/sass/container";
 @import "../../../assets/sass/base";
 
 .view-cart {
@@ -7,9 +7,17 @@
 
     
     &__wrap {
-
+        padding: 8rem 0;
     }
-
+    .row-wrap{
+        display: flex;
+        gap: 1.6rem;
+        flex-wrap: nowrap;
+        @media(max-width: 768px){
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+    }
     &__title {
         @include h-style("h2");
     }
@@ -111,7 +119,14 @@
             }
         }
     }
-
+    &__right{
+            background-color: #f2f2f2;
+            padding: 3.2rem 2.4rem !important;
+            height: -moz-fit-content;
+            height: fit-content;
+            position: sticky;
+            top: 10rem;
+    }
     &__summary {
         &-title {
             font-size: 2rem;

@@ -2,6 +2,7 @@
 logs
 *.log
 npm-debug.log*
+yarn.lock
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
@@ -22,3 +23,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.github/workflows/deploy-develop.yml
+.github/workflows/deploy-production.yml
+
+
+.env

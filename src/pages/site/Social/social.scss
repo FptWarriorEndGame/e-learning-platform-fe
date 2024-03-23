@@ -1,0 +1,250 @@
+@import "../../../assets/sass/base";
+.social {
+    background: #f4f5f7;
+    margin-top: 8rem;
+    padding: 8rem 0;
+}
+.social-flex {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.social-col {
+    border-radius: 0.6rem;
+    padding: 1.2rem 2rem;
+}
+.social-col.col-55 {
+    width: calc(100% * (5.5 / 12));
+    .post {
+    }
+    .post-name {
+        background-color: #ffffff;
+        border-color: #ffffff;
+        color: #112236;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        padding: 12px 20px;
+        text-align: left;
+        width: 100%;
+        .title {
+            font-family: "Poppins";
+            font-weight: bold;
+            font-size: 1.8rem;
+            letter-spacing: 0rem;
+            line-height: 1.4;
+            text-transform: none;
+        }
+    }
+    .post-content {
+        width: 100%;
+        background-color: #ffffff;
+        border-color: #ffffff;
+        color: #112236;
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 3.2rem;
+        padding: 2rem 20px 32px;
+        width: 100%;
+        .post-input {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1.2rem;
+            .avatar {
+                width: 4.2rem;
+                height: 4.2rem;
+                background: #ccc;
+                border-radius: 50%;
+                margin-bottom: 0;
+            }
+            .input {
+                flex: 1;
+                color: #112236;
+                flex: 1;
+                text-transform: none !important;
+                width: 100%;
+                input {
+                    border-radius: 6px;
+                    background-color: #f2f2f2;
+                    height: auto;
+                    padding: 10px;
+                    width: 100%;
+                    font-family: "Noto Sans JP";
+                    font-size: 1.5rem;
+                    font-weight: normal;
+                    letter-spacing: 0rem;
+                    line-height: 1.55;
+                    text-transform: none;
+                    outline: none;
+                }
+            }
+        }
+        .post-support {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .post-icon {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: flex-start;
+            align-items: center;
+            cursor: pointer;
+        }
+        .icon {
+            width: 1.8rem;
+            height: 1.8rem;
+            stroke: #4a4a4a;
+        }
+        .post-submit {
+            border-style: solid;
+            border-width: 2px;
+            align-items: center;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            outline: none;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            background-color: #194583;
+            padding: 1.2rem 2.4rem;
+            border-radius: 1.2rem;
+            a {
+                color: #ffffff;
+                font-family: "Noto Sans JP";
+                font-weight: normal;
+                font-size: 1.4rem;
+                letter-spacing: 0rem;
+                text-transform: none;
+                text-decoration: unset;
+            }
+        }
+    }
+}
+.social-col.col-35 {
+    width: calc(100% * (3.5 / 12));
+    .channel{
+        background-color: #FFFFFF;
+        border-color: #FFFFFF;
+        color: #112236;
+        padding: 1.2rem 2.5rem;
+        border-radius: 6px;
+    }
+    .channel-drop{
+        border-radius: 6px;
+        gap: 6px;
+        padding: 6px 8px 6px 20px;
+        text-align: left;
+        width: 100%;
+        font-family: "Noto Sans JP";
+        font-size: 1.5rem;
+        font-weight: normal;
+        letter-spacing: 0rem;
+        line-height: 1.55;
+        font-weight: 600;
+        margin-bottom: 24px;
+    }
+    .channel-drop.active{
+        background-color: rgba(25,69,131,0.15);
+    }
+    .item{
+        .txt-name{
+            font-family: "Noto Sans JP";
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 0.01rem;
+    line-height: 1.55;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+        }
+    }
+}
+.social-col.col-3 {
+    width: calc(100% * (3 / 12));
+    .user-active {
+    }
+    .user-active-search {
+        border-radius: 6px;
+        background-color: #ffffff;
+        border-color: #ffffff;
+        color: #112236;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .search {
+        padding: 1.2rem 0;
+        font-size: 1.6rem;
+        width: 100%;
+        flex: 1;
+        font-family: "Noto Sans JP";
+        line-height: 1;
+        font-weight: normal;
+        letter-spacing: 0rem;
+        text-transform: none;
+        outline: none;
+    }
+    .icon-search {
+        width: 2rem;
+        height: 2rem;
+        stroke: #f2f2f2;
+    }
+    .user-active-content {
+        background-color: #ffffff;
+        border-color: #ffffff;
+        color: #112236;
+        border-radius: 6px;
+        .title {
+            padding: 1rem 1.5rem;
+            font-family: "Poppins";
+            font-weight: bold;
+            font-size: 1.4rem;
+            letter-spacing: 0rem;
+            line-height: 1.4;
+            text-transform: none;
+        }
+        .divedi {
+            border-bottom: 1px solid #ccc;
+        }
+        .user-active-list {
+            padding: 1rem 1.5rem;
+            .item {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 1rem;
+                .avatar {
+                    margin-bottom: 0;
+                    width: 4.2rem;
+                    height: 4.2rem;
+                    background: #ccc;
+                    border-radius: 50%;
+                    position: relative;
+                    &::before {
+                        display: block;
+                        position: absolute;
+                        content: "";
+                        border-radius: 50%;
+                        bottom: 0;
+                        right: 0;
+                        width: 1rem;
+                        height: 1rem;
+                        background: rgb(29, 186, 110);
+                    }
+                }
+                .name {
+                    font-family: "Noto Sans JP";
+                    font-size: 1.5rem;
+                    font-weight: normal;
+                    letter-spacing: 0rem;
+                    line-height: 1.55;
+                    text-transform: none;
+                }
+            }
+        }
+    }
+}

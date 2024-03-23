@@ -15,7 +15,7 @@ const RootAdminLayout: React.FC = () => {
       <Layout style={{ minHeight: '100vh' }} className='admin-layout'>
         {/* SideBar component here */}
         <SideBar />
-        <Layout>
+        <Layout className='layout-wrap'>
           {/* Admin Header here */}
           <AdminHeader />
           {/* Change content here */}

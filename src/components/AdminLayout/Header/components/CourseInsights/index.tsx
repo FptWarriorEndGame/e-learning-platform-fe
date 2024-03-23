@@ -15,7 +15,7 @@ const CourseInsights = () => {
       <Space>
         <h3 className='admin-header__page-title'>Course Insights</h3>
 
-        <Button onClick={openCreateCourseHandler}>
+        <Button onClick={openCreateCourseHandler} className='btn-wrap'>
           <PlusCircleOutlined />
           Export courses reports
         </Button>

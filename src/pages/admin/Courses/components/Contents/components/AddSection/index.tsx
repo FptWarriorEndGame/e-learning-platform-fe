@@ -4,25 +4,19 @@ import { Button, Col, Drawer, Form, Input, Radio, Row, Select, Space, notificati
 import React, { useState } from 'react';
 import { ISection } from '../../../../../../../types/lesson.type';
 import { useAddSectionMutation } from '../../../../course.service';
+import './addSection.scss';
+
 const { Option } = Select;
 
 type AddSectionProps = {
-  // onSubmit: (formData: Omit<ISection, '_id'>) => void;
   courseId: string;
 };
 
-// const initialSection: Omit<ISection, '_id'> = {
-//   name: '',
-//   courseId: '',
-//   description: ''
-// };
 
 const AddSection: React.FC<AddSectionProps> = (props) => {
   const [addSection, addSectionResult] = useAddSectionMutation();
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
-
-  // const [formData, setFormData] = useState<Omit<ISection, '_id'>>(initialSection);
 
   const showDrawer = () => {
     setOpen(true);
@@ -35,12 +29,10 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
   const [value, setValue] = useState('FREE');
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value);
     setValue((e.target as HTMLInputElement).value);
   };
 
   const submitHandler = (formData: Omit<ISection, '_id'>) => {
-    console.log(formData);
 
     if (props.courseId) {
       const data = {
@@ -52,7 +44,6 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
       addSection(data)
         .unwrap()
         .then((res) => {
-          console.log(res);
           notification.success({
             message: 'Add section successfully',
             description: 'You can start adding lesson to this section',
@@ -71,25 +62,24 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
 
   return (
     <>
-      <Button type='primary' onClick={showDrawer} icon={<PlusOutlined />}>
+      <Button type='primary' onClick={showDrawer} icon={<PlusOutlined />} className='btn-wrap'>
         Add Section
       </Button>
       <Drawer
         title='Section Edit'
-        width={812}
+        // width={812}
         onClose={onClose}
         open={open}
         bodyStyle={{ paddingBottom: 80 }}
+        className='add-section'
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>
           </Space>
         }
       >
-        <Row>
-          <Col md={8}></Col>
-          <Col md={16}>
-            {/* Form maybe cange layter */}
+        <div className='add-section-list'>
+          <div className='form-wrap'>
             <Form form={form} layout='vertical' hideRequiredMark onFinish={submitHandler}>
               <Row gutter={16}>
                 <Col span={24}>
@@ -105,10 +95,6 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
                         <Radio value='SOON'>SOON</Radio>
                         <Radio value='FREE'>FREE</Radio>
                         <Radio value='PAID'>PAID</Radio>
-                        {/* <Radio value={4}>
-                          More...
-                          {value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}
-                        </Radio> */}
                       </Space>
                     </Radio.Group>
                   </Form.Item>
@@ -116,30 +102,6 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
               </Row>
 
               <Row gutter={16}>
-                {/* <Col span={12}>
-                  <Form.Item
-                    name='approver'
-                    label='Approver'
-                    rules={[{ required: true, message: 'Please choose the approver' }]}
-                  >
-                    <Select placeholder='Please choose the approver'>
-                      <Option value='jack'>Jack Ma</Option>
-                      <Option value='tom'>Tom Liu</Option>
-                    </Select>
-                  </Form.Item>
-                </Col> */}
-                {/* <Col span={12}>
-                  <Form.Item
-                    name='dateTime'
-                    label='DateTime'
-                    rules={[{ required: true, message: 'Please choose the dateTime' }]}
-                  >
-                    <DatePicker.RangePicker
-                      style={{ width: '100%' }}
-                      getPopupContainer={(trigger) => trigger.parentElement!}
-                    />
-                  </Form.Item>
-                </Col> */}
               </Row>
               <Row gutter={16}>
                 <Col span={24}>
@@ -163,8 +125,8 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
                 </Button>
               </Form.Item>
             </Form>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Drawer>
     </>
   );

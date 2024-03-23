@@ -38,7 +38,6 @@ const SectionList = (props: SectionListProps) => {
     <div className='course-detail__content-collapse'>
       <Collapse
         items={sectionItems}
-        // defaultActiveKey={sectionData?.sections.map((sectionItem) => sectionItem._id)}
         defaultActiveKey={sectionData?.sections.map((sectionItem, index) => `${index}`)}
         onChange={onChange}
       />

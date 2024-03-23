@@ -1,0 +1,52 @@
+@import '../../../../assets/sass/base';
+
+.terms-conditions {
+  margin-top: $header-height;
+
+  &__header {
+    font-family: $heading-font;
+    width: 100%;
+    background-color: $brand-primary-color;
+    color: $light-text-color;
+    padding: 0 2.5rem;
+  }
+
+  &__title {
+    @include h-style('h1');
+    margin-bottom: 2.5rem;
+  }
+
+  &__intro {
+    font-size: 1.7rem;
+    opacity: 0.8;
+    font-weight: normal;
+    line-height: 1.65;
+  }
+
+  &__sections {
+    padding: 0 2.5rem;
+  }
+
+  &__section {
+    &-title {
+      @include h-style('h3');
+      margin-bottom: 2.5rem;
+    }
+
+    &-content {
+      font-size: 1.7rem;
+      opacity: 0.8;
+      line-height: 1.65;
+
+      ul {
+        list-style: inside;
+      }
+    }
+  }
+}
+
+.terms-conditions__section:nth-of-type(n + 2) {
+  .terms-conditions__section-title {
+    margin-top: 2.5rem;
+  }
+}

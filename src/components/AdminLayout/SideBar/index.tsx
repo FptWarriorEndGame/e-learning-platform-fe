@@ -1,11 +1,15 @@
 import {
   BarChartOutlined,
+  BoldOutlined,
   BorderOuterOutlined,
   DesktopOutlined,
+  DotChartOutlined,
   FileOutlined,
+  IdcardOutlined,
   PieChartOutlined,
   SettingOutlined,
   ShoppingCartOutlined,
+  TagsOutlined,
   UnorderedListOutlined,
   UserAddOutlined,
   UserOutlined
@@ -45,62 +49,52 @@ const SideBar = () => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const adminRole = useSelector((state: RootState) => state.auth.adminRole);
 
+  console.log('adminRole', adminRole);
   const navigateHandler: MenuProps['onClick'] = (e) => {
-    console.log('click', e);
     navigate(e.key);
     setOpenDrawer(true);
   };
 
   const items: MenuItem[] = [
-    getItem('sangtrandev', 'myprofile', <BorderOuterOutlined />),
-    getItem('Dashboard', 'dashboard', <PieChartOutlined />),
-    getItem('Categories', 'categories', <UnorderedListOutlined />, [getItem('Categories', 'categories')]),
-    getItem('Courses', 'courses', <DesktopOutlined />, [getItem('Course Manager', 'courses')]),
+    getItem('Welcome', 'welcome', <DotChartOutlined />),
+    (adminRole === UserRole.AUTHOR && getItem('Report', 'author-report', <PieChartOutlined />)) as MenuItem,
+    (adminRole === UserRole.ADMIN && getItem('Dashboard', 'dashboard', <BorderOuterOutlined />)) as MenuItem,
+    getItem('Courses', 'courses', <DesktopOutlined />, [
+      getItem('Course Categories', 'categories'),
+      getItem('Course Manager', 'courses'),
+      getItem('Course Discuss', 'discuss'),
+      getItem('Course Notes', 'courses-notes')
+    ]),
     (adminRole === UserRole.ADMIN &&
-      getItem('Orders', 'orders', <ShoppingCartOutlined />, [getItem('Order Manager', 'orders')])) as MenuItem,
-    (adminRole === UserRole.ADMIN &&
-      getItem('Users', 'users', <UserOutlined />, [
-        getItem('All Users', 'users'),
-        getItem('Admins', 'admins'),
-        getItem('Intructors', 'intructors')
+      getItem('Orders', 'orders', <ShoppingCartOutlined />, [
+        getItem('Order Manager', 'orders'),
+        getItem('Transactions', 'transaction')
       ])) as MenuItem,
+    getItem('Users', 'users', <UserOutlined />, [
+      getItem('All Users', 'users'),
+      // getItem('Admins', 'admins'),
+      // getItem('Intructors', 'intructors'),
+      (adminRole === UserRole.ADMIN && getItem('Permission', 'users/permission')) as MenuItem // Permission for each user and function
+    ]),
     (adminRole === UserRole.ADMIN &&
       getItem('Reports Center', 'reports', <BarChartOutlined />, [
-        getItem(
-          'User Analytics',
-          'user-analytics',
-          null,
-          [
-            getItem('User Progress', 'reports/users-progress'),
-            // getItem('User Segment', 'reports/users-segment'),
-            getItem('Course Insights', 'reports/course-insights')
-          ],
-          'group'
-        ),
-        getItem(
-          'Exams',
-          'exams',
-          null,
-          [
-            getItem('Certifications', 'reports/certifications'),
-            getItem('Review center', 'reports/reviews-center')
-            // getItem('Question bank', 'reports/questions-bank')
-          ],
-          'group'
-        ),
-        getItem(
-          'Sales',
-          'sales',
-          null,
-          [
-            getItem('Orders', 'reports/orders'),
-            getItem('Courses revenues', 'reports/courses-revenue'),
-            getItem('Instructors Revenues', 'reports/instructors-revenue'),
-            getItem('Cancelled Sales', 'reports/cancelled-sales')
-          ],
-          'group'
-        )
+        getItem('User Progress', 'reports/users-progress'), 
+        getItem('Course Insights', 'reports/course-insights'),
+        getItem('Review center', 'reports/reviews-center'),
       ])) as MenuItem,
+    getItem('Marketing', 'marketing', <TagsOutlined />, [
+      getItem('Coupon Types', 'marketing/coupon-types'),
+      // getItem('Bundles', 'marketing/bundles'),
+      // getItem('Subscriptions', 'marketing/subscriptions'),
+      getItem('Coupons', 'marketing/coupons')
+    ]),
+    getItem('Blog', 'blog', <BoldOutlined />, [
+      getItem('Blog List', 'blog'),
+      getItem('Blog Category', 'blog-category'),
+      getItem('Blog comments', 'blog-comments')
+    ]),
+    (adminRole === UserRole.ADMIN &&
+      getItem('Feedbacks', 'feedbacks', <IdcardOutlined />, [getItem('Feedbacks', 'feedbacks/list')])) as MenuItem,
     getItem('Setting', 'setting', <SettingOutlined />, [getItem('Settings', 'settings')]),
     getItem('My account', 'account', <UserAddOutlined />),
     getItem('Need Help ?', 'help', <FileOutlined />)

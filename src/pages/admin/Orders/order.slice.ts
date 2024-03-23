@@ -4,21 +4,11 @@ import { IOrder } from '../../../types/order.type';
 interface OrderState {
   orderId: string;
   isOpenCreateOrder: boolean;
-  //   formData: IOrder;
 }
 
 const initialState: OrderState = {
   orderId: '',
   isOpenCreateOrder: false
-  //   formData: {
-  //     _id: '',
-  //     name: '',
-  //     description: '',
-  //     price: 0,
-  //     finalPrice: 0,
-  //     access: AccessStatus.FREE,
-  //     level: OrderLevel.BEGINNER,
-  //   }
 };
 
 const orderSlice = createSlice({
@@ -34,9 +24,6 @@ const orderSlice = createSlice({
     cancelEditOrder: (state) => {
       state.orderId = '';
     }
-    // handleFormData: (state, action: PayloadAction<IOrder>) => {
-    //   state.formData = action.payload;
-    // }
   }
 });
 

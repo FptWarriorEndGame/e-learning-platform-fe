@@ -1,4 +1,5 @@
 import { FacebookFilled, GithubOutlined, GoogleOutlined, LinkedinFilled, LoadingOutlined } from '@ant-design/icons';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Button, Divider, Form, Input, Space, Spin, notification } from 'antd';
 import jwtDecode from 'jwt-decode';
 import React, { Fragment, useState } from 'react';
@@ -7,6 +8,9 @@ import ButtonCmp from '../../../../components/Button';
 import { useLoginMutation, useUpdateLastLoginMutation } from '../../../auth.service';
 import { closeAuthModal, setAuthenticated } from '../../../auth.slice';
 import '../Auth.scss';
+import FacebookLoginButton from './FacebookLoginButton/FacebookLoginButton';
+import GithubLoginButton from './GithubLoginButton/GithubLoginButton';
+import GoogleLoginButton from './GoogleLoginButton/GoogleLoginButton';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 interface LoginProps {
   onClick: (authState: string) => void;
@@ -29,9 +33,6 @@ const Login: React.FC<LoginProps> = (props) => {
     setIsSubmitting(true);
     login(userCredentials)
       .then((result) => {
-        // if(result.error) {
-        //   notification.error({ type: 'error', message: result.error.data.message, duration: 2 });
-        // }
         if ('error' in result) {
           notification.error({ type: 'error', message: 'login failed', description: 'Email or password incorrect' });
         }
@@ -75,16 +76,6 @@ const Login: React.FC<LoginProps> = (props) => {
         if (!loginResult.isLoading) {
           setIsSubmitting(false);
         }
-
-        // Handling error failed login here
-        // if ('error' in result) {
-        //   if ('status' in result.error) {
-        //     console.log('show notification!');
-        //   }
-        // }
-        // if (result.error.status === 500) {
-        //   console.log('show notification!');
-        // }
       })
       .catch((error) => {
         console.log('error:', error);
@@ -100,6 +91,11 @@ const Login: React.FC<LoginProps> = (props) => {
     props.onClick('signup');
   };
 
+  const navigateForgotPassHandler = (e: React.MouseEvent) => {
+    e.preventDefault();
+    props.onClick('forgot');
+  };
+
   return (
     <Fragment>
       <div className='auth__title'>
@@ -107,17 +103,17 @@ const Login: React.FC<LoginProps> = (props) => {
       </div>
       <div className='auth__socials'>
         <Space>
-          <Button className='auth__socials-btn'>
-            <GoogleOutlined className='auth__socials-icon' />
-          </Button>
-          <Button className='auth__socials-btn'>
+          <GoogleOAuthProvider clientId='654961818615-ml2bg2915ljl8sntvmlnbb896o15csa7.apps.googleusercontent.com'>
+            <GoogleLoginButton />
+          </GoogleOAuthProvider>
+          {/* <Button className='auth__socials-btn'>
             <FacebookFilled className='auth__socials-icon' />
-          </Button>
-          <Button className='auth__socials-btn'>
+          </Button> */}
+          {/* <Button className='auth__socials-btn'>
             <LinkedinFilled className='auth__socials-icon' />
-          </Button>
+          </Button> */}
           <Button className='auth__socials-btn'>
-            <GithubOutlined className='auth__socials-icon' />
+            <GithubLoginButton/>
           </Button>
         </Space>
       </div>
@@ -153,16 +149,13 @@ const Login: React.FC<LoginProps> = (props) => {
           <ButtonCmp disabled={isSubmitting} className='btn btn-primary btn-sm w-full'>
             {isSubmitting ? <Spin indicator={antIcon} /> : 'Login '}
           </ButtonCmp>
-          {/* <Button loading={true}>
-            Submit Ant Design <Spin indicator={antIcon} />;
-          </Button> */}
         </Form.Item>
       </Form>
       <div className='auth__footer'>
         <a onClick={navigateLoginHandler} href='#' className='auth__footer-link'>
           Create Account
         </a>
-        <a href='' className='auth__footer-link'>
+        <a onClick={navigateForgotPassHandler} href='#' className='auth__footer-link'>
           Forgot Password
         </a>
       </div>

@@ -1,21 +1,25 @@
 import { ICourse } from './course.type';
+import { IBase } from './base.type';
 
 export enum UserRole {
-  ADMIN = 'ADMIN',
-  STUDENT = 'STUDENT',
-  TEACHER = 'TEACHER',
-  USER = 'USER'
+  ADMIN = 'Admin',
+  STUDENT = 'Student',
+  TEACHER = 'Teacher',
+  USER = 'USER',
+  AUTHOR = 'Author',
+  OTHER = 'Other'
 }
 
-export interface IUser {
+export interface IUser extends IBase {
   _id: string;
   name: string;
+  username: string;
   email: string;
   password?: string;
   role: UserRole;
   phone: string;
   address?: string;
-  avatar?: string;
+  avatar?: File | string;
   courses?: ICourse[];
   createdAt?: string;
   updatedAt?: string;
@@ -26,4 +30,18 @@ export interface IUser {
   resetTokenExpiration?: string;
   loginToken?: string;
   loginTokenExpiration?: string;
+  payment?: string;
+  headline?: string;
+  biography?: string;
+  website?: string;
+  twitter?: string;
+  facebook?: string;
+  linkedin?: string;
+  youtube?: string;
+  language?: string;
+  showProfile?: boolean;
+  showCourses?: boolean;
+  statusColor?: string;
+  statusName?: string;
+  status?: string;
 }

@@ -1,0 +1,84 @@
+
+.user-profile {
+  width: 100%; 
+  &-top {
+    width: 100%; 
+    height: 15em; 
+    background-color: #000; 
+    color: #fff; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    .user-profile__name{
+      line-height: 15em;
+      font-size: 2.8em;
+    }
+  }
+  &-bottom {
+    .container {
+      display: flex-start;
+      align-items: center; 
+      padding: 2em; 
+
+       .user-profile__avatar{
+        width: 150px; 
+        height: 150px; 
+        border-radius: 50%; 
+        margin-right: 16px; 
+      }
+
+      &__info {
+        display: flex;
+        flex-direction: column; 
+      }
+
+      &__name {
+        font-size: 24px; 
+        color: #333; 
+        margin: 0 0 8px 0; 
+      }
+
+      &__bio {
+        font-size: 2.0; 
+        color: #666; 
+      }
+    }
+  }
+  .tabs {
+    display: flex;
+    justify-content: center; 
+    margin-top: 20px; 
+
+    .tab {
+      cursor: pointer;
+      padding: 10px 20px;
+      transition: all 0.3s ease;
+      font-weight: 700; 
+      margin: 0 10px; 
+      position: relative;
+      font-size: 1.8em;
+
+      &:hover, &.active {
+        color: #000; 
+        background-color: #fff; 
+
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: -10px; 
+          left: 0;
+          right: 0;
+          height: 2px; 
+          background-color: #000; 
+          width: 100%; 
+          margin: 0 auto; 
+        }
+      }
+      &:not(.active):after {
+        display: none;
+      }
+    }
+  }
+}
+
+

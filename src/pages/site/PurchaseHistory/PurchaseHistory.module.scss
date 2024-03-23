@@ -1,0 +1,36 @@
+@import '../../../assets/sass/base';
+
+.purchaseHistory {
+  margin-top: $header-height;
+  padding: 0 4.8rem;
+
+  min-height: 65vh;
+
+  &__title {
+    @include h-style('h2');
+  }
+
+  &__tabs {
+    font-family: $text-font;
+
+    :global {
+      .ant-tabs-nav .ant-tabs-tab {
+        font-size: 1.6rem;
+
+        &:hover {
+          color: #000;
+        }
+      }
+
+      .ant-tabs-nav .ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+          color: #000;
+        }
+      }
+
+      .ant-tabs-ink-bar {
+        background-color: #000;
+      }
+    }
+  }
+}

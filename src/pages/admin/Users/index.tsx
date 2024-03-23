@@ -6,7 +6,8 @@ import './Users.scss';
 import AddUser from './components/AddUser';
 import UsersList from './components/UsersList';
 import { startEditUser } from './user.slice';
-
+import { Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
 const { Search } = Input;
 
 const Users = () => {
@@ -15,8 +16,6 @@ const Users = () => {
 
   const [searchValue, setSearchValue] = useState('');
   const onSearchHandler = (value: string) => {
-    console.log(value);
-
     setSearchValue(value);
   };
 
@@ -35,13 +34,25 @@ const Users = () => {
 
   return (
     <div className='users'>
+       <div className='breakcrumb'>
+        <Breadcrumb
+          items={[
+            {
+              title: 'Users'
+            },
+            {
+              title: <Link to='#'>All Users</Link>
+            }
+          ]}
+        />
+      </div>
       <div className='users__wrap'>
         <div className='users__filter'>
           <Space className='sub-header__wrap'>
-            <Button onClick={createUserHandler} type='primary' icon={<PlusOutlined />}>
+            <Button onClick={createUserHandler} type='primary' icon={<PlusOutlined />} className='btn-wrap'>
               New User
             </Button>
-            <Search placeholder='Search Name of User' onSearch={onSearchHandler} style={{ width: 200 }} />
+            <Search placeholder='Search Name of User' onSearch={onSearchHandler} style={{ width: 200 }} className='search-wrap'/>
             <Select
               showSearch
               placeholder='Search by course'

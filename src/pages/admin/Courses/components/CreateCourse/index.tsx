@@ -71,7 +71,6 @@ const CreateCourse = () => {
     addCourse(newCourse)
       .unwrap()
       .then((result) => {
-        console.log(result);
 
         notification.success({
           message: 'Add Course',
@@ -80,7 +79,6 @@ const CreateCourse = () => {
         dispatch(handleFormData(initStateCourse));
       })
       .catch((error) => {
-        console.log(error);
 
         notification.error({
           message: 'Add Course',
@@ -127,11 +125,6 @@ const CreateCourse = () => {
                         <Button onClick={handlePrevSlide}>Previous</Button>
                       </div>
                       <div className='carousel-navigator__dots'>
-                        {/* <PlusCircleOutlined />
-                            <PlusCircleOutlined />
-                            <PlusCircleOutlined />
-                            <PlusCircleOutlined />
-                            <PlusCircleOutlined /> */}
                         <span className='carousel-navigator__dots-item'></span>
                         <span className='carousel-navigator__dots-item'></span>
                         <span className='carousel-navigator__dots-item'></span>

@@ -1,14 +1,20 @@
-export interface IReview {
-  authorId: string;
+import { IBase } from './base.type';
+import { ICourse } from './course.type';
+import { IUser } from './user.type';
+export interface IReview extends IBase {
+  _id: string;
+  code: string;
+  courseId: ICourse;
   title: string;
-  createdAt: string;
   content: string;
-  courseId: string;
+  ratingStar: number;
   orderId: string;
-  replies: IReplyReview[];
+  userId: IUser;
 }
 
-export interface IReplyReview {
-  userId: string;
-  name: string;
+export interface IReviewReply extends IBase {
+  _id: string;
+  code: string;
+  reviewId: string;
+  contentReply: string;
 }

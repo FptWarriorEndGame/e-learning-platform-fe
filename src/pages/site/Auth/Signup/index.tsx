@@ -15,7 +15,6 @@ const Signup: React.FC<SignupProps> = (props) => {
   const [signup, signupResult] = useSignupMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onFinish = (formValues: Omit<IUser, '_id'>) => {
-    console.log('Success:', formValues);
 
     const newUser: Omit<IUser, '_id'> = {
       email: formValues.email,
@@ -29,10 +28,8 @@ const Signup: React.FC<SignupProps> = (props) => {
 
     signup(newUser)
       .then((result) => {
-        console.log(result);
 
         if ('data' in result) {
-          console.log(result.data);
 
           const signupResponse: { message: string; userId: string } = result.data;
 
@@ -67,14 +64,14 @@ const Signup: React.FC<SignupProps> = (props) => {
       <div className='auth__socials'>
         <Space>
           <Button className='auth__socials-btn'>
-            <GoogleOutlined className='auth__socials-icon' />
+          <img src="https://image.similarpng.com/very-thumbnail/2020/06/Logo-google-icon-PNG.png" alt="" />
           </Button>
-          <Button className='auth__socials-btn'>
+          {/* <Button className='auth__socials-btn'>
             <FacebookFilled className='auth__socials-icon' />
           </Button>
           <Button className='auth__socials-btn'>
             <LinkedinFilled className='auth__socials-icon' />
-          </Button>
+          </Button> */}
           <Button className='auth__socials-btn'>
             <GithubOutlined className='auth__socials-icon' />
           </Button>

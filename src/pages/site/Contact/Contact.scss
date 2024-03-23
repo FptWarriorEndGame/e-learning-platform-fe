@@ -7,4 +7,15 @@
     &__title {
         @include h-style("h2");
     }
+    .remember{
+        text-align: left;
+    }
+    &-btn{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1.2rem 0;
+        box-sizing: content-box;
+    }
 }

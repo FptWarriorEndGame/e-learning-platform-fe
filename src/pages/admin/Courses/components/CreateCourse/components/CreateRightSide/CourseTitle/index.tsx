@@ -5,18 +5,33 @@ import { ICategory } from '../../../../../../../../types/category.type';
 import { useGetCategoriesQuery } from '../../../../../../Categories/category.service';
 import { handleFormData } from '../../../../../course.slice';
 import './CourseTitle.scss';
+import { useState } from 'react';
 
 const { TextArea } = Input;
 
 const CourseTitle = () => {
   const { data: categoriesData, isFetching } = useGetCategoriesQuery({ _q: '' });
   const formData = useSelector((state: RootState) => state.course.formData);
+  const [titleError, setTitleError] = useState('');
+  const [subTitleError, setSubTitleError] = useState('');
   const dispatch = useDispatch();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length < 100) {
+      setTitleError('Course title must be minimum 100 characters.');
+    } else {
+      setTitleError('');
+    }
     dispatch(handleFormData({ ...formData, name: e.target.value }));
   };
 
   const subTitleChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length < 50) {
+      setSubTitleError('Course subtitle must be minimum 50 characters.');
+    } else {
+      setSubTitleError('');
+    }
     dispatch(handleFormData({ ...formData, subTitle: e.target.value }));
   };
 
@@ -30,8 +45,6 @@ const CourseTitle = () => {
     value: string,
     options: { label: string; value: string } | { label: string; value: string }[]
   ) => {
-    console.log(`selected ${value}`, options);
-
     dispatch(
       handleFormData({
         ...formData,
@@ -62,6 +75,7 @@ const CourseTitle = () => {
             className='course-title__input-input'
             placeholder='Your course title. Ex: Learning C Programm'
           />
+          {titleError && <p className='error-message text-red-500'>{titleError}</p>}
         </div>
 
         <div className='course-title__input-group mt-8'>
@@ -69,20 +83,19 @@ const CourseTitle = () => {
             Course Categories
           </label>
           <Select
-            // defaultValue='frontend'
             value={formData.categoryId.name}
             style={{ width: '100%' }}
             onChange={cateChangeHandler}
             options={optionsCateList}
           />
         </div>
-
         {/* Sub title of course */}
         <div className='course-title__input-group mt-8'>
           <label htmlFor='' className='course-title__input-label me-4 block'>
             Course sub title
           </label>
           <TextArea rows={4} value={formData.subTitle} onChange={subTitleChangeHandler} />
+          {subTitleError && <p className='error-message text-red-500'>{subTitleError}</p>}
         </div>
       </div>
     </div>

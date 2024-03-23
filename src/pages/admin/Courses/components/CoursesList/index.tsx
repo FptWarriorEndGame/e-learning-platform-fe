@@ -58,11 +58,6 @@ const CoursesList: React.FC<CoursesListProps> = (props) => {
       value: course.name
     };
   });
-  // const onNameFilter = (value: string, record: DataCourseType) => {
-  //   console.log(value, record);
-
-  //   return record.author.includes(value.toString());
-  // };
 
   const cateFilterList = categoriesData?.categories.map((cate) => {
     return {
@@ -91,10 +86,6 @@ const CoursesList: React.FC<CoursesListProps> = (props) => {
     {
       title: 'Name',
       dataIndex: 'name',
-      // filters: nameFiltersList,
-      // filterMode: 'tree',
-      // filterSearch: true,
-      // onFilter: onNameFilter,
       width: '20%'
     },
     {
@@ -136,7 +127,6 @@ const CoursesList: React.FC<CoursesListProps> = (props) => {
     {
       title: 'Created At',
       dataIndex: 'createdAt'
-      // sorter: (a, b) => a.createdAt - b.createdAt
     },
     {
       title: 'Updated At',
@@ -156,7 +146,6 @@ const CoursesList: React.FC<CoursesListProps> = (props) => {
   });
 
   const onChange: TableProps<DataCourseType>['onChange'] = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
 
     setTableParams({
       pagination

@@ -12,7 +12,6 @@ const AdminDrawer = () => {
 
   const dispatch = useDispatch();
   const openCreateCourseHandler = () => {
-    console.log('click');
     dispatch(openCreateCourse(true));
   };
 

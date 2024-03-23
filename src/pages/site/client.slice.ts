@@ -2,8 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { notification } from 'antd';
 import { ICart } from '../../types/cart.type';
 import { IParams } from '../../types/params.type';
-// import { IOrder } from '../../../types/order.type';
-// import { IUser } from '../../types/user.type';
 
 interface ClientState {
   lessonId: string;
@@ -19,7 +17,8 @@ interface ClientState {
   currentProgress: number;
   certificatePath: string;
   isLessonChange: boolean;
-  //   formData: IClient;
+  percentHavePlayed: number;
+  selectedCoupon: string | null;
 }
 
 const storedCart = JSON.parse(localStorage.getItem('cart') || '{}') as ICart;
@@ -41,7 +40,9 @@ const initialState: ClientState = {
   lessonIdsDoneByCourseId: [],
   currentProgress: 0,
   certificatePath: '',
-  isLessonChange: false
+  isLessonChange: false,
+  percentHavePlayed: 0,
+  selectedCoupon: null
 };
 
 const clientSlice = createSlice({
@@ -50,19 +51,10 @@ const clientSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<string>) => {
       if (action.payload) {
-        console.log('state cart: ', state.cart);
-
-        // const cartItems = state.cart.items;
-
-        // if (cartItems) {
-        //   state.cart.items = [];
-        // }
-        // console.log('state cart items: ', state.cart.items);
         const courseExistingIdx = state.cart.items.findIndex((item) => item.courseId === action.payload);
 
         if (courseExistingIdx === -1) {
           state.cart.items.push({ courseId: action.payload });
-          // state.cart.items = [...state.cart.items, { courseId: action.payload }];
 
           const cartForStorage = {
             items: state.cart.items
@@ -79,6 +71,7 @@ const clientSlice = createSlice({
     },
     clearCart: (state) => {
       state.cart.items = [];
+      localStorage.removeItem('cart');
     },
     removeCart: (state, action: PayloadAction<string>) => {
       const courseExistingIdx = state.cart.items.findIndex((item) => item.courseId === action.payload);
@@ -87,9 +80,6 @@ const clientSlice = createSlice({
         localStorage.setItem('cart', JSON.stringify(state.cart));
       }
     },
-    // createOrder: (state, action: PayloadAction<Omit<IOrder, "_id">) => {
-    //   state.state = action.payload;
-    // },
     startPlayingVideo: (state, action: PayloadAction<{ lessonId: string; content: string }>) => {
       state.playingVideo = action.payload.content;
       state.lessonId = action.payload.lessonId;
@@ -135,10 +125,13 @@ const clientSlice = createSlice({
     },
     resetLessonChange: (state) => {
       state.isLessonChange = false;
+    },
+    setPercentHavePlayed: (state, action: PayloadAction<number>) => {
+      state.percentHavePlayed = action.payload;
+    },
+    setSelectedCoupon: (state, action: PayloadAction<string | null>) => {
+      state.selectedCoupon = action.payload;
     }
-    // handleFormData: (state, action: PayloadAction<IOrder>) => {
-    //   state.formData = action.payload;
-    // }
   }
 });
 
@@ -158,7 +151,9 @@ export const {
   updateCurrentProgress,
   createCertificatePath,
   updateIsLessonChange,
-  resetLessonChange
+  resetLessonChange,
+  setPercentHavePlayed,
+  setSelectedCoupon
   // refetchCourseEnrolledbyUser
 } = clientSlice.actions;
 export default clientReducer;

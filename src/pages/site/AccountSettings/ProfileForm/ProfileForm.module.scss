@@ -1,0 +1,112 @@
+@import '../../../../assets/sass/base';
+
+.profileForm {
+  &__item {
+    :global {
+      .ant-form-item-label > label {
+        font-size: 1.4rem;
+        font-weight: 700;
+        line-height: 1.2;
+        opacity: 0.9;
+      }
+    }
+  }
+
+  &__input {
+    height: 4.8rem;
+    border: 1px solid $dark-text-color;
+    border-radius: 0;
+    display: block;
+    padding: 0 1.6rem;
+    font-weight: 400;
+    line-height: 1.4;
+    font-size: 1.6rem;
+    color: $dark-text-color;
+
+    &:hover {
+      border-color: $dark-text-color;
+    }
+
+    &:focus {
+      border-color: $dark-text-color;
+      box-shadow: none;
+    }
+
+    &--textarea {
+      padding-top: 1rem;
+    }
+
+    &--select {
+      padding: 0;
+      :global {
+        .ant-select-selector {
+          border: none !important;
+          height: 4.5rem !important;
+
+          .ant-select-selection-item,
+          .ant-select-selection-search {
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            height: 4.5rem;
+            font-size: 1.6rem;
+            color: $dark-text-color;
+
+            .ant-select-selection-search-input {
+              height: 4.5rem;
+            }
+          }
+
+          .ant-select-selection-placeholder {
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+            font-size: 1.6rem;
+          }
+        }
+      }
+    }
+
+    &--social {
+      padding: 0;
+      :global {
+        .ant-input-group-addon,
+        .ant-input {
+          height: 4.6rem;
+          border: none;
+          font-weight: 400;
+          line-height: 1.4;
+          font-size: 1.6rem;
+        }
+
+        .ant-input {
+          border-left: 1px solid $dark-text-color;
+        }
+      }
+    }
+  }
+
+  &__bioHint {
+    padding-top: 0.8rem;
+    font-weight: 400;
+    line-height: 1.4;
+    font-size: 1.2rem;
+    margin-bottom: 2.4rem;
+  }
+
+  &__submit {
+    width: 8rem;
+    button {
+      height: 4.8rem;
+      border-radius: 0;
+      font-weight: 700;
+      line-height: 1.2;
+      font-size: 1.6rem;
+
+      &:disabled {
+        color: rgba($light-text-color, 0.8);
+        background-color: rgba($brand-primary-color, 0.9);
+      }
+    }
+  }
+}

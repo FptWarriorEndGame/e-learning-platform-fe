@@ -15,7 +15,7 @@ const ReviewsCenter = () => {
       <Space>
         <h3 className='admin-header__page-title'>ReviewsCenter</h3>
 
-        <Button onClick={openCreateCourseHandler}>
+        <Button onClick={openCreateCourseHandler} className='btn-wrap'>
           <PlusCircleOutlined />
           Export data
         </Button>

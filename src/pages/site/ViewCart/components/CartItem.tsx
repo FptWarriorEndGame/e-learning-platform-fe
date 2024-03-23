@@ -9,7 +9,6 @@ import './CartItem.scss';
 
 type CartItemProps = {
   courseItem: ICourseDetail;
-  // onTotal: (finalPrice: number) => void;
   onRemove: (courseId: string) => void;
 };
 
@@ -39,8 +38,6 @@ const CartItem = (props: CartItemProps) => {
 
   return (
     <Fragment>
-      {/* {isFetching && <Skeleton />} */}
-      {/* {!isFetching && ( */}
       <div className='view-cart__list-item'>
         <Divider className='view-cart__list-item-divider' />
         <Row>
@@ -95,7 +92,6 @@ const CartItem = (props: CartItemProps) => {
           </Col>
         </Row>
       </div>
-      {/* )} */}
     </Fragment>
   );
 };

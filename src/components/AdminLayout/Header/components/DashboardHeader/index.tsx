@@ -34,7 +34,6 @@ const DashboardHeader = () => {
     adminLogout()
       .unwrap()
       .then((result) => {
-        console.log('result: ', result);
 
         notification.success({
           message: result.message
@@ -79,26 +78,13 @@ const DashboardHeader = () => {
     <Fragment>
       <Space>
         <h3 className='admin-header__page-title'>Dashboard</h3>
-
-        <Button onClick={openCreateCourseHandler}>
-          <PlusCircleOutlined />
-          Create Course
-        </Button>
-        <Button>
-          <PlusCircleOutlined />
-          Preview Hompage
-        </Button>
-        <Button>
-          <PlusCircleOutlined />
-          Preview Hompage after login
-        </Button>
       </Space>
       <Space className='admin-header__notify'>
-        <Button>
+        <Button className='btn-wrap'>
           <BellOutlined />
           <span>What's new</span>
         </Button>
-        <Button>
+        <Button className='btn-wrap'>
           <QuestionOutlined />
           <span>Help</span>
         </Button>

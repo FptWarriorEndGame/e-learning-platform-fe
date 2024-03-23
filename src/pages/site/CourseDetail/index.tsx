@@ -1,6 +1,7 @@
 import { CheckOutlined, HeartOutlined, RightCircleFilled, StarFilled } from '@ant-design/icons';
 import { Breadcrumb, Button, Col, List, Row, Space, Typography, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
 import { BACKEND_URL } from '../../../constant/backend-domain';
@@ -9,6 +10,7 @@ import { AccessStatus, CourseLevel } from '../../../types/course.type';
 import { IOrder } from '../../../types/order.type';
 import { formatVideoLengthToHours, transformDate } from '../../../utils/functions';
 import { openAuthModal } from '../../auth.slice';
+import RelatedCourses from './components/RelatedCourses/RelatedCourses';
 import {
   useCreateOrderMutation,
   useGetCourseDetailQuery,
@@ -18,6 +20,7 @@ import {
 import { addToCart } from '../client.slice';
 import './CourseDetail.scss';
 import SectionList from './components/SectionList';
+import ReviewModal from './components/ReviewModal/ReviewModal';
 // type Props = {}
 const courseData = [
   'Will learning some things at this course -- task 1.',
@@ -68,6 +71,8 @@ const CourseDetail = () => {
   const { data: userData } = useGetUserQuery(userId);
 
   const { courseId } = params;
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { data } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
   const [createOrder, createOrderResult] = useCreateOrderMutation();
@@ -188,13 +193,21 @@ const CourseDetail = () => {
     navigate(`/path-player?courseId=${courseId as string}`);
   };
 
+  const handleOpenModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <div className='course-detail'>
-      <div className='course-detail__wrap spacing-h-sm'>
+      <div className='course-detail__wrap'>
         <div className='course-detail__intro '>
           <div className='container'>
-            <Row gutter={16} className='course-detail__intro-wrap'>
-              <Col md={16}>
+            <div className='course-detail__intro-wrap'>
+              <div className='course-detail__intro-wrap-content'>
                 <Breadcrumb
                   className='course-detail__breadcrumb'
                   items={[
@@ -227,9 +240,12 @@ const CourseDetail = () => {
                         <StarFilled className='rating-icon' />
                         <StarFilled className='rating-icon' />
                       </span>
-                      <Link to='/'>({numOfReviews} ratings)</Link>
+                      <span onClick={handleOpenModal} style={{ cursor: 'pointer' }}>
+                        ({numOfReviews} ratings)
+                      </span>
                     </Space>
                   </div>
+                  <ReviewModal courseId={courseId} visible={isModalVisible} onCancel={handleCancel} />
                   <div className='course-detail__info-item course-detail__info-students'>
                     <Space>
                       <span>{students}</span>
@@ -244,8 +260,8 @@ const CourseDetail = () => {
                   </Link>
                 </div>
                 <div className='course-detail__intro-updated-at'>Last updated {transformDate(updatedAt)}</div>
-              </Col>
-              <Col sm={16} md={8} lg={8}>
+              </div>
+              <div className='course-detail__intro-wrap-course'>
                 <div className='course-detail__overview'>
                   <div className='course-detail__thumbnail'>
                     <img
@@ -321,8 +337,6 @@ const CourseDetail = () => {
                     <div className='course-detail__overview-includes'>
                       <h4 className='course-detail__overview-includes-title'>This course includes:</h4>
                       <List
-                        // header={<div>Header</div>}
-                        // footer={<div>Footer</div>}
                         dataSource={overviewData}
                         renderItem={(item) => (
                           <List.Item>
@@ -333,65 +347,63 @@ const CourseDetail = () => {
                     </div>
                   </div>
                 </div>
-              </Col>
-            </Row>
+              </div>
+            </div>
           </div>
         </div>
-        {/* Include section */}
-        <div className='course-detail__includes spacing-h-sm container'>
-          <Row>
-            <Col md={24} lg={16}>
-              <div className='container course-detail__includes-wrap'>
-                <List
-                  header={<div className='course-detail__includes-header'>What you'll learn</div>}
-                  footer={<div className='course-detail__includes-footer'>Show more</div>}
-                  //   bordered
-                  dataSource={courseData}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <Space>
-                        <Typography.Text>
-                          <CheckOutlined />
-                        </Typography.Text>
-                        <span>{item}</span>
-                      </Space>
-                    </List.Item>
-                  )}
-                />
-              </div>
-            </Col>
-          </Row>
-        </div>
-        {/* Content section */}
-        <div className='course-detail__content container'>
-          <Row>
-            <Col md={24} lg={16}>
-              <h3 className='course-detail__content-title'>Course content</h3>
-              <div className='course-detail__content-wrap'>
-                <div className='course-detail__content-summary'>
-                  <Row className='course-detail__content-summary-row'>
-                    <Col md='12'>
-                      {numOfSections} sections • {lessons} lectures • {formatVideoLengthToHours(totalVideosLength)}{' '}
-                      total length
-                    </Col>
-                    <Col className='course-detail__content-summary-col col-right' md='12'>
-                      <Link to='/'>Expand all sections</Link>
-                    </Col>
-                  </Row>
+        <div className='container'>
+          <div className='course-detail__includes'>
+            <div className='course-detail__includes-list'>
+              <div className='course-detail__includes-item'>
+                <div className='container course-detail__includes-wrap'>
+                  <List
+                    header={<div className='course-detail__includes-header'>What you'll learn</div>}
+                    footer={<div className='course-detail__includes-footer'>Show more</div>}
+                    dataSource={courseData}
+                    renderItem={(item) => (
+                      <List.Item>
+                        <Space>
+                          <Typography.Text>
+                            <CheckOutlined />
+                          </Typography.Text>
+                          <span>{item}</span>
+                        </Space>
+                      </List.Item>
+                    )}
+                  />
                 </div>
               </div>
-              {/* Collapse section */}
-              {courseId && <SectionList courseId={courseId} />}
-            </Col>
-          </Row>
+            </div>
+          </div>
+          <div className='course-detail__content'>
+            <div className='course-detail__content-list'>
+              <div className='course-detail__content-item'>
+                <h3 className='course-detail__content-title'>Course content</h3>
+                <div className='course-detail__content-wrap'>
+                  <div className='course-detail__content-summary'>
+                    <Row className='course-detail__content-summary-row'>
+                      <Col md='12'>
+                        {numOfSections} sections • {lessons} lectures • {formatVideoLengthToHours(totalVideosLength)}{' '}
+                        total length
+                      </Col>
+                      <Col className='course-detail__content-summary-col col-right' md='12'>
+                        <Link to='/'>Expand all sections</Link>
+                      </Col>
+                    </Row>
+                  </div>
+                </div>
+                {courseId && <SectionList courseId={courseId} />}
+              </div>
+            </div>
+          </div>
+          <div className='course-detail__related-courses container'>
+            {courseId !== undefined && <RelatedCourses courseId={courseId} />}
+          </div>
         </div>
-
-        {/* Course author */}
-
         <div className='course-detail__author spacing-h-md'>
           <div className='course-detail__author-wrap container'>
-            <Row>
-              <Col md={12} className='course-detail__author-info'>
+            <div className='course-detail__author-list'>
+              <div className='course-detail__author-info'>
                 <p className='course-detail__author-intro'>Meet the intructor</p>
                 <h2 className='course-detail__author-name'>{author.name}</h2>
                 <p className='course-detail__author-desc'>
@@ -400,15 +412,15 @@ const CourseDetail = () => {
                   Chicago. Patrick enjoys teaching all levels and all ages. He looks forward to sharing his love of
                   building meaningful and effective content with all students to develop their marketing abilities.
                 </p>
-              </Col>
-              <Col md={12} className='course-detail__author-avatar'>
+              </div>
+              <div className='course-detail__author-avatar'>
                 <img
                   className='course-detail__author-img'
                   src={author.avatar || 'https://www.w3schools.com/howto/img_avatar.png'}
                   alt={author.name}
                 />
-              </Col>
-            </Row>
+              </div>
+            </div>
           </div>
         </div>
       </div>

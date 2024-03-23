@@ -42,36 +42,12 @@ const UsersProgressHeader = () => {
     <Fragment>
       <Space>
         <h3 className='admin-header__page-title'>User Progress</h3>
-
-        <Button onClick={openCreateCourseHandler}>
-          <PlusCircleOutlined />
-          Save Segment
-        </Button>
-        <Button>
-          <PlusCircleOutlined />
-          View segments
-        </Button>
-        <Button>
-          <PlusCircleOutlined />
-          Shedule report
-        </Button>
-        <Button>
+        <Button className='btn-wrap'>
           <PlusCircleOutlined />
           Export user progress
         </Button>
       </Space>
       <Space className='admin-header__notify'>
-        {/* <Button>
-          <BellOutlined />
-          <span>What's new</span>
-        </Button>
-        <Button>
-          <QuestionOutlined />
-          <span>Help</span>
-        </Button>
-        <Dropdown menu={{ items: adminInfoItems }} placement='bottom' arrow>
-          <Avatar style={{ backgroundColor: '#87d068', cursor: 'pointer' }} icon={<UserOutlined />} />
-        </Dropdown> */}
       </Space>
     </Fragment>
   );

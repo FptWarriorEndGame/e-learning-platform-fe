@@ -1,0 +1,15 @@
+.breakcrumb{
+    padding: 1.2rem;
+    padding-top: 2.4rem;
+    .ant-breadcrumb-link{
+        font-size: 1.8rem;
+        a{
+            color: #3a3a3a;
+            &:hover{
+                text-decoration: underline;
+                text-underline-offset: .6rem;
+                background-color: transparent;
+            }
+        }
+    }
+}

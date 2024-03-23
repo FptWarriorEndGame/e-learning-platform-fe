@@ -10,4 +10,6 @@ export interface IParams {
   _price?: string[];
   _topic?: string[];
   _cateName?: string;
+  _status?: string;
+  _rating?: number;
 }

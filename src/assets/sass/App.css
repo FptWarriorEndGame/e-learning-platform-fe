@@ -1,0 +1,19 @@
+.back-top .ant-float-btn-body {
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+.back-top .ant-float-btn-body .ant-float-btn-content {
+  min-height: 16px;
+  width: 14px;
+  height: 16px;
+  margin: 12px auto;
+  background: url('../images/icons/backtop.png') 100%/100% no-repeat;
+}
+
+.back-top .ant-float-btn-body .ant-float-btn-content .ant-float-btn-icon {
+  display: none;
+}
+
+.back-top .ant-float-btn-body:hover {
+  background-color: rgba(0, 0, 0, 0.65);
+}

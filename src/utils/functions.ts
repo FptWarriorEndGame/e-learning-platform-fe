@@ -14,8 +14,26 @@ import 'dayjs/locale/en'; // Import the English locale (you can replace 'en' wit
 
 export const transformDate = (apiDate: string) => {
   const parsedDate = dayjs(apiDate);
-  const formattedDate = parsedDate.format('M/YYYY');
+  const formattedDate = parsedDate.format('DD/MM/YYYY HH:mm:ss');
   return formattedDate;
+};
+
+export function formatTimeRounded(seconds: number): string {
+  // Làm tròn số giây trước khi chia để đảm bảo phút và giây được tính toán chính xác
+  const roundedSeconds = Math.round(seconds);
+  const minutes = Math.floor(roundedSeconds / 60);
+  const remainingSeconds = roundedSeconds % 60;
+  // Sử dụng padStart để đảm bảo cả phút và giây đều có ít nhất 2 chữ số
+  const paddedMinutes = minutes.toString().padStart(2, '0');
+  const paddedSeconds = remainingSeconds.toString().padStart(2, '0');
+  return `${paddedMinutes}:${paddedSeconds}`;
+}
+
+export const formatTimeAndMinutes = (seconds: number) => {
+  const pad = (num: number) => num.toString().padStart(2, '0');
+  const minutes = pad(Math.floor(seconds / 60));
+  const secondsLeft = pad(Math.floor(seconds % 60));
+  return `${minutes}:${secondsLeft}`;
 };
 
 export function formatTime(seconds: number) {
@@ -28,6 +46,14 @@ export const formatVideoLengthToHours = (seconds: number): string => {
   const hours = seconds / 3600;
   return `${hours.toFixed(1)} hours`;
 };
+
+export const  isNotValidEmail = (email: string) => {
+  // Regular expression for a simple email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Test the provided email against the regex
+  return !emailRegex.test(email);
+}
 
 export function getHeaders() {
   const token = localStorage.getItem('token');

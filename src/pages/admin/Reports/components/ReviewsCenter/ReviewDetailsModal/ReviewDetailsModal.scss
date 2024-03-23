@@ -1,0 +1,25 @@
+.review-details-modal {
+  .ant-modal-content {
+    border-radius: 10px;
+  }
+
+  .review-details {
+    &__section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+
+      &__label {
+        font-weight: bold;
+        margin-right: 8px;
+      }
+    }
+
+    &__empty {
+      text-align: center;
+      color: #aaa;
+      padding: 20px 0;
+    }
+  }
+}

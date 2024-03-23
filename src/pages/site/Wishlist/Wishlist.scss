@@ -1,0 +1,34 @@
+@import '../../../assets/sass/base';
+
+.wishlist-courses {
+  margin-top: $header-height;
+  font-size: 1.6rem;
+  text-align: center;
+  padding: 4rem 0;
+
+  &__title {
+    @include h-style('h2');
+    @media (max-width: 1200px) {
+      font-size: 3.2rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 2.4rem;
+    }
+    @media (max-width: 576px) {
+      font-size: 1.8rem;
+    }
+    margin-bottom: 4rem;
+  }
+
+
+  @media (max-width: map-get($breakpoint, mobile)) {
+    &__title {
+      text-align: center;
+    }
+
+    &__list {
+      padding: 0rem 2rem;
+    }
+  }
+
+}
