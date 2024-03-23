@@ -334,7 +334,7 @@ export const reportApi = createApi({
         return [{ type: 'Reports', id: 'LIST' }];
       }
     }),
-    getCoursesReportByAuthor: build.query<any, {dateStart?: string, dateEnd?: string}>({
+    getCoursesReportByAuthor: build.query<{reports: Array<any>}, {dateStart?: string, dateEnd?: string}>({
       query: (params) => ({
         url: `/reports/courses-report-by-author`,
         params

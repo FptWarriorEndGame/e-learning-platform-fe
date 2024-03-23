@@ -144,7 +144,7 @@ const CourseDetail = () => {
           email: userData?.user.email || '',
           name: userData?.user.name || '',
           phone: userData?.user.phone || '',
-          avatar: userData?.user.avatar || ''
+          avatar: (userData?.user.avatar as string) || ''
         },
         transaction: {
           method: 'VNPAY'

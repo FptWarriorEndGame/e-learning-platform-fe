@@ -14,5 +14,4 @@ if (process.env.NODE_ENV === 'development') {
     // Production (assume process.env.BACKEND_URL is set on your server)
     BACKEND_API = process.env.BACKEND_URL ?? ""; 
   }
-
   export const BACKEND_URL = BACKEND_API

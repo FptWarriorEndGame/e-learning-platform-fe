@@ -136,7 +136,6 @@ const AuthorReport = () => {
   };
 
   const hangeChangeRangeDate = (dates: [Dayjs, Dayjs], dateStrings: [string, string]) => {
-    console.log('From: ', dates[0].format('DD/MM/YYYY'), 'To: ', dates[1].format('DD/MM/YYYY'));
     setCurrentParams({
       dateStart: dateStrings[0],
       dateEnd: dateStrings[1]
@@ -144,12 +143,9 @@ const AuthorReport = () => {
   }
 
   const searchData = () => {
-    console.log('search data', currentParams);
-    console.log("form", form.getFieldsValue())
-    refetch().then(() => {
-      console.log('data', data);
-    
-    }).catch((err) => {
+    refetch().then((res: any) => {
+      console.log('data', res);
+    }).catch((err: any) => {
       console.log('err', err);
     })
   }
@@ -192,6 +188,7 @@ const AuthorReport = () => {
 
       {/* Author report content */}
       <div className='author-report-content mt-8'>
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
         <Table columns={columns} dataSource={authorReportData?.reports ?? []} onChange={onChange} pagination={tableParams.pagination} />
         </div>
     </Fragment>

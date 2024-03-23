@@ -1,7 +1,7 @@
 import { BellOutlined, HeartOutlined, MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Avatar, Badge, Drawer, Dropdown, Input, Modal, Space, notification } from 'antd';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, RefObject } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useLogoutMutation } from '../../../pages/auth.service';
@@ -87,7 +87,7 @@ const Header = () => {
         </Link>
       ),
       key: 'profile',
-      icon: <Avatar src={userData?.avatar} />
+      icon: <Avatar src={userData?.avatar as string} />
     },
     {
       label: <Link to='/start'>My Learning</Link>,
@@ -291,7 +291,7 @@ const Header = () => {
           </Link>
 
           <div className='header__nav'>
-            <ul id='menu' className='header__nav-list' ref={menuRef}>
+            <ul id='menu' className='header__nav-list' ref={menuRef as unknown as RefObject<HTMLUListElement>}>
               <Link to='/' className='header__logo header__logo-mobile'>
                 <img src='https://i.imgur.com/NZj5m3U.png' alt='' className='header__logo-img' />
               </Link>
@@ -414,7 +414,7 @@ const Header = () => {
                 <div className='header__nav-item header__nav-item--user'>
                   <Dropdown menu={menuUserProps} placement='bottomRight'>
                     <Badge dot={true}>
-                      <Avatar className='header__nav-item-user-icon' src={userData?.avatar} />
+                      <Avatar className='header__nav-item-user-icon' src={userData?.avatar as string} />
                     </Badge>
                   </Dropdown>
                 </div>
