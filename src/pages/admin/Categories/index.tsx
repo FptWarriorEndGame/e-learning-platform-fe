@@ -29,7 +29,7 @@ const Categories = () => {
   const { data, isFetching } = useGetCategoriesQuery(params);
   const { data: allCateData, isFetching: isAllCateFetching } = useGetAllCategoriesQuery();
   const [open, setOpen] = useState(false);
-
+  // Create permission section
   const helper = new Helper();
   const CourseCategory = helper.getRole.CourseCategory;
   // GET AUTHORIZATION BY EACH EMPLOYEE

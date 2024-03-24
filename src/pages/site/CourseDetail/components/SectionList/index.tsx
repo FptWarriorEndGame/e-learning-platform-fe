@@ -7,6 +7,7 @@ import './SectionList.scss';
 
 type SectionListProps = {
   courseId: string;
+  courseName: string;
 };
 
 const SectionList = (props: SectionListProps) => {
@@ -29,7 +30,7 @@ const SectionList = (props: SectionListProps) => {
           </div>
         </div>
       ),
-      children: <CourseDetailLessonList sectionId={_id} />
+      children: <CourseDetailLessonList sectionId={_id} courseId={props.courseId} courseName={props.courseName} />
     };
     return sectionTemplateItem;
   });

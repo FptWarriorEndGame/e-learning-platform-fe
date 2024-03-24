@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { Button, Popover, Space, Table, notification } from 'antd';
 import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
 import type { FilterValue } from 'antd/es/table/interface';
@@ -11,12 +16,12 @@ import { CategoryError } from '../../../../../utils/errorHelpers';
 import { useDeleteCategoryMutation } from '../../category.service';
 import { startEditCategory } from '../../category.slice';
 import moment from 'moment';
+import { Helper } from '../../../../../utils/helper';
 
 interface DataCategoryType {
   key: React.Key;
   name: any;
   courses: number;
-  tags: string[];
   createdAt: string; // Convert to date: Example: 18 jun 2023
   description: any;
   actions?: any;
@@ -76,6 +81,18 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
+
+  // Create permission section
+  const helper = new Helper();
+  const CourseCategory = helper.getRole.CourseCategory;
+  // GET AUTHORIZATION BY EACH EMPLOYEE
+  // List Permission here!
+  const isView = helper.checkPermission(CourseCategory?.View?.code);
+  const isCreate = helper.checkPermission(CourseCategory?.Create?.code);
+  const isEdit = helper.checkPermission(CourseCategory?.Edit?.code);
+  const isViewDetail = helper.checkPermission(CourseCategory?.Detail?.code);
+  const isDelete = helper.checkPermission(CourseCategory?.Delete?.code);
+
   const columns: ColumnsType<DataCategoryType> = [
     {
       title: 'Category',
@@ -88,12 +105,14 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
     },
     {
       title: 'Created at',
-      dataIndex: 'createdAt'
+      dataIndex: 'createdAt',
+      render: (value: string) => <div className='txt-desc'>{moment(value).format('YYYY-MM-DD HH:mm:ss') || ''}</div>
     },
     {
       title: 'Courses',
       dataIndex: 'courses',
-      sorter: (a, b) => Number(a.courses) - Number(b.courses)
+      sorter: (a, b) => Number(a.courses) - Number(b.courses),
+      render: (value: number) => <div className='txt-desc'>{value}</div>
     },
     {
       title: 'Manage',
@@ -114,7 +133,7 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
       name: (
         <a href='#'>
           <div className='category-info'>
-            <img alt='' src={cateImage} className='category-info__avatar' />
+            <img alt='' src={cateImage as string} className='category-info__avatar' />
 
             <div className='category-info__content'>
               <div className='category-info__name txt-tt'>{name}</div>
@@ -123,8 +142,8 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
         </a>
       ),
       description: <div className='txt-desc'>{description}</div>,
-      createdAt: <div className='txt-desc'>{moment(createdAt).format('YYYY-MM-DD HH:mm:ss') || ''}</div>,
-      courses:  <div className='txt-desc'>{courses || 0}</div>,
+      createdAt: createdAt ?? "" as string,
+      courses: courses || 0 ,
       actions: (
         <Space>
           {props.permission.isEdit && (
@@ -132,6 +151,7 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
               <EditOutlined />
             </Button>
           )}
+
           <Popover placement='bottomRight' content={SettingContent(_id)} title='Actions'>
             <Button>
               <EllipsisOutlined />

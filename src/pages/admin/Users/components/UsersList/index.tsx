@@ -29,52 +29,7 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-const columns: ColumnsType<IUser> = [
-  {
-    title: 'User',
-    dataIndex: 'name',
-    width: '30%'
-  },
-  {
-    title: 'Last login',
-    dataIndex: 'lastLogin'
-  },
-  {
-    title: 'Registerd',
-    dataIndex: 'createdAt',
-    filters: [
-      {
-        text: 'London',
-        value: 'London'
-      },
-      {
-        text: 'New York',
-        value: 'New York'
-      }
-    ],
-    filterSearch: true
-  },
-  {
-    title: 'Role',
-    dataIndex: 'role'
-  },
-  {
-    title: 'Courses',
-    dataIndex: 'courses'
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status'
-  },
-  {
-    title: 'Active',
-    dataIndex: 'isDeleted'
-  },
-  {
-    title: 'Manage',
-    dataIndex: 'manage'
-  }
-];
+
 
 interface UserListProps {
   onEditUser: () => void;
@@ -196,7 +151,7 @@ const UsersList: React.FC<UserListProps> = (props) => {
           <>
             <a href='#' onClick={showUserDetail}>
               <div className='user-info'>
-                <img alt={user?.name} src={user?.avatar} className='user-info__avatar' />
+                <img alt={user?.name} src={user?.avatar as string} className='user-info__avatar' />
                 <div className='user-info__content'>
                   <div className='user-info__name txt-tt'>{user?.name}</div>
                   <div className='user-info__email txt-desc'>{user?.email}</div>
@@ -225,11 +180,11 @@ const UsersList: React.FC<UserListProps> = (props) => {
             <Tag color={user?.statusColor}>{user.statusName}</Tag>{' '}
           </>
         ),
-        isDeleted: (
-          <>
-            <Tag color={user?.isDeleted ? 'red' : 'green'}>{user?.isDeleted ? 'Un Active' : 'Active'}</Tag>{' '}
-          </>
-        ),
+        // isDeleted: (
+        //   <>
+        //     <Tag color={user?.isDeleted ? 'red' : 'green'}>{user?.isDeleted ? 'Un Active' : 'Active'}</Tag>{' '}
+        //   </>
+        // ),
         manage: (
           <Space>
             <Button onClick={() => editUserHandler(user._id)} className='btn-wrap' style={{ color: '#38bdf8' }}>
@@ -289,6 +244,53 @@ const UsersList: React.FC<UserListProps> = (props) => {
       pageSize: 12
     }
   });
+
+  const columns: ColumnsType<IUser> = [
+    {
+      title: 'User',
+      dataIndex: 'name',
+      width: '30%'
+    },
+    {
+      title: 'Last login',
+      dataIndex: 'lastLogin'
+    },
+    {
+      title: 'Registerd',
+      dataIndex: 'createdAt',
+      filters: [
+        {
+          text: 'London',
+          value: 'London'
+        },
+        {
+          text: 'New York',
+          value: 'New York'
+        }
+      ],
+      filterSearch: true
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role'
+    },
+    {
+      title: 'Courses',
+      dataIndex: 'courses'
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status'
+    },
+    // {
+    //   title: 'Active',
+    //   dataIndex: 'isDeleted'
+    // },
+    {
+      title: 'Manage',
+      dataIndex: 'manage'
+    }
+  ];
 
   return (
     <>

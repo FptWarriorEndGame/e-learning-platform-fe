@@ -21,7 +21,8 @@ const Signup: React.FC<SignupProps> = (props) => {
       password: formValues.password,
       name: formValues.name,
       phone: formValues.name,
-      role: UserRole.USER
+      role: UserRole.USER,
+      status: 'ACTIVE'
     };
 
     setIsSubmitting(true);

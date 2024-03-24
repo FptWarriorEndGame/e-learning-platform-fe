@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import {
   AppstoreOutlined,
   EditOutlined,
@@ -20,7 +25,7 @@ import './Courses.scss';
 import CoursesGrid from './components/CoursesGrid';
 import CoursesList from './components/CoursesList';
 import { useUpdateActiveStatusCourseMutation, useGetAllCoursesQuery, useGetCoursesQuery } from './course.service';
-
+import { Helper } from '../../../utils/helper';
 enum Access {
   PAID = 'PAID',
   FREE = 'FREE',
@@ -335,6 +340,79 @@ const Courses = () => {
       });
     }
   };
+
+
+  // Create permission section
+  const helper = new Helper();
+  const CourseCategory = helper.getRole.CourseCategory;
+  // GET AUTHORIZATION BY EACH EMPLOYEE
+  // List Permission here!
+  const isView = helper.checkPermission(CourseCategory?.View?.code);
+  const isCreate = helper.checkPermission(CourseCategory?.Create?.code);
+  const isEdit = helper.checkPermission(CourseCategory?.Edit?.code);
+  const isViewDetail = helper.checkPermission(CourseCategory?.Detail?.code);
+  const isDelete = helper.checkPermission(CourseCategory?.Delete?.code);
+
+  if(!isView) {
+    return (
+      <Fragment>
+      <div className='breakcrumb'>
+        <Breadcrumb
+          items={[
+            {
+              title: 'Courses'
+            },
+            {
+              title: <Link to='#'>Course Manager</Link>
+            }
+          ]}
+        />
+        <Header className='sub-header'>
+          <Space className='sub-header__wrap'>
+            <Search
+              placeholder='Search courses'
+              onSearch={onSearchHandler}
+              style={{ width: 200 }}
+              className='search-wrap'
+            />
+
+            {viewTable === 'grid' && (
+              <Select
+                size='middle'
+                placeholder='Please select your categories'
+                defaultValue={'All Categories'}
+                onChange={cateFilterHandler}
+                style={{ width: '240px' }}
+                options={cateFilterList as { _id: string; text: string; value: string; name: string }[]}
+              />
+            )}
+
+            {viewTable === 'grid' && adminRole === UserRole.ADMIN && (
+              <Select
+                size='middle'
+                placeholder='Please select Your Authors'
+                onChange={authorsFitlerHandler}
+                style={{ width: '200px' }}
+                options={authorFilterList}
+              />
+            )}
+
+            <Button onClick={changeTableToGrid} className='btn-wrap'>
+              <AppstoreOutlined />
+            </Button>
+            <Button onClick={changeTableToList} className='btn-wrap'>
+              <UnorderedListOutlined />
+            </Button>
+          </Space>
+        </Header>
+        <div className='course-content'>
+          <h2> You don't have permission</h2>
+        </div>
+              
+      </div>
+    </Fragment>
+    )
+  }
 
   return (
     <Fragment>

@@ -5,7 +5,8 @@ export enum UserRole {
   ADMIN = 'Admin',
   STUDENT = 'Student',
   TEACHER = 'Teacher',
-  USER = 'USER',
+  EMPLOYEE = 'Employee',
+  USER = 'User',
   AUTHOR = 'Author',
   OTHER = 'Other'
 }
@@ -13,7 +14,7 @@ export enum UserRole {
 export interface IUser extends IBase {
   _id: string;
   name: string;
-  username: string;
+  username?: string;
   email: string;
   password?: string;
   role: UserRole;

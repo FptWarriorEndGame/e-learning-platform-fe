@@ -27,7 +27,8 @@ const Permission: React.FC = () => {
   } = useGetPermissionsQuery(permissionQuery, {
     skip: !selectUser || !isSearch
   });
-  const { data: usersSelectRes } = useGetUsersSelectQuery({});
+  // Phân quyền view chỉ cho nhân viên!
+  const { data: usersSelectRes } = useGetUsersSelectQuery({role: 'Employee'});
   const [updatePermission, updatePermissionResult] = useUpdatePermissionMutation();
   const listPermission = permissionResponse?.listPermission;
   const listUserSelect = usersSelectRes?.users;
@@ -137,8 +138,9 @@ const Permission: React.FC = () => {
       </div>
       <div className='permission-list-item-head'>
         <Select
+          className='w-1/3'
           showSearch
-          placeholder='Select a user'
+          placeholder='Select a user employee to view permission'
           optionFilterProp='children'
           onChange={onChangeUserSelect}
           onSearch={onSearchUserSelect}

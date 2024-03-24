@@ -48,7 +48,9 @@ const AddUser: React.FC<AddUserProps> = (props) => {
       phone: formData.phone,
       role: formData.role,
       password: formData.password,
-      avatar: formData.avatar
+      avatar: formData.avatar,
+      status: 'ACTIVE',
+      username: formData.username
     };
 
     if (fileList.length > 0 && fileList[0].originFileObj) {
@@ -126,9 +128,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
         }
       >
         <Row>
-          <Col md={8}></Col>
-
-          <Col md={16}>
+          <Col md={24}>
             <Form form={form} layout='vertical' hideRequiredMark onFinish={submitHandler}>
               <Row gutter={16}>
                 <Col span={12}>
@@ -142,7 +142,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
                     label='Email'
                     rules={[{ required: true, message: 'Please enter your email' }]}
                   >
-                    <Input style={{ width: '100%' }} addonAfter='.com' placeholder='Please enter email' />
+                    <Input style={{ width: '100%' }} placeholder='Please enter email' />
                   </Form.Item>
                 </Col>
               </Row>
@@ -152,13 +152,18 @@ const AddUser: React.FC<AddUserProps> = (props) => {
                     <Input placeholder='Enter your phone' />
                   </Form.Item>
                 </Col>
-                <Col>
-                  <Form.Item name='role' label='Role' rules={[{ required: true, message: 'Please select an owner' }]}>
-                    <Select placeholder='Please select a role'>
-                      <Option value='ADMIN'>ADMIN</Option>
-                      <Option value='USER'>USER</Option>
-                      <Option value='TEACHER'>TEACHER</Option>
-                      <Option value='INSTRUCTOR'>INSTRUCTOR</Option>
+                <Col span={12}>
+                  <Form.Item
+                    className='w-full'
+                    name='role'
+                    label='Role'
+                    rules={[{ required: true, message: 'Please select an owner' }]}
+                  >
+                    <Select className='w-full' placeholder='Please select a role'>
+                      <Option value='Admin'>Admin</Option>
+                      <Option value='User'>User</Option>
+                      <Option value='Author'>Author</Option>
+                      <Option value='Employee'>Employee</Option>
                     </Select>
                   </Form.Item>
                 </Col>
@@ -169,7 +174,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
                     </Upload>
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                {/* <Col span={12}>
                   <Form.Item
                     name='courses'
                     label='Select a course'
@@ -180,37 +185,22 @@ const AddUser: React.FC<AddUserProps> = (props) => {
                       <Option value='public'>Javascript</Option>
                     </Select>
                   </Form.Item>
+                </Col> */}
+                <Col span={12}>
+                  <Form.Item name='username' label='Username' rules={[{ required: true, message: 'Please input your username' }]}>
+                    <Input placeholder='Username' />
+                  </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name='price' label='Price' rules={[{ required: true, message: 'Please choose the type' }]}>
-                    <Input placeholder='Price' />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name='type' label='Type' rules={[{ required: true, message: 'Please choose the type' }]}>
-                    <Select placeholder='Please choose the type'>
-                      <Option value='private'>Private</Option>
-                      <Option value='public'>Public</Option>
-                    </Select>
-                  </Form.Item>
-
-                  <Form.Item
-                    name='password'
-                    label='Password'
-                    rules={[{ required: true, message: 'Please enter the password' }]}
-                  >
-                    <Input.Password type='password' placeholder='password' />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item name='Tags' label='Tags' rules={[{ required: true, message: 'Please choose the Tags' }]}>
-                    <Select placeholder='Please choose the Tags'>
-                      <Option value='jack'>Backend dev</Option>
-                      <Option value='tom'>Frontend dev</Option>
-                    </Select>
-                  </Form.Item>
+                  {!userId && (
+                    <Form.Item
+                      name='password'
+                      label='Password'
+                      rules={[{ required: true, message: 'Please enter the password' }]}
+                    >
+                      <Input.Password type='password' placeholder='password' />
+                    </Form.Item>
+                  )}
                 </Col>
               </Row>
               <Form.Item>

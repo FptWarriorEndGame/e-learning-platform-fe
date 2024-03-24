@@ -7,6 +7,8 @@ import CourseDetailLessonItem from '../LessonItem';
 
 interface LessonListProps {
   sectionId: string;
+  courseId: string;
+  courseName: string;
 }
 
 const CourseDetailLessonList = (props: LessonListProps) => {
@@ -26,7 +28,14 @@ const CourseDetailLessonList = (props: LessonListProps) => {
   return (
     <div className='course-detail__lesson-list'>
       {lessonData?.lessons.map((lessonItem) => {
-        return <CourseDetailLessonItem key={lessonItem._id} lessonItem={lessonItem} />;
+        return (
+          <CourseDetailLessonItem
+            key={lessonItem._id}
+            lessonItem={lessonItem}
+            courseId={props.courseId}
+            courseName={props.courseName}
+          />
+        );
       })}
     </div>
   );

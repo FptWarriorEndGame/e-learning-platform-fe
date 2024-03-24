@@ -64,9 +64,7 @@ const WelcomeHeader = () => {
     {
       key: '3',
       label: (
-        <a target='_blank' rel='noopener noreferrer'>
-          Setting
-        </a>
+        <Link to='settings'>Settings</Link>
       )
     },
     {

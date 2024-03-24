@@ -21,6 +21,7 @@ import { addToCart } from '../client.slice';
 import './CourseDetail.scss';
 import SectionList from './components/SectionList';
 import ReviewModal from './components/ReviewModal/ReviewModal';
+import PreviewModal from './components/PreviewModal/PreviewModal';
 // type Props = {}
 const courseData = [
   'Will learning some things at this course -- task 1.',
@@ -73,6 +74,8 @@ const CourseDetail = () => {
   const { courseId } = params;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [isPreviewModalVisible, setIsPreviewModalVisible] = useState(false);
 
   const { data } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
   const [createOrder, createOrderResult] = useCreateOrderMutation();
@@ -201,6 +204,14 @@ const CourseDetail = () => {
     setIsModalVisible(false);
   };
 
+  const handleOpenPreviewModal = () => {
+    setIsPreviewModalVisible(true);
+  };
+
+  const handleCancelPreviewModal = () => {
+    setIsPreviewModalVisible(false);
+  };
+
   return (
     <div className='course-detail'>
       <div className='course-detail__wrap'>
@@ -269,12 +280,20 @@ const CourseDetail = () => {
                       alt=''
                       className='course-detail__thumbnail-img'
                     />
-                    <div className='course-detail__thumbnail-overlay'>
+                    <div onClick={handleOpenPreviewModal} className='course-detail__thumbnail-overlay'>
                       <RightCircleFilled className='course-detail__thumbnail-overlay-icon' />
                       <div className='course-detail__thumbnail-overlay-text'>
                         <span>Preview This course</span>
                       </div>
                     </div>
+
+                    <PreviewModal
+                      courseId={courseId}
+                      lessonId={undefined}
+                      courseName={name}
+                      visible={isPreviewModalVisible}
+                      onCancel={handleCancelPreviewModal}
+                    />
                   </div>
                   <div className='course-detail__overview-content '>
                     <div className='course-detail__overview-price'>{finalPrice === 0 && 'FREE'}</div>
@@ -392,7 +411,7 @@ const CourseDetail = () => {
                     </Row>
                   </div>
                 </div>
-                {courseId && <SectionList courseId={courseId} />}
+                {courseId && <SectionList courseId={courseId} courseName={name} />}
               </div>
             </div>
           </div>

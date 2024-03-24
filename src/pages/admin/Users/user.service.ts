@@ -126,7 +126,7 @@ export const userApi = createApi({
       }
     }),
     // Generic type theo thứ tự là kiểu response trả về và argument
-    getUsersSelect: build.query<getUsersSelectResponse, IParams>({
+    getUsersSelect: build.query<getUsersSelectResponse, {role?: string}>({
       query: (params) => ({
         url: '/users/select',
         params: params

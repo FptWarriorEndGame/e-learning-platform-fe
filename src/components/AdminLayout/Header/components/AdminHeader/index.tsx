@@ -69,7 +69,7 @@ const AdminCommonHeader = (props: {title: string}) => {
     {
       key: 'change-password',
       label: (
-        <Link to="/author/settings">
+        <Link to="/author/change-password">
          Change password
         </Link>
       )
