@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Table, Pagination, Button, Space, message, Popconfirm, Select } from 'antd';
+import { Input, Table, Pagination, Button, Space, message, Popconfirm, Select, Badge } from 'antd';
 import {
   EyeOutlined,
   HistoryOutlined,
@@ -137,10 +137,19 @@ const ReviewsTable: React.FC = () => {
             onClick={() => handleOpenReviewReplyDrawer(record._id)}
             icon={<MessageOutlined style={{ color: '#1890ff' }} />}
           ></Button>
-          <Button
-            icon={<SolutionOutlined style={{ color: '#1890ff' }} />}
-            onClick={() => handleViewReplies(record._id)}
-          />
+          {record.hasReplies ? (
+            <Badge size='small' count={record.replyCount}>
+              <Button
+                icon={<SolutionOutlined style={{ color: '#1890ff' }} />}
+                onClick={() => handleViewReplies(record._id)}
+              />
+            </Badge>
+          ) : (
+            <Button
+              icon={<SolutionOutlined style={{ color: '#1890ff' }} />}
+              onClick={() => handleViewReplies(record._id)}
+            />
+          )}
           <Button
             icon={<HistoryOutlined style={{ color: '#1890ff' }} />}
             onClick={() => handleViewHistory(record._id)}
@@ -195,18 +204,19 @@ const ReviewsTable: React.FC = () => {
         dataSource={data?.reviews as IReview[]}
         columns={columns}
         rowKey='_id'
-        pagination={false}
+        // pagination={false}
         loading={isFetching}
         scroll={{ y: 400 }}
       />
-      <Pagination
+      {/* <Pagination
+        style={{ float: 'right', marginRight: '0px' }}
         className='pagination'
         current={currentPage}
         pageSize={pageSize}
         total={data?.total}
         onChange={handlePageChange}
         showSizeChanger
-      />
+      /> */}
       {selectedReviewId && (
         <ReviewDetailsModal
           reviewId={selectedReviewId}

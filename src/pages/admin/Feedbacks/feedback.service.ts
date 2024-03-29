@@ -108,7 +108,10 @@ export const feedbackApi = createApi({
         method: 'POST',
         body: { feedbackId, contentReply }
       }),
-      invalidatesTags: (_, __, { feedbackId }) => [{ type: 'Feedbacks', id: feedbackId }]
+      invalidatesTags: (_, __, { feedbackId }) => [
+        { type: 'Feedbacks', id: feedbackId },
+        { type: 'Feedbacks', id: 'LIST' }
+      ]
     }),
     getFeedbackRepliesByFeedbackId: build.query<
       GetFeedbackRepliesByFeedbackIdResponse,

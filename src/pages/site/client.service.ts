@@ -17,6 +17,7 @@ import { IBlogComment } from '../../types/blogComments.type';
 import { INote } from '../../types/note.type';
 import { IDataSelect } from '../../types/dataSelect.type';
 import { IDiscuss } from '../../types/discuss.type';
+import { ISubscribe } from '../../types/subscribe.type';
 
 interface getCategoriesResponse {
   categories: ICategory[];
@@ -69,6 +70,13 @@ export interface getAuthorsSelectResponse {
     label: string;
   }[];
 }
+export interface getCategoriesSelectResponse {
+  message: string;
+  categories: {
+    name: string;
+    label: string;
+  }[];
+}
 
 export interface getSectionsResponse {
   sections: ISection[];
@@ -77,6 +85,11 @@ export interface getSectionsResponse {
 
 export interface getLessonsResponse {
   lessons: ILesson[];
+  message: string;
+}
+
+export interface getUserByLessonResponse {
+  users: IUser[];
   message: string;
 }
 
@@ -193,7 +206,10 @@ export interface CreateReviewResponse {
   message: string;
   review: IReview;
 }
-
+export interface CreateSubscribeResponse {
+  message: string;
+  subscribe: ISubscribe;
+}
 export interface CreateVnpayUrlResponse {
   redirectUrl: string;
 }
@@ -364,7 +380,8 @@ export const clientApi = createApi({
     'Coupons',
     'BlogComment',
     'Note',
-    'Discussions'
+    'Discussions',
+    'Subscribe'
   ],
   keepUnusedDataFor: 10,
   baseQuery: fetchBaseQuery({
@@ -466,6 +483,15 @@ export const clientApi = createApi({
         return [{ type: 'Clients', id: 'LIST' }];
       }
     }),
+    getCategoriesSelect: build.query<IDataSelect[], void>({
+      query: () => ({
+        url: '/categories/select'
+      }),
+      providesTags() {
+        return [{ type: 'Clients', id: 'LIST' }];
+      }
+    }),
+
     getCoursesOrderedByUser: build.query<getCoursesResponse, IParams>({
       query: (params) => ({
         url: `/courses/ordered/${params._userId as string}`,
@@ -639,6 +665,11 @@ export const clientApi = createApi({
         }
       })
     }),
+    getAllUserByLesson: build.query<getUserByLessonResponse, { lessonId: string }>({
+      query: (payload) => ({
+        url: `lessons/lesson/${payload.lessonId}/users`
+      })
+    }),
     getAllLessons: build.query<getLessonsResponse, void>({
       query: () => 'lessons/getAllLesson'
     }),
@@ -676,8 +707,9 @@ export const clientApi = createApi({
     }),
 
     getAllBlogs: build.query<GetAllBlogReponse, IParams>({
-      query: ({ _page = 1, _limit = 5 }) => ({
-        url: `blog/?page=${_page}&limit=${_limit}`
+      query: (params) => ({
+        url: `blog`,
+        params
       })
     }),
 
@@ -714,6 +746,13 @@ export const clientApi = createApi({
         url: `payments/vnpay/create_vnpayment_url`,
         method: 'POST',
         body: { orderId, amount, bankCode }
+      })
+    }),
+    createSubscribe: build.mutation<CreateSubscribeResponse, { email: string }>({
+      query: ({ email }) => ({
+        url: `subscribe/create`,
+        method: 'POST',
+        body: { email }
       })
     }),
     getSuggestedCourses: build.query<SuggestedCoursesResponse, { userId: string; limit?: number }>({
@@ -810,9 +849,9 @@ export const clientApi = createApi({
       invalidatesTags: (result, error, replyData) => [{ type: 'BlogComment', id: replyData.blogId }]
     }),
 
-    getAllNotes: build.query<GetNotesResponse, void>({
+    getAllNotes: build.query<GetNotesResponse, string>({
       query: () => ({
-        url: '/note'
+        url: '/note/getAll'
       }),
       providesTags: (result) =>
         result
@@ -880,6 +919,14 @@ export const clientApi = createApi({
       }),
       invalidatesTags: (result, error, noteId) => [{ type: 'Note', id: noteId }]
     }),
+
+    filterNotes: build.query<GetNotesResponse, string>({
+      query: (filters) => {
+        const queryString = new URLSearchParams(filters).toString();
+        return `/note/filter/?${queryString}`;
+      }
+    }),
+
     getReviewsByCourseId: build.query<GetReviewsByCourseIdResponse, { courseId: string; params?: IParams }>({
       query: ({ courseId, params }) => ({
         url: `reviews/course/${courseId}`,
@@ -1012,6 +1059,7 @@ export const clientApi = createApi({
 
 export const {
   useGetCategoriesQuery,
+  useGetCategoriesSelectQuery,
   useGetCoursesQuery,
   useGetPopularCoursesQuery,
   useGetAuthorsQuery,
@@ -1056,6 +1104,7 @@ export const {
   useUpdateNoteMutation,
   useDeleteNoteMutation,
   useGetNotesByLessonIdQuery,
+  useFilterNotesQuery,
   useGetReviewsByCourseIdQuery,
   useGetTotalReviewsByCourseIdQuery,
   useGetAverageRatingByCourseIdQuery,
@@ -1066,6 +1115,7 @@ export const {
   useGetValidCouponsForCoursesWithoutUserQuery,
   useGetTotalPriceWithoutUserQuery,
   useGetFreeLessonsByCourseIdQuery,
+  useGetAllUserByLessonQuery,
   // Discuss
   useGetAllDiscussionsQuery,
   useGetDiscussionsByLessonIdQuery,
@@ -1075,5 +1125,6 @@ export const {
   useUpdateDiscussionMutation,
   useDeleteDiscussionMutation,
   useAddReplyToDiscussMutation,
-  useGetAllLessonsQuery
+  useGetAllLessonsQuery,
+  useCreateSubscribeMutation
 } = clientApi;

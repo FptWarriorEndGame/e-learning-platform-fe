@@ -28,6 +28,8 @@ export interface ICourse extends IBase {
   level: CourseLevel;
   thumbnail: string;
   courseSlug: string;
+  avgRatings?: number;
+  numberUsersOfCourse?: number;
   categoryId: {
     _id: string;
     name: string;

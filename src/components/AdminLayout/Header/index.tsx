@@ -25,6 +25,7 @@ import DiscussHeader from './components/DiscussHeader';
 import UsersPermissionHeader from './components/UsersPermission';
 import SettingHeader from './components/SettingHeader';
 import AdminCommonHeader from './components/AdminHeader';
+import SubscribeHeader from './components/SubscribeHeader';
 
 const { Header } = Layout;
 const AdminHeader = () => {
@@ -39,6 +40,7 @@ const AdminHeader = () => {
     <Header className='admin-header' style={{ padding: 0, background: colorBgContainer }}>
       {path === '/author/dashboard' && <DashboardHeader />}
       {path === '/author/welcome' && <WelcomeHeader />}
+      {path === '/author/author-report' && <AdminCommonHeader title={'Author Report'} />}
       {path === '/author/categories' && <AdminCommonHeader title={'Categories'} />}
       {path === '/author/courses' && <AdminCommonHeader title={'Courses'} />}
       {path === '/author/courses-notes' && <AdminCommonHeader title={'Courses Notes'} />}
@@ -57,6 +59,8 @@ const AdminHeader = () => {
       {path === '/author/transaction' && <AdminCommonHeader title={'Transactions'} />}
       {path === '/author/change-password' && <AdminCommonHeader title={'Change Password'} />}
       {path === '/author/settings' && <AdminCommonHeader title={'Settings'} />}
+      {path === '/author/subscribe' && <AdminCommonHeader title={'Subscribe'} />}
+      {path === '/author/marketing/coupons' && <AdminCommonHeader title={'Coupons'} />}
     </Header>
   );
 };

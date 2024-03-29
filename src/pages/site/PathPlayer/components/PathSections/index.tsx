@@ -43,7 +43,7 @@ const PathSections = (props: Props) => {
     ),
     children:
       certificatePath && currentProgress === 1 ? (
-        <Link target='_blank' to={`${BACKEND_URL}/images/${certificatePath}`}>
+        <Link target='_blank' to={`${BACKEND_URL}/certificates/${certificatePath}`}>
           Got the certification here!!!
         </Link>
       ) : (

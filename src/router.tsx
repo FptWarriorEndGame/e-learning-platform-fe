@@ -74,14 +74,12 @@ import BlogComments from './pages/admin/BlogComments/BlogComments';
 import Discuss from './pages/admin/Discuss/Discuss';
 import ChangePassword from './pages/admin/ChangePassword';
 import ChangePasswordUser from './pages/site/ChangePassword';
+import SubscribeEmail from './pages/admin/SubscribeEmail/index'
 
 const RouterHooks = () => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const isAdminAuth = useSelector((state: RootState) => state.auth.isAdminAuth);
   const adminRole = useSelector((state: RootState) => state.auth.adminRole);
-
-  console.log('is auth: ', isAuth);
-  console.log('is admin auth: ', isAdminAuth);
 
   const router = createBrowserRouter([
     {
@@ -314,6 +312,15 @@ const RouterHooks = () => {
               index: true,
               path: 'list',
               element: adminRole === UserRole.ADMIN ? <Feedbacks /> : <Navigate to='/error' />
+            }
+          ]
+        },
+        {
+          path: 'subscribe',
+          children: [
+            {
+              index: true,
+              element: <SubscribeEmail/>
             }
           ]
         },

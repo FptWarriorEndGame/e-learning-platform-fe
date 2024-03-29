@@ -13,14 +13,15 @@ import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/tab
 import type { FilterValue } from 'antd/es/table/interface';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useApproveUserMutation, useGetUsersQuery, useUpdateActiveStatusUserMutation } from '../../user.service';
 import { startEditUser } from '../../user.slice';
 import './UsersList.scss';
 import ViewHistoryUser from '../HistoryUser/HistoryUser';
 import { Helper } from '../../../../../utils/helper';
 import ViewDetailUser from '../ViewDetailUser';
-import { IUser } from '../../../../../types/user.type';
+import { IUser, UserRole } from '../../../../../types/user.type';
+import { RootState } from '../../../../../store/store';
 
 interface TableParams {
   pagination?: TablePaginationConfig;
@@ -29,16 +30,16 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-
-
 interface UserListProps {
   onEditUser: () => void;
   searchValue: string;
-  userId: string;
-  isDeleted: boolean;
+  userId?: string;
+  isDeleted?: boolean;
 }
 
 const UsersList: React.FC<UserListProps> = (props) => {
+  const currentUserRole = useSelector((state: RootState) => state.auth.adminRole) as UserRole;
+
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -187,9 +188,12 @@ const UsersList: React.FC<UserListProps> = (props) => {
         // ),
         manage: (
           <Space>
-            <Button onClick={() => editUserHandler(user._id)} className='btn-wrap' style={{ color: '#38bdf8' }}>
-              <EditOutlined />
-            </Button>
+            {currentUserRole !== UserRole.AUTHOR && (
+              <Button onClick={() => editUserHandler(user._id)} className='btn-wrap' style={{ color: '#38bdf8' }}>
+                <EditOutlined />
+              </Button>
+            )}
+
             <Button onClick={() => handleViewDetail(user._id)} className='btn-wrap' style={{ color: '#38bdf8' }}>
               <ProfileOutlined />
             </Button>
@@ -198,7 +202,7 @@ const UsersList: React.FC<UserListProps> = (props) => {
               <HistoryOutlined />
             </Button>
 
-            {user.isDeleted ? (
+            {currentUserRole !== UserRole.AUTHOR && (user.isDeleted ? (
               <Popconfirm
                 title='Are you sure you want to activate this blog?'
                 placement='topRight'
@@ -218,9 +222,9 @@ const UsersList: React.FC<UserListProps> = (props) => {
               >
                 <Button icon={<StopOutlined style={{ color: '#ff4d4f' }} />} danger />
               </Popconfirm>
-            )}
+            ))}
 
-            {user.status == 'NEW' && ( // Check if user.status is not 'new'
+            {currentUserRole !== UserRole.AUTHOR && user.status == 'NEW' && ( // Check if user.status is not 'new'
               <Popconfirm
                 title='Approve User'
                 description='Are you sure to approve this user to become an author?'
@@ -257,18 +261,7 @@ const UsersList: React.FC<UserListProps> = (props) => {
     },
     {
       title: 'Registerd',
-      dataIndex: 'createdAt',
-      filters: [
-        {
-          text: 'London',
-          value: 'London'
-        },
-        {
-          text: 'New York',
-          value: 'New York'
-        }
-      ],
-      filterSearch: true
+      dataIndex: 'createdAt'
     },
     {
       title: 'Role',

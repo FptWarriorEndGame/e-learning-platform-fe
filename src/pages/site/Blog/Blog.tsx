@@ -8,6 +8,7 @@ import SlidingModal from './components/SidingModal/SlidingModal';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
+import { sanitizeAndReturnHtml } from '../../../utils/functions';
 
 export default function Blog() {
   const { id } = useParams<{ id: string }>();

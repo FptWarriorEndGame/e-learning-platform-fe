@@ -14,7 +14,7 @@ interface PreviewModalProps {
 }
 
 const PreviewModal: React.FC<PreviewModalProps> = ({ courseId, lessonId, courseName, visible, onCancel }) => {
-  const { data, isLoading, isError } = useGetFreeLessonsByCourseIdQuery(courseId ?? '');
+  const { data, isFetching } = useGetFreeLessonsByCourseIdQuery(courseId ?? '');
   const [currentLessonIndex, setCurrentLessonIndex] = useState<number>(0);
   const [isVideoReady, setIsVideoReady] = useState<boolean>(false);
   const playerRef = useRef<ReactPlayer>(null);
@@ -37,9 +37,22 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ courseId, lessonId, courseN
     }
   }, [visible]);
 
-  if (isLoading) return <Spin />;
-
-  if (isError) return <Alert message='Error fetching data' type='error' />;
+  if (isFetching || !data) {
+    return (
+      <Modal
+        title={<span style={{ fontSize: '14px', fontWeight: 'bold' }}>Course Preview</span>}
+        open={visible}
+        onCancel={onCancel}
+        destroyOnClose={true}
+        footer={null}
+        width={800}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+          <Spin size='large' />
+        </div>
+      </Modal>
+    );
+  }
 
   const handleLessonChange = (index: number) => {
     setCurrentLessonIndex(index);

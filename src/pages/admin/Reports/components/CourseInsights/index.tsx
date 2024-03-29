@@ -11,9 +11,11 @@ import { ColumnsType } from 'antd/es/table';
 import { useGetReportsCourseInsightsQuery } from '../../../report.service';
 import { formatVideoLengthToHours } from '../../../../../utils/functions';
 import moment from 'moment';
-import { read, utils, writeFileXLSX } from 'xlsx';
 import * as XLSX from 'xlsx';
 import { useGetAuthorsSelectQuery } from '../../../../site/client.service';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../store/store';
+import { UserRole } from '../../../../../types/user.type';
 const { RangePicker } = DatePicker;
 
 interface DataType {
@@ -36,12 +38,11 @@ interface Params {
   dateEnd: string;
 }
 
-
-
 const CourseInsights = () => {
   const [form] = Form.useForm();
   const [isSearch, setIsSearch] = useState(true);
   const [currentParams, setCurrentParams] = useState({ dateStart: '', dateEnd: '', authorId: '' });
+  const currentAdminRole = useSelector((state: RootState) => state.auth.adminRole) as UserRole;
   const {data: dataAuthorSelect} = useGetAuthorsSelectQuery();
 
   const {
@@ -82,6 +83,7 @@ const CourseInsights = () => {
   const hangeChangeRangeDate = (dates: [Dayjs, Dayjs], dateStrings: [string, string]) => {
     setIsSearch(false);
     setCurrentParams({
+      ...currentParams,
       dateStart: dates[0].format('DD/MM/YYYY'),
       dateEnd: dates[1].format('DD/MM/YYYY')
     });
@@ -115,6 +117,7 @@ const CourseInsights = () => {
           const { dateStart, dateEnd } = getQuarterDates(1);
 
           setCurrentParams({
+            ...currentParams,
             dateStart: moment(dateStart).format('DD/MM/YYYY'),
             dateEnd: moment(dateEnd).format('DD/MM/YYYY')
           });
@@ -124,6 +127,7 @@ const CourseInsights = () => {
         {
           const { dateStart, dateEnd } = getQuarterDates(2);
           setCurrentParams({
+            ...currentParams,
             dateStart: moment(dateStart).format('DD/MM/YYYY'),
             dateEnd: moment(dateEnd).format('DD/MM/YYYY')
           });
@@ -133,6 +137,7 @@ const CourseInsights = () => {
         {
           const { dateStart, dateEnd } = getQuarterDates(3);
           setCurrentParams({
+            ...currentParams,
             dateStart: moment(dateStart).format('DD/MM/YYYY'),
             dateEnd: moment(dateEnd).format('DD/MM/YYYY')
           });
@@ -142,6 +147,7 @@ const CourseInsights = () => {
         {
           const { dateStart, dateEnd } = getQuarterDates(4);
           setCurrentParams({
+            ...currentParams,
             dateStart: moment(dateStart).format('DD/MM/YYYY'),
             dateEnd: moment(dateEnd).format('DD/MM/YYYY')
           });
@@ -307,7 +313,8 @@ const CourseInsights = () => {
                 </Form.Item>
               </Col>
 
-              <Col span={12} className='mb-4'>
+              {currentAdminRole !== UserRole.AUTHOR && (
+                <Col span={12} className='mb-4'>
                 {/* Filter by author */}
                 <Form.Item name='filterByAuthor' label='Filter By Author'>
                   <Select
@@ -318,6 +325,7 @@ const CourseInsights = () => {
                   />
                 </Form.Item>
               </Col>
+              ) }
 
               <Col span={24}>
                 <Form.Item label='Filter'>

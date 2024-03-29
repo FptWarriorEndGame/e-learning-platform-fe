@@ -440,11 +440,6 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Subscribe Email */}
-      <SubscribeEmail />
-
-      {/* FeedbackStudent */}
-      <FeedbackStudent />
 
       {/* Devops */}
 
@@ -465,6 +460,13 @@ const HomePage = () => {
         </div>
       </div>
       {/* Blogs */}
+
+      {/* Subscribe Email */}
+      <SubscribeEmail />
+
+      {/* FeedbackStudent */}
+      <FeedbackStudent />
+
       <div className='blogs mb-8'>
         <div className='container'>
           <h2 className='blogs__title text-6xl font-bold mb-16'>Blogs</h2>

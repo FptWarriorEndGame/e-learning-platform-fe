@@ -5,7 +5,6 @@ import './SubscribeCourse.scss';
 
 const SubsribeCourse = () => {
   const { courseId } = useParams();
-
   return (
     <div className='subscribe-course'>
       <div className='subscribe-course__wrapper container bg-slate-300 rounded-2xl'>

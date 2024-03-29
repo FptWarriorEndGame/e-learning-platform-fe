@@ -107,30 +107,38 @@ const CoursesList: React.FC<CoursesListProps> = (props) => {
       title: 'Access',
       dataIndex: 'access',
       filters: accessFilterList,
+      width: '7%',
       onFilter: (value: string | number | boolean, record: DataCourseType) => record.access === value
     },
     {
       title: 'Final Price',
       dataIndex: 'finalPrice',
+      width: '5%',
       sorter: (a, b) => a.finalPrice - b.finalPrice
     },
     {
       title: 'Price (before discount)',
       dataIndex: 'price',
+      width: '9%',
       sorter: (a, b) => a.price - b.price
     },
     {
       title: 'Learners',
       dataIndex: 'learners',
+      width: '7%',
       sorter: (a, b) => a.learners - b.learners
     },
     {
       title: 'Created At',
-      dataIndex: 'createdAt'
+      dataIndex: 'createdAt',
+      sorter: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      width: '7%'
     },
     {
       title: 'Updated At',
-      dataIndex: 'updatedAt'
+      dataIndex: 'updatedAt',
+      sorter: (a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
+      width: '7%'
     },
     {
       title: 'Action',
@@ -146,7 +154,6 @@ const CoursesList: React.FC<CoursesListProps> = (props) => {
   });
 
   const onChange: TableProps<DataCourseType>['onChange'] = (pagination, filters, sorter, extra) => {
-
     setTableParams({
       pagination
     });
@@ -154,7 +161,13 @@ const CoursesList: React.FC<CoursesListProps> = (props) => {
 
   return (
     <div className='course-list'>
-      <Table columns={columns} dataSource={props.courseData} onChange={onChange} pagination={tableParams.pagination} />
+      <Table
+        columns={columns}
+        dataSource={props.courseData}
+        onChange={onChange}
+        pagination={tableParams.pagination}
+        scroll={{ y: 400 }}
+      />
     </div>
   );
 };

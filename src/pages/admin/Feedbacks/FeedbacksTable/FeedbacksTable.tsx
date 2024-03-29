@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Table, Pagination, Button, Space, message, Popconfirm, Select } from 'antd';
+import { Input, Table, Pagination, Button, Space, message, Popconfirm, Select, Badge } from 'antd';
 import {
   EyeOutlined,
   HistoryOutlined,
@@ -126,10 +126,20 @@ const FeedbacksTable: React.FC = () => {
             onClick={() => handleOpenFeedbackReplyDrawer(record._id)}
             icon={<MessageOutlined style={{ color: '#1890ff' }} />}
           ></Button>
-          <Button
-            icon={<SolutionOutlined style={{ color: '#1890ff' }} />}
-            onClick={() => handleViewFeedbackRepliesModal(record._id)}
-          />
+          {record.hasReplies ? (
+            <Badge size='small' count={record.replyCount}>
+              <Button
+                icon={<SolutionOutlined style={{ color: '#1890ff' }} />}
+                onClick={() => handleViewFeedbackRepliesModal(record._id)}
+              />
+            </Badge>
+          ) : (
+            <Button
+              icon={<SolutionOutlined style={{ color: '#1890ff' }} />}
+              onClick={() => handleViewFeedbackRepliesModal(record._id)}
+            />
+          )}
+
           <Button
             icon={<HistoryOutlined style={{ color: '#1890ff' }} />}
             onClick={() => handleViewHistory(record._id)}
@@ -183,6 +193,7 @@ const FeedbacksTable: React.FC = () => {
         scroll={{ y: 400 }}
       />
       <Pagination
+        style={{ float: 'right', marginRight: '0px' }}
         className='pagination'
         current={currentPage}
         pageSize={pageSize}

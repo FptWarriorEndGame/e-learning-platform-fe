@@ -1,20 +1,10 @@
-import { Avatar, Card } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Card } from 'antd';
+import { IReply } from '../../../../../../types/blogComments.type';
 
-interface User {
-  _id: string;
-  name: string;
-  avatar: string;
-}
-
-interface Reply {
-  _id: string;
-  content: string;
-  userId?: User; // Đánh dấu là optional để xử lý trường hợp userId không được cung cấp
-}
 
 interface CommentListProps {
-  replies: Reply[];
+  replies: IReply[];
   blogId: string;
 }
 

@@ -1,16 +1,20 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Select, Space } from 'antd';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './Users.scss';
 import AddUser from './components/AddUser';
 import UsersList from './components/UsersList';
 import { startEditUser } from './user.slice';
 import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
+import { RootState } from '../../../store/store';
+import { UserRole } from '../../../types/user.type';
 const { Search } = Input;
 
 const Users = () => {
+  const currentAdminRole = useSelector((state: RootState) => state.auth.adminRole) as UserRole;
+
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -34,7 +38,7 @@ const Users = () => {
 
   return (
     <div className='users'>
-       <div className='breakcrumb'>
+      <div className='breakcrumb'>
         <Breadcrumb
           items={[
             {
@@ -49,10 +53,18 @@ const Users = () => {
       <div className='users__wrap'>
         <div className='users__filter'>
           <Space className='sub-header__wrap'>
-            <Button onClick={createUserHandler} type='primary' icon={<PlusOutlined />} className='btn-wrap'>
-              New User
-            </Button>
-            <Search placeholder='Search Name of User' onSearch={onSearchHandler} style={{ width: 200 }} className='search-wrap'/>
+            {currentAdminRole !== UserRole.AUTHOR && (
+              <Button onClick={createUserHandler} type='primary' icon={<PlusOutlined />} className='btn-wrap'>
+                New User
+              </Button>
+            )}
+
+            <Search
+              placeholder='Search Name of User'
+              onSearch={onSearchHandler}
+              style={{ width: 200 }}
+              className='search-wrap'
+            />
             <Select
               showSearch
               placeholder='Search by course'
@@ -117,27 +129,30 @@ const Users = () => {
                 }
               ]}
             />
-            <Select
-              size='middle'
-              placeholder='Role'
-              defaultValue={['All Roles']}
-              // onChange={handleChange}
-              style={{ width: '10rem' }}
-              options={[
-                {
-                  value: 'Users',
-                  label: 'Users'
-                },
-                {
-                  value: 'Admins',
-                  label: 'Admins'
-                },
-                {
-                  value: 'Teachers',
-                  label: 'Teachers'
-                }
-              ]}
-            />
+
+            {currentAdminRole !== UserRole.AUTHOR && (
+              <Select
+                size='middle'
+                placeholder='Role'
+                defaultValue={['All Roles']}
+                // onChange={handleChange}
+                style={{ width: '10rem' }}
+                options={[
+                  {
+                    value: 'Users',
+                    label: 'Users'
+                  },
+                  {
+                    value: 'Admins',
+                    label: 'Admins'
+                  },
+                  {
+                    value: 'Teachers',
+                    label: 'Teachers'
+                  }
+                ]}
+              />
+            )}
 
             <Select
               size='middle'

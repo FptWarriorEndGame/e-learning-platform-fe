@@ -11,6 +11,38 @@
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/en'; // Import the English locale (you can replace 'en' with your desired locale)
+import DOMPurify from 'dompurify';
+
+interface SanitizedHtml {
+  __html: string;
+}
+
+export const calculateTimeSinceRead = (readTime: Date) => {
+  const now = new Date();
+  const readDate = new Date(readTime);
+  const diffInMilliseconds = now.getTime() - readDate.getTime();
+
+  const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
+
+  if (diffInDays > 0) {
+    return `${diffInDays} day ago`;
+  } else if (diffInHours > 0) {
+    return `${diffInHours} hour ago`;
+  } else if (diffInMinutes > 0) {
+    return `${diffInMinutes} minute ago`;
+  } else {
+    return `${diffInSeconds} second ago`;
+  }
+};
+
+// Function to sanitize HTML content and prepare it for safe rendering
+export const sanitizeAndReturnHtml = (htmlContent: string): SanitizedHtml => {
+  const sanitizedContent = DOMPurify.sanitize(htmlContent);
+  return { __html: sanitizedContent };
+};
 
 export const transformDate = (apiDate: string) => {
   const parsedDate = dayjs(apiDate);
@@ -47,13 +79,12 @@ export const formatVideoLengthToHours = (seconds: number): string => {
   return `${hours.toFixed(1)} hours`;
 };
 
-export const  isNotValidEmail = (email: string) => {
+export const isNotValidEmail = (email: string) => {
   // Regular expression for a simple email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
   // Test the provided email against the regex
   return !emailRegex.test(email);
-}
+};
 
 export function getHeaders() {
   const token = localStorage.getItem('token');

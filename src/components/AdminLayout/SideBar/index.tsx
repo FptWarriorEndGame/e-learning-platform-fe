@@ -258,7 +258,7 @@ const SideBar = () => {
 
   const items: MenuItem[] = [
     getItem('Welcome', 'welcome', <DotChartOutlined />),
-    (adminRole === UserRole.AUTHOR && getItem('Report', 'author-report', <PieChartOutlined />)) as MenuItem,
+    (adminRole === UserRole.AUTHOR && getItem('Report Overview', 'author-report', <PieChartOutlined />)) as MenuItem,
     (adminRole === UserRole.ADMIN && getItem('Dashboard', 'dashboard', <BorderOuterOutlined />)) as MenuItem,
     (isViewCourseModule && getItem('Courses', 'courses', <DesktopOutlined />, [
       (isViewCategory && getItem('Course Categories', 'categories')),
@@ -279,14 +279,14 @@ const SideBar = () => {
         isViewPermission &&
         getItem('Permission', 'users/permission')) as MenuItem // Permission for each user and function
     ])) as MenuItem,
-    (isViewReportModule && (adminRole === UserRole.ADMIN || adminRole === UserRole.EMPLOYEE) &&
+    (isViewReportModule && 
       getItem('Reports Center', 'reports', <BarChartOutlined />, [
         (isViewUserProgress && getItem('User Progress', 'reports/users-progress')),
         (isViewCourseInsight && getItem('Course Insights', 'reports/course-insights')),
         (isViewReviewCenter && getItem('Review center', 'reports/reviews-center'))
       ])) as MenuItem,
-    (isViewMarketingModule && getItem('Marketing', 'marketing', <TagsOutlined />, [
-      (isViewCoupon && getItem('Coupon Types', 'marketing/coupon-types')),
+    (isViewMarketingModule && (adminRole === UserRole.ADMIN || adminRole === UserRole.EMPLOYEE) && getItem('Marketing', 'marketing', <TagsOutlined />, [
+      // (isViewCoupon && getItem('Coupon Types', 'marketing/coupon-types')),
       // getItem('Bundles', 'marketing/bundles'),
       // getItem('Subscriptions', 'marketing/subscriptions'),
       (isViewCoupon && getItem('Coupons', 'marketing/coupons'))
@@ -298,11 +298,12 @@ const SideBar = () => {
     ])) as MenuItem,
     (isViewFeedback && (adminRole === UserRole.ADMIN || adminRole === UserRole.EMPLOYEE) &&
       getItem('Feedbacks', 'feedbacks', <IdcardOutlined />, [
-        (isViewFeedback && getItem('Feedbacks', 'feedbacks/list'))
+        (isViewFeedback && getItem('Feedbacks', 'feedbacks/list')),
+        getItem('Subscribe', 'subscribe')
       ])) as MenuItem,
-    getItem('Setting', 'setting', <SettingOutlined />, [getItem('Settings', 'settings')]),
-    getItem('My account', 'account', <UserAddOutlined />),
-    getItem('Need Help ?', 'help', <FileOutlined />)
+    getItem('Setting', 'setting', <SettingOutlined />, [getItem('Settings', 'settings' ) ]),
+    // getItem('My account', 'account', <UserAddOutlined />),
+    // getItem('Need Help ?', 'help', <FileOutlined />)
   ];
 
   return (

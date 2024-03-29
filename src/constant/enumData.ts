@@ -1,0 +1,8 @@
+
+
+export declare enum COURSE_LEVEL {
+    ALL = "ALL",
+    BEGINNER = "BEGINNER",
+    INTERMEDIATE = "INTERMEDIATE",
+    ADVANCED = "ADVANCED",
+} 

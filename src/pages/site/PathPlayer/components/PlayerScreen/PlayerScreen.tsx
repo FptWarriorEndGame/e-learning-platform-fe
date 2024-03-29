@@ -54,7 +54,7 @@ const PlayerScreen = () => {
         userId: currUserId,
         lessonId: currLessonId,
         content: noteContent,
-        courseId: courseId,
+        courseId: courseId as string,
         videoMinute: Math.floor(currentTimeInSeconds) // Lưu thời gian hiện tại của video dưới dạng số giây
       }).unwrap();
       notification.success({

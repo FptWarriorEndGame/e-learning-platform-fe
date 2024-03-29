@@ -10,6 +10,8 @@ export interface IReview extends IBase {
   ratingStar: number;
   orderId: string;
   userId: IUser;
+  hasReplies: boolean;
+  replyCount: number;
 }
 
 export interface IReviewReply extends IBase {

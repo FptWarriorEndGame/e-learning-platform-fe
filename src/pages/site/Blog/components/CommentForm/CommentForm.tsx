@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useState } from 'react';
-import './CommentForm.scss';
+import { Button, notification } from 'antd';
 import Avatar from 'antd/es/avatar/avatar';
-import { UserOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // import styles
-import { Button, message, notification } from 'antd';
-import { useAddBlogCommentMutation } from '../../../client.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
+import { IBlogComment } from '../../../../../types/blogComments.type';
+import { useAddBlogCommentMutation } from '../../../client.service';
+import './CommentForm.scss';
 
 function htmlToText(htmlString: string) {
   const parser = new DOMParser();
@@ -17,7 +17,13 @@ function htmlToText(htmlString: string) {
   return doc.body.textContent || '';
 }
 
-const CommentForm: React.FC<{ blogId: string; commentLength: number }> = ({ blogId, commentLength }) => {
+interface CommentListProps {
+  comments: IBlogComment[];
+  blogId: string;
+  commentLength: number;
+}
+
+const CommentForm: React.FC<CommentListProps> = ({ blogId, commentLength, comments }) => {
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
   const [addComment, { isLoading }] = useAddBlogCommentMutation();
@@ -60,7 +66,6 @@ const CommentForm: React.FC<{ blogId: string; commentLength: number }> = ({ blog
     <form className='comment-form' onSubmit={handleSubmit}>
       <div className='comment-title text-3xl mb-6 ml-14'>{commentLength} bình luận</div>
       <div className='div flex mb-20'>
-        <Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=1' className='mr-4 text-3xl' />{' '}
         <ReactQuill
           className='comment-input'
           placeholder='Thêm bình luận...'

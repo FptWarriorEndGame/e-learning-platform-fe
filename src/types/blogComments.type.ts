@@ -1,7 +1,7 @@
 import { User } from '../pages/site/Blog/components/CommentList/CommentList';
 import { IBase } from './base.type';
 
-interface IReply {
+export interface IReply {
   _id: string;
   content?: string;
   userId?: User;
@@ -10,6 +10,7 @@ interface IReply {
 }
 
 interface ILike {
+  includes: any;
   userId: string;
 }
 
@@ -20,6 +21,6 @@ export interface IBlogComment extends IBase {
   userId: User;
   blogId: string;
   parentCommentId?: string;
-  likes: ILike;
+  likes: string[];
   replies: IReply[];
 }

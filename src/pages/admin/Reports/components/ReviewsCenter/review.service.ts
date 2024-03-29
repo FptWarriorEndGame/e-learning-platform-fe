@@ -110,7 +110,10 @@ export const reviewApi = createApi({
         method: 'POST',
         body: { reviewId, contentReply }
       }),
-      invalidatesTags: (_, __, { reviewId }) => [{ type: 'Reviews', id: reviewId }]
+      invalidatesTags: (_, __, { reviewId }) => [
+        { type: 'Reviews', id: reviewId },
+        { type: 'Reviews', id: 'LIST' }
+      ]
     }),
     getReviewRepliesByReviewId: build.query<GetReviewRepliesByReviewIdResponse, { reviewId: string; params: IParams }>({
       query: ({ reviewId, params }) => ({

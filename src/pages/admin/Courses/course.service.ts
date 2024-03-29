@@ -3,12 +3,18 @@ import { BACKEND_URL } from '../../../constant/backend-domain';
 import { ICourse } from '../../../types/course.type';
 import { ILesson, ISection } from '../../../types/lesson.type';
 import { IPagination } from '../../../types/pagination';
+import { IActionLog } from '../../../types/actionLog.type';
 import { IParams } from '../../../types/params.type';
 import { CustomError } from '../../../utils/errorHelpers';
 
 interface getCoursesResponse {
   courses: ICourse[];
   pagination: IPagination;
+  message: string;
+}
+
+interface getCourseResponse {
+  course: ICourse;
   message: string;
 }
 
@@ -29,6 +35,15 @@ interface getLessonsResponse {
 
 interface UpdateActiveStatusCourseResponse {
   message: string;
+}
+
+interface GetCourseHistoriesResponse {
+  message: string;
+  results: IActionLog[];
+  count: number;
+  page: number;
+  pages: number;
+  limit: number;
 }
 
 export const courseApi = createApi({
@@ -204,7 +219,7 @@ export const courseApi = createApi({
 
       invalidatesTags: (result, error, body) => (error ? [] : [{ type: 'Courses', id: 'LIST' }])
     }),
-    getCourse: build.query<ICourse, string>({
+    getCourse: build.query<getCourseResponse, string>({
       query: (id) => ({
         url: `/courses/course/${id}`,
         headers: {
@@ -214,17 +229,22 @@ export const courseApi = createApi({
           first_name: 'du',
           'last-name': 'duoc'
         }
-      })
+      }),
+      providesTags: (result, error, id) => [
+        { type: 'Courses', id: id },
+        { type: 'Courses', id: 'LIST' }
+      ]
     }),
-    updateCourse: build.mutation<ICourse, { id: string; body: ICourse }>({
-      query(data) {
-        return {
-          url: `/courses/course/update/${data.id}`,
-          method: 'PUT',
-          body: data.body
-        };
-      },
-      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Courses', id: data.id }])
+    updateCourse: build.mutation<void, ICourse>({
+      query: (course) => ({
+        url: 'courses/course/update',
+        method: 'PUT',
+        body: course
+      }),
+      invalidatesTags: (_, __, { _id }) => [
+        { type: 'Courses', id: 'LIST' },
+        { type: 'Courses', id: _id }
+      ]
     }),
     updateActiveStatusCourse: build.mutation<UpdateActiveStatusCourseResponse, Partial<{ courseId: string }>>({
       query: (data) => ({
@@ -256,6 +276,16 @@ export const courseApi = createApi({
         };
       },
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Courses', id: 'LIST' }])
+    }),
+    getCourseHistories: build.query<GetCourseHistoriesResponse, { courseId: string; params: IParams }>({
+      query: ({ courseId, params }) => ({
+        url: `courses/course/histories/${courseId}`,
+        params: params
+      }),
+      providesTags: (result, error, { courseId }) => [
+        { type: 'Courses', id: 'LIST' },
+        { type: 'Courses', id: courseId }
+      ]
     })
   })
 });
@@ -274,5 +304,6 @@ export const {
   useUpdateCourseMutation,
   useUpdateActiveStatusCourseMutation,
   useUpdateSectionMutation,
-  useUpdateLessonMutation
+  useUpdateLessonMutation,
+  useGetCourseHistoriesQuery
 } = courseApi;

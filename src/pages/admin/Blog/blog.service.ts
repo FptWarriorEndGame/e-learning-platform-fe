@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BACKEND_URL } from '../../../constant/backend-domain';
 import { IBlog } from '../../../types/blog.type';
@@ -53,7 +54,7 @@ export const blogApi = createApi({
       providesTags(result) {
         if (result && Array.isArray(result.blogs)) {
           return [
-            ...result.blogs.map(({ _id }: { _id: string }) => ({ type: 'Blogs' as const, _id })),
+            ...result.blogs.map(({ _id }: { _id: string | undefined }) => ({ type: 'Blogs' as const, _id })),
             { type: 'Blogs' as const, id: 'LIST' }
           ];
         }

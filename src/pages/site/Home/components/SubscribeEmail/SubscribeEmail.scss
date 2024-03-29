@@ -72,34 +72,45 @@
 .subscribeemail-box {
     display: flex;
     margin-bottom: 2.5rem;
-    border: 1px solid #00d9bf;
+    align-items: flex-start;
+    gap: 1.6rem;
     font-family: "Noto Sans JP";
-    font-size: 1.6rem;
     border-radius: 1.2rem;
     .subscribeemail-input {
         line-height: 1;
-        padding: 1.6rem;
         flex: 1;
-        input{
+        margin: 0;
+        .input{
+            padding: 1.6rem;
             background: none;
             outline: none;
+            border: none;
+            font-size: 1.6rem;
+            border: 1px solid #00d9bf;
+            color: #fff;
+            &::placeholder{
+                color: #9c9c9c;
+            }
         }
     }
     .subscribeemail-submit {
-        align-items: center;
-        cursor: pointer;
-        display: inline-flex;
-        justify-content: center;
-        max-width: 100%;
-        outline: none;
-        position: relative;
-        text-align: center;
-        vertical-align: middle;
-        padding: 1.6rem 4rem;
-        background: #00d9bf;
-        border-radius: 1.2rem;
-        .btn{
-            background: none;
+        height: 100%;
+        margin: 0;
+        &-btn{
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            align-items: center;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            max-width: 100%;
+            outline: none;
+            padding: 1.6rem 2.4rem;
+            border-radius: 1.2rem;
+            background-color: #00d9bf !important;
+            height: 100%;
+            font-size: 1.6rem;
         }
     }
 }

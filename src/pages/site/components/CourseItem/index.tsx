@@ -1,4 +1,4 @@
-import { Badge, Col, Progress, Row, notification } from 'antd';
+import { Badge, Col, Progress, Rate, Row, notification } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -113,7 +113,7 @@ const CourseItem = (props: CourseItemProps) => {
     backgroundImageUrl = encodeURI(`${BACKEND_URL}/${props.courseItem.thumbnail}`);
   }
 
-  let badgeCourse = 'new';
+  let badgeCourse = 'new'; // Get logic from backend! TODO: LATER!
 
   if (props.courseItem.finalPrice < props.courseItem.price) {
     badgeCourse = 'Special Offer';
@@ -172,13 +172,25 @@ const CourseItem = (props: CourseItemProps) => {
             }}
           ></div>
           <div className='course-item__content'>
+            {/* Tiêu đề khoá học! */}
             <h3 onClick={viewCourseDetail} className='course-item__title course-item__title--courses-page'>
               {props.courseItem.name}
             </h3>
             {props.courseState === 'ordered' && (
               <Progress className='course-item__process' percent={progressPercent as number} />
             )}
+            {/* Số lượt đánh giá! */}
+            {props.courseState !== "ordered" && (
+              <div className="mt-4">
+              <span className="text-2xl mr-2">{props.courseItem.avgRatings } </span><Rate className="text-3xl mr-2" disabled value={props.courseItem.avgRatings}/>
+              <span>
+              ({props.courseItem.numberUsersOfCourse})
+              </span>
+              </div>
+            )}
+            {/* Mô tả khoá học */}
             <div className='course-item__desc'>{props.courseItem.description}</div>
+            {/* Tên tác giả */}
             <div className='course-item__author'>
             <div className="course-item__author-details">
               <img
@@ -195,6 +207,7 @@ const CourseItem = (props: CourseItemProps) => {
                 {isCourseInWishlist ? <HeartFilled /> : <HeartOutlined />}
               </Button>
             </div>
+            {/* Nút enroll hoặc order của khoá học */}
             <div className='course-item__enrolls'>
               <Row className='course-item__enrolls-row' justify='space-around' align='middle'>
                 <Col md={12}>

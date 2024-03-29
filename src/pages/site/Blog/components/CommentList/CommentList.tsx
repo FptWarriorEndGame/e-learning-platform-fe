@@ -13,6 +13,7 @@ import {
 } from '../../../client.service';
 import './CommentList.scss';
 import CommentWithReplies from './components/CommentWithReplies';
+import { IBlogComment } from '../../../../../types/blogComments.type';
 
 export interface User {
   _id: string;
@@ -32,13 +33,13 @@ export interface Comment {
 }
 
 interface CommentListProps {
-  comments: Comment[];
+  comments: IBlogComment[];
   blogId: string;
 }
 
 const CommentList: React.FC<CommentListProps> = ({ comments, blogId }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [currentComment, setCurrentComment] = useState<Comment | null>(null);
+  const [currentComment, setCurrentComment] = useState<IBlogComment | null>(null);
   const [editContent, setEditContent] = useState('');
   const [localComments, setLocalComments] = useState(comments);
   const userId = useSelector((state: RootState) => state.auth.userId);
@@ -67,7 +68,7 @@ const CommentList: React.FC<CommentListProps> = ({ comments, blogId }) => {
     }));
   };
 
-  const showEditModal = (comment: Comment) => {
+  const showEditModal = (comment: IBlogComment) => {
     setIsEditing(true);
     setCurrentComment(comment);
     setEditContent(comment.content);
@@ -196,10 +197,15 @@ const CommentList: React.FC<CommentListProps> = ({ comments, blogId }) => {
       {localComments.map((comment) => (
         <div className='comment mb-12' key={comment._id}>
           <Card className='mt-4'>
-            <div className='comment-header flex items-center ml-4'>
-              <Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=1' className='mr-4 text-3xl' />
-              <div className='comment-author mr-5 text-2xl font-medium'>{comment.content}</div>
+            <div className='comment-header ml-4'>
+              <div className='flex items-center mb-2'>
+                {' '}
+                <Avatar src={comment.userId.avatar} className='mr-4 text-3xl' />
+                <div className='comment-author mr-5 text-2xl font-medium'>{comment.userId.name}</div>
+              </div>
+              <div className='comment-content ml-16 opacity-90'>{comment.content}</div>
             </div>
+
             <div className='flex items-center mt-2'>
               <Button onClick={() => handleLike(comment._id)} type='link'>
                 <div className='flex items-center'>
@@ -210,26 +216,29 @@ const CommentList: React.FC<CommentListProps> = ({ comments, blogId }) => {
               <Button type='link' className='mr-4' onClick={() => handleReplyClick(comment._id)}>
                 Trả lời
               </Button>
-              <Dropdown
-                className='opacity-80'
-                overlay={
-                  <Menu>
-                    <Menu.Item key='edit' onClick={() => showEditModal(comment)}>
-                      Sửa bình luận
-                    </Menu.Item>
-                    <Menu.Item key='delete' onClick={() => handleDelete(comment._id)}>
-                      Xóa bình luận
-                    </Menu.Item>
-                  </Menu>
-                }
-                trigger={['click']}
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <Space>
-                    <UnorderedListOutlined />
-                  </Space>
-                </a>
-              </Dropdown>
+              {userId === comment.userId._id && (
+                <Dropdown
+                  className='opacity-80'
+                  overlay={
+                    <Menu>
+                      .
+                      <Menu.Item key='edit' onClick={() => showEditModal(comment)}>
+                        Sửa bình luận
+                      </Menu.Item>
+                      <Menu.Item key='delete' onClick={() => handleDelete(comment._id)}>
+                        Xóa bình luận
+                      </Menu.Item>
+                    </Menu>
+                  }
+                  trigger={['click']}
+                >
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      <UnorderedListOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>
+              )}
             </div>
             {/* Form comments */}
             {replyingTo === comment._id && (
@@ -255,7 +264,7 @@ const CommentList: React.FC<CommentListProps> = ({ comments, blogId }) => {
             {/* Render Comments */}
             <Button onClick={() => toggleReplies(comment._id)} type='link'>
               {visibleReplies[comment._id] ? 'Ẩn câu trả lời ' : `Xem ${comment.replies?.length || 0} câu trả lời`}
-              {visibleReplies[comment._id] ? <UpOutlined /> : <DownOutlined />}
+              {/* {visibleReplies[comment._id] ? <UpOutlined /> : <DownOutlined />} */}
             </Button>
             {visibleReplies[comment._id] && (
               <div className='replies-container'>

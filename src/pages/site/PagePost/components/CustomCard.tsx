@@ -1,5 +1,6 @@
 import { BookOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Avatar, Card } from 'antd';
+import { sanitizeAndReturnHtml } from '../../../../utils/functions';
 
 interface CustomCartProps {
   blogImg: string;
@@ -32,10 +33,17 @@ const CustomCard = ({ author, content, technology, readTime, title, blogImg }: C
                 </div>
               </div>
             </div>
-            <h1 className='blog_Name text-4xl font-bold mb-12'>{content}</h1>
+            <div
+              className='blog_Name text-4xl font-bold mb-12'
+              dangerouslySetInnerHTML={sanitizeAndReturnHtml(
+                title.length > 60 ? title.substring(0, 60) + '...' : title
+              )}
+            ></div>
             <div className='blog_Detail'>
               <div className='blog_Detail-content'>
-                <p className='title my-10 text-2xl opacity-90'>{title}</p>
+                <p className='title my-10 text-2xl opacity-90'>
+                  {content.length > 60 ? content.substring(0, 60) + '...' : content}
+                </p>
                 <div className='text-gray-500 text-1xl mb-4'>
                   <span className='bg-slate-200 p-3 rounded-3xl text-black hover:opacity-75 cursor-pointer mr-6'>
                     {technology}

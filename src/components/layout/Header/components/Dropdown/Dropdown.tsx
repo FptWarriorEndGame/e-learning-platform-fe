@@ -37,9 +37,9 @@ const Dropdown = () => {
           <Link to='/blog' className='block hover:opacity-50'>
             Blog
           </Link>
-          <Link to='/inbox' className='block mt-6 hover:opacity-50'>
+          {/* <Link to='/inbox' className='block mt-6 hover:opacity-50'>
             Inbox
-          </Link>
+          </Link> */}
         </div>
       )}
     </div>

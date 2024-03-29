@@ -1,24 +1,26 @@
 import { CheckCircleOutlined, EditOutlined, EyeOutlined, HistoryOutlined, StopOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Space, Table, notification } from 'antd';
+import { Button, Dropdown, Menu, Popconfirm, Space, Table, notification } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { IBlog } from '../../../../../types/blog.type';
 import { ICategoryBlogs } from '../../../../../types/categoryBlogs.type';
-import { transformDate } from '../../../../../utils/functions';
+import { sanitizeAndReturnHtml, transformDate } from '../../../../../utils/functions';
 import { useUpdateActiveStatusBlogMutation } from '../../blog.service';
 import { startEditBlog } from '../../blog.slice';
 import BlogDetailModal from '../BlogsDetailModal/BlogDetailModal';
-import './BlogList.scss';
 import ViewHistoryBlog from '../ViewHistoryBLog';
+import './BlogList.scss';
 
 interface BlogListProps {
   data: IBlog[];
   onBlogEdit: (blogId: string) => void;
   categories: ICategoryBlogs[];
+  htmlContent: string;
+  onTagClick: (tag: string) => void;
 }
 
-const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) => {
+const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories, onTagClick }) => {
   const dispatch = useDispatch();
   const [blogs, setBlogs] = useState<IBlog[]>(data);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -86,11 +88,13 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
       key: 'category',
       render: (_: IBlog, record: IBlog) => getCategoryName(record.categoryId)
     },
+
     {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
       width: '20%',
+      sorter: (a, b) => a.title.localeCompare(b.title),
       render: (_: IBlog, record: IBlog) => (
         <span>
           {record.title.substring(0, 30)}
@@ -102,6 +106,7 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
       title: 'Author',
       dataIndex: 'author',
       key: 'author',
+      sorter: (a, b) => a.author.localeCompare(b.author),
       render: (_: IBlog, record: IBlog) => <span>{record.author}</span>
     },
     {
@@ -109,14 +114,48 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
       dataIndex: 'content',
       render: (_: IBlog, record: IBlog) => (
         <span>
-          {record.content.substring(0, 80)}
+          {
+            <div
+              dangerouslySetInnerHTML={sanitizeAndReturnHtml(
+                record.content.length > 60 ? record.content.substring(0, 60) : record.content
+              )}
+            ></div>
+          }
           {record.content.length > 60 ? '...' : ''}
         </span>
       )
     },
     {
+      title: 'Tags',
+      dataIndex: 'Tags',
+      key: 'Tags',
+      render: (_: IBlog, record: IBlog) => (
+        <Space>
+          {record.tags.map((tag) => (
+            <Dropdown
+              overlay={
+                <Menu onClick={({ key }) => onTagClick(key)}>
+                  <Menu.Item key=''>All Tags</Menu.Item>
+                  {record.tags.map((tag) => (
+                    <Menu.Item key={tag}>{tag}</Menu.Item>
+                  ))}
+                </Menu>
+              }
+            >
+              <Button type='dashed'>Tags</Button>
+            </Dropdown>
+          ))}
+        </Space>
+      )
+    },
+    {
       title: 'Created at',
       dataIndex: 'createdAt',
+      sorter: (a: IBlog, b: IBlog) => {
+        const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return aTime - bTime;
+      },
       render: (_: IBlog, record: IBlog) => transformDate(record.createdAt ? record.createdAt : new Date().toISOString())
     },
     {
@@ -131,17 +170,20 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
       key: 'actions',
       render: (_: IBlog, record: IBlog) => (
         <Space size='middle'>
-          <Button icon={<EditOutlined style={{ color: '#1890ff' }} />} onClick={() => blogEditHandler(record._id)} />
-          <Button icon={<EyeOutlined style={{ color: '#1890ff' }} />} onClick={() => showModal(record._id)} />
+          <Button
+            icon={<EditOutlined style={{ color: '#1890ff' }} />}
+            onClick={() => blogEditHandler(record._id || '')}
+          />
+          <Button icon={<EyeOutlined style={{ color: '#1890ff' }} />} onClick={() => showModal(record._id || '')} />
           <Button
             icon={<HistoryOutlined style={{ color: '#1890ff' }} />}
-            onClick={() => handleViewHistory(record._id)}
+            onClick={() => handleViewHistory(record._id || '')}
           />
           {record.isDeleted ? (
             <Popconfirm
               title='Are you sure you want to activate this blog?'
               placement='topRight'
-              onConfirm={() => handleUpdateStatus(record._id)}
+              onConfirm={() => handleUpdateStatus(record._id || '')}
               okText='Yes'
               cancelText='No'
             >
@@ -151,7 +193,7 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
             <Popconfirm
               title='Are you sure you want to deactivate this blog category?'
               placement='topRight'
-              onConfirm={() => handleUpdateStatus(record._id)}
+              onConfirm={() => handleUpdateStatus(record._id || '')}
               okText='Yes'
               cancelText='No'
             >
@@ -174,7 +216,11 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories }) =>
           categories={categories}
         />
       )}
-      <ViewHistoryBlog isVisible={historyVisible} onClose={() => setHistoryVisible(false)} blogId={currentBlogId} />
+      <ViewHistoryBlog
+        isVisible={historyVisible}
+        onClose={() => setHistoryVisible(false)}
+        blogId={currentBlogId || ''}
+      />
     </div>
   );
 };

@@ -31,6 +31,7 @@
     "axios": "^1.4.0",
     "chart.js": "^4.3.0",
     "date-fns": "^2.30.0",
+    "dompurify": "^3.0.11",
     "dotenv": "^16.4.5",
     "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
+    "@types/dompurify": "^3.0.5",
     "@types/file-saver": "^2.0.7",
     "@types/jwt-decode": "^3.1.0",
     "@types/node": "^20.10.4",

@@ -6,6 +6,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { RootState } from '../../../store/store';
 import {
   useCreateCertificateMutation,
+  useGetAllUserByLessonQuery,
   useGetCertificateQuery,
   useGetCourseEnrolledByUserQuery,
   useGetDiscussionsByLessonIdQuery,
@@ -59,6 +60,7 @@ const PathPlayer = () => {
     return currProgress === 100 && !certificateData?.certificate && isFetchingCertificate === false;
   }, [currProgress, certificateData?.certificate, isFetchingCertificate]);
 
+  const { data: usersData, isLoading: isLoadingUsers } = useGetAllUserByLessonQuery({ lessonId });
   // Test demo create certificate:
 
   useEffect(() => {
@@ -156,7 +158,7 @@ const PathPlayer = () => {
     },
     {
       key: 'learners',
-      label: `Learners`,
+      label: `Learners (${usersData?.users?.length || 0})`,
       children: <Learners className='path-player__menu-content' />
     },
     {

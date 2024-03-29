@@ -114,14 +114,14 @@ const ListDiscuss: React.FC<IDisCussProps> = ({ data, onDiscussEdit, course, sec
       title: 'Course Name',
       dataIndex: 'CourseName',
       key: 'CourseName',
-      render: (_: IDiscuss, record: IDiscuss) => <span>{getCourseName(record.courseId)}</span>
+      render: (_: IDiscuss, record: IDiscuss) => <span>{record.courseId?.name}</span>
     },
     {
       title: 'Lesson Name',
       dataIndex: 'LessonNamee',
       key: 'LessonName',
       render: (_: IDiscuss, record: IDiscuss) => {
-        return <span>{getSectionName(record.lessonId)}</span>;
+        return <span>{record.lessonId?.name}</span>;
       }
     },
     {

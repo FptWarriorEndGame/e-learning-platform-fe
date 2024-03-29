@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { CloseOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Input, Radio, Rate, Select, Skeleton, Space } from 'antd';
+import { Button, Checkbox, Input, Radio, RadioChangeEvent, Rate, Select, Skeleton, Space } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -11,13 +11,18 @@ import {
   useGetAuthorsQuery,
   useGetAuthorsSelectQuery,
   useGetCategoriesQuery,
+  useGetCategoriesSelectQuery,
   useGetCoursesQuery
 } from '../client.service';
 import CourseList from '../components/CourseList';
 import './Courses.scss';
 
 import { SearchParamsStateType, useSearchParamsState } from 'react-use-search-params-state';
-
+import { useEffect, useState } from 'react';
+import { IDataSelect } from '../../../types/dataSelect.type';
+type StateType = {
+  [key: string]: string[];
+};
 const { Search } = Input;
 const Courses = () => {
   const filtersDefaults: SearchParamsStateType = {
@@ -27,11 +32,25 @@ const Courses = () => {
     _level: { type: 'string', default: [], multiple: true },
     _price: { type: 'string', default: [], multiple: true },
     _topic: { type: 'string', default: [], multiple: true },
-    _page: { type: 'number', default: 1 }
+    _page: { type: 'number', default: 1 },
+    _avgRatings: { type: 'number', default: 0 }
+  };
+
+  const defaultParams = {
+    _limit: 12,
+    _page: 1,
+    _q: "",
+    _author: [],
+    _level: [],
+    _price: [],
+    _sort: "",
+    _topic: [],
+    _avgRatings: 0,
+    userId: ""
   };
 
   const sortDefaults: SearchParamsStateType = {
-    sort: { type: 'string', default: 'relavant' }
+    sort: { type: 'string', default: 'mostReviews' }
   };
 
   const [filterParams, setFilterParams] = useSearchParamsState(filtersDefaults);
@@ -41,11 +60,12 @@ const Courses = () => {
   const userId = useSelector((state: RootState) => state.auth.userId);
 
   const searchValue = searchParams.get('_q') || '';
-  const sortValue = searchParams.get('_sort') || 'relavant';
+  const sortValue = searchParams.get('_sort') || 'mostReviews';
   const authorValue = searchParams.getAll('_author') || '';
   const levelValue = searchParams.getAll('_level') || '';
   const priceValue = searchParams.getAll('_price') || '';
   const topicValue = searchParams.getAll('_topic') || '';
+  const avgRatingsValue = searchParams.get('_avgRatings') || 0;
 
   const params = {
     _limit: searchParams.get('_limit') ? Number(searchParams.get('_limit')) : 12,
@@ -56,12 +76,14 @@ const Courses = () => {
     _price: priceValue,
     _sort: sortValue,
     _topic: topicValue,
+    _avgRatings: avgRatingsValue,
     userId
   };
+  const [searchFilterParams, setSearchFilterParams] = useState(params)
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
-  const { data, isFetching } = useGetCoursesQuery(params);
+  const { data, isFetching, refetch } = useGetCoursesQuery(searchFilterParams);
 
   const isFiltered = authorValue || levelValue || priceValue;
 
@@ -72,19 +94,46 @@ const Courses = () => {
   // Get all authors at db
   const { data: authorsData } = useGetAuthorsQuery();
   const { data: listAuthorSelect } = useGetAuthorsSelectQuery();
+  const { data: listCategorySelect } = useGetCategoriesSelectQuery();
 
-  console.log('list author: ', listAuthorSelect);
+  const [selectedInput, setSelectedInput] = useState<StateType>({
+    listAuthorSelect: [],
+    listCategorySelect: []
+  })
+
+  useEffect(() => {
+    setSearchFilterParams(searchFilterParams)
+    refetch().then((res) => {
+      console.log("res", res);
+    }).catch((err) => {
+      console.log("error", err)
+    })
+  },[refetch, searchFilterParams])
+
 
   const categoriesList = categoriesData?.categories || [];
 
   const authorsList = authorsData?.authors || [];
 
-  const levelList = ['All Level', 'Beginner', 'Intermediate', 'Advanced'];
+  const levelList = [{
+    code: 'ALL',
+    name: 'All Level',
+  }, {
+    code: "BEGINNER",
+    name: 'Beginner'
+  }, {
+    code: "INTERMEDIATE",
+    name: 'Intermediate'
+  }, {
+    code: "ADVANCED",
+    name: 'Advanced'
+  }];
 
   const navigate = useNavigate();
 
   const sortChangeHandler = (value: string) => {
     setSortParams({ _sort: value });
+    setSearchFilterParams({ ...searchFilterParams, _sort: value })
   };
 
   const filterAuthorsHandler = (e: CheckboxChangeEvent) => {
@@ -95,12 +144,31 @@ const Courses = () => {
     setFilterParams({ _author: newValues });
   };
 
+  const filterSelectedAuthorsHandler = (value: string[]) => {
+    setSelectedInput({
+      ...selectedInput,
+      listAuthorSelect: value
+    });
+    setFilterParams({ _author: value });
+    setSearchFilterParams({ ...searchFilterParams, _author: value })
+  };
+
+  const filterSelectedCategoriesHandler = (value: string[]) => {
+    setSelectedInput({
+      ...selectedInput,
+      listCategorySelect: value
+    });
+    setFilterParams({ _topic: value });
+    setSearchFilterParams({ ...searchFilterParams, _topic: value })
+  };
+
   const filterLevelHandler = (e: CheckboxChangeEvent) => {
     const { checked, value } = e.target;
     const newValues = checked
       ? [...filterParams._level, value]
       : filterParams._level.filter((item: string) => item !== value);
     setFilterParams({ _level: newValues });
+    setSearchFilterParams({ ...searchFilterParams, _level: newValues })
   };
 
   const filterPriceHandler = (e: CheckboxChangeEvent) => {
@@ -109,21 +177,38 @@ const Courses = () => {
       ? [...filterParams._price, value]
       : filterParams._price.filter((item: string) => item !== value);
     setFilterParams({ _price: newValues });
+    setSearchFilterParams({ ...params, _price: newValues })
+    
   };
-
-  const filterTopicHandler = (e: CheckboxChangeEvent) => {
+  
+  const filterRatingsHandler = (e: RadioChangeEvent) => {
     const { checked, value } = e.target;
-
-    const newValues = checked
-      ? [...filterParams._topic, value]
-      : filterParams._topic.filter((item: string) => item !== value);
-
-    setFilterParams({ _topic: newValues });
-  };
+    setFilterParams({
+      _avgRatings: value
+    })
+    setSearchFilterParams({ ...params, _avgRatings: value })
+  }
 
   const clearFilterHandler = () => {
-    setSearchParams({});
+   // Reset your filtering state
+   setFilterParams(filtersDefaults); 
+  //  searchFilterParams(defaultParams)
+   // Clear the URL query parameters
+   setSearchParams({});
+
+   setSelectedInput({
+    listAuthorSelect: [], // Reset to original data
+    listCategorySelect: []  // Reset to original data
+  });
+  setSearchFilterParams(defaultParams)
+  // Call again api
+    refetch().then((res) => {
+      console.log("res", res)
+    }).catch((err) => {
+      console.log("error", err)
+    })
   };
+
 
   const enrollFilterHandler = () => {
     console.log('object');
@@ -131,10 +216,14 @@ const Courses = () => {
 
   const paginateHandler = (page: number) => {
     setFilterParams({ _p: page });
+    setSearchFilterParams({ ...searchFilterParams, _page: page })
   };
 
   // Filter author select
-  const filterOption = (input: string, option?: { label: string; value: string }) =>
+  const filterAuthorsOption = (input: string, option?: { label: string; value: string }) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+  
+    const filterCategoriesOption = (input: string, option?: { label: string; value: string }) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   return (
@@ -175,7 +264,7 @@ const Courses = () => {
               <div className='courses__filter-bar-item'>
                 <h3 className='courses__filter-bar-item-title'>Authors</h3>
                 <div className='authors-filter'>
-                  <ul className='authors-filter__list'>
+                  {/* <ul className='authors-filter__list'>
                     {authorsList.map((author) => {
                       return (
                         <li key={author[1]._id} className='authors-filter__item'>
@@ -189,29 +278,33 @@ const Courses = () => {
                         </li>
                       );
                     })}
-                  </ul>
-                  {/* <Select
+                  </ul> */}
+                  <Select
+                    style={{ width: '80%' }}
+                    mode="multiple"
                     showSearch
-                    placeholder='Select a author to filter!'
+                    placeholder='Select authors to filter!'
                     optionFilterProp='children'
-                    filterOption={filterOption}
+                    filterOption={filterAuthorsOption}
                     options={listAuthorSelect}
-                  /> */}
+                    onChange={filterSelectedAuthorsHandler}
+                    value={selectedInput.listAuthorSelect}
+                  />
                 </div>
               </div>
               <div className='courses__filter-bar-item'>
                 <h3 className='courses__filter-bar-item-title'>Level</h3>
                 <div className='course-level'>
                   <ul className='course-level__list'>
-                    {levelList.map((level, index) => {
+                    {levelList.map((levelItem, index) => {
                       return (
                         <li key={index} className='course-level__item'>
                           <Checkbox
-                            value={level}
-                            checked={filterParams._level.includes(level)}
+                            value={levelItem.code}
+                            checked={filterParams._level.includes(levelItem.code)}
                             onChange={filterLevelHandler}
                           >
-                            {level}
+                            {levelItem.name}
                           </Checkbox>
                         </li>
                       );
@@ -247,8 +340,8 @@ const Courses = () => {
               <div className='courses__filter-bar-item'>
                 <h3 className='courses__filter-bar-item-title'>Topic course</h3>
                 <div className='course-topic'>
-                  <ul className='course-topic__list'>
-                    {categoriesList.map((cateItem) => {
+                  {/* <ul className='course-topic__list'>
+                    {categoriesList.map((cateItem: any) => {
                       return (
                         <li key={cateItem._id} className='course-topic__item'>
                           <Checkbox
@@ -261,7 +354,20 @@ const Courses = () => {
                         </li>
                       );
                     })}
-                  </ul>
+                  </ul> */}
+                    {/* Select topic course (course cate) */}
+                  <Select
+                    style={{ width: '80%' }}
+                    mode="multiple"
+                    showSearch
+                    placeholder='Select topics to filter!'
+                    optionFilterProp='children'
+                    filterOption={filterCategoriesOption}
+                    options={listCategorySelect}
+                    onChange={filterSelectedCategoriesHandler}
+                    value={selectedInput.listCategorySelect}
+                  />
+
                 </div>
               </div>
               {/* Ratings */}
@@ -269,21 +375,21 @@ const Courses = () => {
                 <h3 className='courses__filter-bar-item-title'>Course Ratings</h3>
                 <div className='course-ratings'>
                   <ul className='course-ratings__list'>
-                    <Radio.Group>
+                    <Radio.Group onChange={filterRatingsHandler} value={filterParams._avgRatings}>
                       <Space direction='vertical'>
-                        <Radio value={1}>
+                        <Radio value={4.5}>
                           <Rate allowHalf defaultValue={4.5} />
                           <span className='ml-2 font-normal'> 4.5 & up</span>
                         </Radio>
-                        <Radio value={2}>
+                        <Radio value={4.0}>
                           <Rate allowHalf defaultValue={4.0} />
                           <span className='ml-2 font-normal'> 4.0 & up</span>
                         </Radio>
-                        <Radio value={3}>
+                        <Radio value={3.5}>
                           <Rate allowHalf defaultValue={3.5} />
                           <span className='ml-2 font-normal'> 3.5 & up</span>
                         </Radio>
-                        <Radio value={4}>
+                        <Radio value={3}>
                           <Rate allowHalf defaultValue={3} />
                           <span className='ml-2 font-normal'> 3 & up</span>
                         </Radio>
@@ -313,14 +419,14 @@ const Courses = () => {
               <div className='search-results__sort'>
                 <Button>Sort</Button>
                 <Select
-                  defaultValue={sortValue === 'newest' ? 'newest' : 'Most Relavant'}
+                  defaultValue={sortValue === 'mostReviews' ? 'mostReviews' : 'newest'}
                   value={sortValue}
                   style={{ width: 130, marginLeft: '1rem' }}
                   onChange={sortChangeHandler}
                   options={[
-                    { value: 'relevant', label: 'Relevant' },
+                    // { value: 'relevant', label: 'Relevant' },
                     { value: 'mostReviews', label: 'Most Reviews' },
-                    { value: 'highestRated', label: 'Highest Rated' },
+                    { value: 'mostEnrolled', label: 'Most Enrolled' },
                     { value: 'newest', label: 'Newest' }
                   ]}
                 />

@@ -1,3 +1,5 @@
+import { ICategoryBlogs } from "./categoryBlogs.type";
+
 export interface Blog {
   _id: string;
   title: string;
@@ -5,12 +7,10 @@ export interface Blog {
   blogImg: string;
   technology: string;
   tags: string[];
-  readTime: string;
+  readTime: Date;
   datePublished: string;
   content: string;
   userId: string;
-  category: string[];
+  categoryId: ICategoryBlogs;
   __v: number;
 }
-
-

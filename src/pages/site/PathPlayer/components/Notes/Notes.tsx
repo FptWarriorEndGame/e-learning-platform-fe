@@ -1,19 +1,21 @@
+/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { BookOutlined, CheckOutlined, DeleteOutlined, EditOutlined, SaveOutlined } from '@ant-design/icons';
-import { Button, Empty, Input, Modal, Select, Typography } from 'antd';
-import { useState } from 'react';
+import { DeleteOutlined, EditOutlined, SaveOutlined } from '@ant-design/icons';
+import { Button, Empty, Input, Modal, Select, Typography, notification } from 'antd';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { RootState } from '../../../../../store/store';
+import { INote } from '../../../../../types/note.type';
 import { formatTimeAndMinutes, transformDate } from '../../../../../utils/functions';
 import {
   useDeleteNoteMutation,
   useGetAllLessonsQuery,
+  useGetAllNotesQuery,
   useGetNotesByLessonIdQuery,
   useUpdateNoteMutation
 } from '../../../client.service';
 import './Notes.scss';
-import { INote } from '../../../../../types/note.type';
-import { useSearchParams } from 'react-router-dom';
 type Props = {
   className: string;
 };
@@ -26,20 +28,55 @@ const Notes = (props: Props) => {
   const courseId = searchParams.get('courseId');
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [newContent, setNewContent] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(currLessonId || 'all');
+  const [notes, setNotes] = useState<INote[]>([]);
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
+  const [updateNote, { isLoading: isUpdating }] = useUpdateNoteMutation();
+  const [deleteNote, { isLoading: isDeleting }] = useDeleteNoteMutation();
+  const { data: lessonsData, isLoading: isLoadingLessons } = useGetAllLessonsQuery();
 
   const handleFilterChange = (value: string) => {
     setFilter(value);
   };
 
-  const [updateNote, { isLoading: isUpdating }] = useUpdateNoteMutation();
-  const [deleteNote, { isLoading: isDeleting }] = useDeleteNoteMutation();
+  useEffect(() => {
+    setFilter(currLessonId || 'all');
+  }, [currLessonId]);
 
-  const { data, error, isLoading } = useGetNotesByLessonIdQuery(currLessonId, {
-    skip: !currLessonId
+  const {
+    data: lessonNotesData,
+    error,
+    isLoading: isLoadingLesson
+  } = useGetNotesByLessonIdQuery(filter, {
+    skip: filter === 'all',
+    refetchOnMountOrArgChange: true // Đảm bảo refetch dữ liệu mỗi khi component mount hoặc argument thay đổi
   });
-  const { data: lessonsData } = useGetAllLessonsQuery();
-  console.log('data', lessonsData);
+
+  const {
+    data: allNotesData,
+    error: errorAll,
+    isLoading: isLoadingAll
+  } = useGetAllNotesQuery(filter, {
+    skip: filter !== 'all',
+    refetchOnMountOrArgChange: true
+  });
+
+  useEffect(() => {
+    if (filter === 'all') {
+      if (allNotesData && allNotesData.notes) {
+        setNotes(allNotesData.notes.filter((note) => note.userId === userId));
+      } else {
+        setNotes([]);
+      }
+    } else {
+      if (lessonNotesData && lessonNotesData.notes) {
+        setNotes(lessonNotesData.notes.filter((note) => note.userId === userId));
+      } else {
+        setNotes([]);
+      }
+    }
+  }, [filter, allNotesData, lessonNotesData]); // Đảm bảo đúng dependencies được theo dõi
 
   const startEditing = (note: INote) => {
     setEditingNoteId(note._id);
@@ -60,36 +97,49 @@ const Notes = (props: Props) => {
   };
 
   const handleDeleteNote = async (noteId: string) => {
-    try {
-      await deleteNote(noteId).unwrap();
-    } catch (error) {
-      console.error('Failed to delete note:', error);
-    }
+    Modal.confirm({
+      title: 'Delete Note',
+      content: 'Are you sure you want to delete this note?',
+      onOk: async () => {
+        try {
+          await deleteNote(noteId).unwrap();
+          notification.success({ message: 'Delete note successfully' });
+          setNotes(notes.filter((note) => note._id !== noteId));
+        } catch (error) {
+          console.error('Failed to delete note:', error);
+        }
+      }
+    });
   };
-
-  const filteredNotes = data?.notes.filter((note) => {
-    if (filter === 'all') return true;
-    return false;
-  });
 
   return (
     <div className={props.className + ' Notes'}>
       <div className=''>
-        {isLoading ? (
+        <Typography.Title level={4}>Notes</Typography.Title>
+        <Select value={filter} style={{ width: 320, marginBottom: 10 }} onChange={handleFilterChange}>
+          <Option value='all'>All notes</Option>
+          {lessonsData?.lessons.map((lesson) => (
+            <Option key={lesson._id} value={lesson._id}>
+              {lesson.name}
+            </Option>
+          ))}
+        </Select>
+        {isLoadingLesson ? (
           <div>Loading...</div>
-        ) : filteredNotes && filteredNotes.length > 0 ? (
+        ) : notes && notes.length > 0 ? (
           <div className='modal-content-scrollable'>
-            <Typography className='text-3xl mb-4'>List Notes</Typography>
-            <Select defaultValue='all' style={{ width: 120, marginBottom: 10 }} onChange={handleFilterChange}>
-              <Option value='all'>All</Option>
-            </Select>
-            {filteredNotes.map((note) => (
+            {notes.map((note) => (
               <div key={note._id} className='mb-3'>
                 <div className='mr-6'>
                   <div className='flex items-center justify-between'>
-                    <p className='bg-red-500 w-20 text-center text-white rounded-2xl mb-4'>
+                    <span className='bg-red-500 w-20 text-center text-white rounded-2xl mb-4 mr-4'>
                       {formatTimeAndMinutes(note.videoMinute)}
-                    </p>
+                    </span>
+                    <span>
+                      <p className='opacity-70'>
+                        {lessonsData?.lessons.find((lesson) => lesson._id === note.lessonId)?.name}
+                      </p>
+                    </span>
                     <div className='mb-4'>
                       {editingNoteId === note._id ? (
                         <Input

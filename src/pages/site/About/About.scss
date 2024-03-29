@@ -68,16 +68,16 @@ body {
     flex-wrap: wrap;
 }
 .wrapper {
-  width: calc(100% * (4/12));
+  width: calc(100% * (3/12));
   height: auto;
-  padding: 5rem 1.2rem;
+  padding: 5rem .6rem;
   padding-top: 100px;
   display: flex;
   @media screen and (max-width: 1200px) {
     padding: 5rem .75rem;
     width: calc(100% * (6/12));
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 576px) {
     padding-top: 70px;
     width: calc(100% * (12/12));
 
@@ -112,8 +112,8 @@ body {
   }
 
   &__img {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     margin-left: auto;
     margin-right: auto;
     transform: translateY(-50%);
@@ -142,7 +142,7 @@ body {
     margin-top: -35px;
     text-align: center;
     padding: 0 20px;
-    padding-bottom: 40px;
+    padding-bottom: 24px;
     transition: all .3s;
     @media screen and (max-width: 1200px) {
         padding: 0 1.4rem 3.2rem;
@@ -152,13 +152,13 @@ body {
 
   &__name {
     font-weight: 700;
-    font-size: 24px;
+    font-size: 18px;
     color: #194583;
     margin-bottom: 15px;
   }
 
   &__txt {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
     color: #324e63;
     margin-bottom: 15px;
@@ -191,7 +191,7 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     align-items: flex-start;
-    margin-top: 35px;
+    margin-top: 16px;
 
     &__item {
       padding: 10px 32px;
@@ -218,7 +218,7 @@ body {
   }
 
   &-social {
-    margin-top: 25px;
+    margin-top: 16px;
     display: flex;
     justify-content: center;
     align-items: center;

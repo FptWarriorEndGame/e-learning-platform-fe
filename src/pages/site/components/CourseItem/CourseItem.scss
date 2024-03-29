@@ -31,11 +31,11 @@
         margin: 2rem 0rem;
         font-size: 1.5rem;
 
-        height:  9rem; /* Chiều cao để hiển thị dòng text */
+        height:  6.8rem; /* Chiều cao để hiển thị dòng text */
         overflow: hidden;
         display: -webkit-box;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 4;  /* Số dòng hiển thị lên */
+        -webkit-line-clamp: 3;  /* Số dòng hiển thị lên */
     }
 
     &__img {
