@@ -13,7 +13,8 @@ import {
   EyeOutlined,
   StopOutlined,
   PlusOutlined,
-  HistoryOutlined
+  HistoryOutlined,
+  EditFilled 
 } from '@ant-design/icons';
 import { Breadcrumb, Button, Input, Popover, Select, Skeleton, Space, message, Popconfirm } from 'antd';
 import { Header } from 'antd/es/layout/layout';
@@ -325,6 +326,9 @@ const Courses = () => {
               <Button icon={<EditOutlined style={{ color: '#1890ff' }} />} onClick={() => handleUpdate(_id)} />
               <Button icon={<EyeOutlined style={{ color: '#1890ff' }} />} onClick={() => handleViewDetails(_id)} />
               <Button icon={<HistoryOutlined style={{ color: '#1890ff' }} />} onClick={() => handleViewHistory(_id)} />
+              <Link to={`/author/courses/${_id}`}>
+                <Button icon={<EditFilled  style={{ color: '#faad14' }} />} />
+              </Link>
               {isDeleted ? (
                 <Popconfirm
                   title='Are you sure you want to activate this course?'

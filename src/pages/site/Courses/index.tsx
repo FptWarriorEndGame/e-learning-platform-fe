@@ -238,11 +238,11 @@ const Courses = () => {
               <div className='courses__filter-bar-item'>
                 <div className='status-filter'>
                   <ul className='status-filter__list'>
-                    <li className='status-filter__item'>
+                    {/* <li className='status-filter__item'>
                       <a href='' className='status-filter__item-link'>
                         All
                       </a>
-                    </li>
+                    </li> */}
                     {isAuth && (
                       <>
                         <li className='status-filter__item'>
@@ -421,7 +421,7 @@ const Courses = () => {
                 <Select
                   defaultValue={sortValue === 'mostReviews' ? 'mostReviews' : 'newest'}
                   value={sortValue}
-                  style={{ width: 130, marginLeft: '1rem' }}
+                  style={{ width: 200, marginLeft: '1rem' }}
                   onChange={sortChangeHandler}
                   options={[
                     // { value: 'relevant', label: 'Relevant' },

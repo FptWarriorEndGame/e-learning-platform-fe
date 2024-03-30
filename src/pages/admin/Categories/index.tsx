@@ -98,7 +98,6 @@ const Categories = () => {
             {
               title: <Link to='#'>Categories</Link>
             }
-            
           ]}
         />
       </div>
@@ -110,7 +109,12 @@ const Categories = () => {
                 New Category
               </Button>
             )}
-            <Search placeholder='Search categories' onSearch={onSearchHandler} style={{ width: 200 }} className='search-wrap'/>
+            <Search
+              placeholder='Search categories'
+              onSearch={onSearchHandler}
+              style={{ width: 200 }}
+              className='search-wrap'
+            />
 
             <Select
               size='middle'

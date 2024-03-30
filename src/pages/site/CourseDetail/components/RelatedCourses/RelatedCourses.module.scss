@@ -2,6 +2,7 @@
 
 .relatedCourses {
   width: 100%;
+  padding-bottom: 10rem;
 
   &__title {
     @include h-style('h3');
@@ -10,20 +11,33 @@
 
   :global {
     .slick-slider {
+      position: relative;
+
       .slick-list {
+        margin: 0 -0.8rem;
+        margin-bottom: -12rem;
         .ant-col {
           max-width: 100%;
-        }
-        .slick-slide {
           padding: 0 0.8rem;
         }
       }
 
       .slick-next,
       .slick-prev {
+        position: absolute;
+
         &::before {
+          font-size: 25px;
           color: black;
         }
+      }
+
+      .slick-prev {
+        left: -52px;
+      }
+
+      .slick-next {
+        right: -50px;
       }
     }
   }

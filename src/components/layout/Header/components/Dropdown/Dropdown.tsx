@@ -25,7 +25,7 @@ const Dropdown = () => {
     <div className='relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <span className='cursor-pointer relative'>
         Other
-        <DownOutlined className='cursor-pointer text-2xl absolute top-1 ml-1' />
+        <DownOutlined className='cursor-pointer text-2xl absolute top-1 ml-1 icon-other' />
       </span>
       {isOpen && (
         <div

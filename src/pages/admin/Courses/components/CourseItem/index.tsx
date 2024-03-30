@@ -91,24 +91,6 @@ const CourseItem = (props: CourseItemProps) => {
               title={name}
               description={description}
             />
-
-            <div className='course-content__item-categories'>
-              <Tag className='course-content__item-cate' color='magenta'>
-                magenta
-              </Tag>
-              <Tag className='course-content__item-cate' color='magenta'>
-                magenta
-              </Tag>
-              <Tag className='course-content__item-cate' color='magenta'>
-                magenta
-              </Tag>
-              <Tag className='course-content__item-cate' color='magenta'>
-                magenta
-              </Tag>
-              <Tag className='course-content__item-cate' color='magenta'>
-                magenta
-              </Tag>
-            </div>
             <Divider className='course-content__item-divider' />
             <Row>
               <Col className='item-price' span={12}>

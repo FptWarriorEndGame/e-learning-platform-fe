@@ -447,6 +447,8 @@
   }
 
   .slick-slider {
+    position: relative;
+
     .slick-list {
       margin: 0 -0.8rem;
       margin-bottom: -12rem;
@@ -458,9 +460,20 @@
 
     .slick-next,
     .slick-prev {
+      position: absolute;
+
       &::before {
+        font-size: 25px;
         color: black;
       }
+    }
+
+    .slick-prev {
+      left: -52px;
+    }
+
+    .slick-next {
+      right: -50px;
     }
   }
 }

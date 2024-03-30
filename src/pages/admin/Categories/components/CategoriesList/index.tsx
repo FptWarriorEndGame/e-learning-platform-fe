@@ -3,17 +3,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { Button, Popover, Space, Table, notification } from 'antd';
+import { Button, message, Space, Table, notification, Popconfirm } from 'antd';
 import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
 import type { FilterValue } from 'antd/es/table/interface';
 import React, { useState } from 'react';
 import './CategoriesList.scss';
-import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
+import { EditOutlined, EllipsisOutlined, CheckCircleOutlined, StopOutlined } from '@ant-design/icons';
 import Link from 'antd/es/typography/Link';
 import { useDispatch } from 'react-redux';
 import { ICategory } from '../../../../../types/category.type';
 import { CategoryError } from '../../../../../utils/errorHelpers';
-import { useDeleteCategoryMutation } from '../../category.service';
+import { useDeleteCategoryMutation, useUpdateActiveStatusCategoryMutation } from '../../category.service';
 import { startEditCategory } from '../../category.slice';
 import moment from 'moment';
 import { Helper } from '../../../../../utils/helper';
@@ -79,8 +79,10 @@ const SettingContent = (cateId: string) => {
 
 const CategoriesList: React.FC<CategoryListProps> = (props) => {
   const [open, setOpen] = useState(false);
-  const dispatch = useDispatch();
 
+  const [updateActiveStatusCategory] = useUpdateActiveStatusCategoryMutation();
+
+  const dispatch = useDispatch();
 
   // Create permission section
   const helper = new Helper();
@@ -125,8 +127,19 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
     dispatch(startEditCategory(cateId));
   };
 
+  const handleUpdateStatus = (categoryId: string) => {
+    updateActiveStatusCategory({ categoryId })
+      .unwrap()
+      .then(() => {
+        void message.success('Category status updated successfully');
+      })
+      .catch(() => {
+        void message.error('Failed to update Category status');
+      });
+  };
+
   const categoriesSource = props.data.map((cateItem) => {
-    const { _id, name, cateImage, cateSlug, description, createdAt, courses } = cateItem;
+    const { _id, name, cateImage, cateSlug, description, createdAt, courses, isDeleted } = cateItem;
 
     const categoryTemplateItem: DataCategoryType = {
       key: _id,
@@ -142,21 +155,34 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
         </a>
       ),
       description: <div className='txt-desc'>{description}</div>,
-      createdAt: createdAt ?? "" as string,
-      courses: courses || 0 ,
+      createdAt: createdAt ?? ('' as string),
+      courses: courses || 0,
       actions: (
-        <Space>
+        <Space size='small'>
           {props.permission.isEdit && (
-            <Button onClick={() => cateEditHandler(_id)}>
-              <EditOutlined />
-            </Button>
+            <Button icon={<EditOutlined style={{ color: '#1890ff' }} />} onClick={() => cateEditHandler(_id)} />
           )}
-
-          <Popover placement='bottomRight' content={SettingContent(_id)} title='Actions'>
-            <Button>
-              <EllipsisOutlined />
-            </Button>
-          </Popover>
+          {isDeleted ? (
+            <Popconfirm
+              title='Are you sure you want to activate this category?'
+              placement='topRight'
+              onConfirm={() => handleUpdateStatus(_id)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button icon={<CheckCircleOutlined style={{ color: '#52c41a' }} />} />
+            </Popconfirm>
+          ) : (
+            <Popconfirm
+              title='Are you sure you want to deactivate this category?'
+              placement='topRight'
+              onConfirm={() => handleUpdateStatus(_id)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button icon={<StopOutlined style={{ color: '#ff4d4f' }} />} danger />
+            </Popconfirm>
+          )}
         </Space>
       )
     };
@@ -179,7 +205,13 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
 
   return (
     <div className='users-list'>
-      <Table scroll={{ x: 'max-content', y: 'calc(100vh - 300px)' }}  columns={columns} dataSource={categoriesSource} onChange={onChange} pagination={tableParams.pagination} />
+      <Table
+        columns={columns}
+        dataSource={categoriesSource}
+        onChange={onChange}
+        pagination={tableParams.pagination}
+        scroll={{ y: 400 }}
+      />
     </div>
   );
 };

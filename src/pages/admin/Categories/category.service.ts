@@ -14,6 +14,10 @@ interface getCategoryResponse {
   message: string;
 }
 
+interface UpdateActiveStatusCategoryResponse {
+  message: string;
+}
+
 export const categoryApi = createApi({
   reducerPath: 'categoryApi',
   tagTypes: ['Categories'],
@@ -106,6 +110,17 @@ export const categoryApi = createApi({
       invalidatesTags: (result, error, id) => {
         return [{ type: 'Categories', id: 'LIST' }];
       }
+    }),
+    updateActiveStatusCategory: build.mutation<UpdateActiveStatusCategoryResponse, Partial<{ categoryId: string }>>({
+      query: (data) => ({
+        url: 'categories/category/update-active-status',
+        method: 'PATCH',
+        body: data
+      }),
+      invalidatesTags: (_, __, { categoryId }) => [
+        { type: 'Categories', id: 'LIST' },
+        { type: 'Categories', id: categoryId }
+      ]
     })
   })
 });
@@ -116,5 +131,6 @@ export const {
   useAddCategoryMutation,
   useGetCategoryQuery,
   useUpdateCategoryMutation,
-  useDeleteCategoryMutation
+  useDeleteCategoryMutation,
+  useUpdateActiveStatusCategoryMutation
 } = categoryApi;

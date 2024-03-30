@@ -65,14 +65,14 @@ export default function Blog() {
                           <Avatar src={data?.blog.blogImg} className='w-16 h-16' />
                           <div className='inline ml-3 text-3xl'>{data?.blog.author}</div>
                         </div>
-                        <div className='blog_Avatar-icon'>
+                        {/* <div className='blog_Avatar-icon'>
                           <div className='bookOutLine inline mr-4'>
                             <BookOutlined className='text-3xl hover:opacity-60 cursor-pointer' />
                           </div>
                           <div className='ellipsisOutlined inline'>
                             <EllipsisOutlined className='text-3xl hover:opacity-60 cursor-pointer' />
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     {/* Blog_Detail */}

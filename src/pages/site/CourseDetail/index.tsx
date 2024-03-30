@@ -22,14 +22,6 @@ import './CourseDetail.scss';
 import SectionList from './components/SectionList';
 import ReviewModal from './components/ReviewModal/ReviewModal';
 import PreviewModal from './components/PreviewModal/PreviewModal';
-// type Props = {}
-const courseData = [
-  'Will learning some things at this course -- task 1.',
-  'Will learning some things at this course -- task 2',
-  'Will learning some things at this course -- task 3',
-  'Will learning some things at this course -- task 4.',
-  'Will learning some things at this course -- task 5.'
-];
 
 const initCourseDetail = {
   _id: '',
@@ -46,6 +38,11 @@ const initCourseDetail = {
     name: 'Web'
   },
   userId: {
+    _id: '6468a145401d3810494f4797',
+    name: 'Nguyen Van A',
+    avatar: ''
+  },
+  authorId: {
     _id: '6468a145401d3810494f4797',
     name: 'Nguyen Van A',
     avatar: ''
@@ -77,7 +74,12 @@ const CourseDetail = () => {
 
   const [isPreviewModalVisible, setIsPreviewModalVisible] = useState(false);
 
+  const [visibleCourseData, setVisibleCourseData] = useState<number>(10);
+
   const { data } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
+
+  const courseData = data?.course.willLearns || [];
+
   const [createOrder, createOrderResult] = useCreateOrderMutation();
   const navigate = useNavigate();
 
@@ -97,6 +99,7 @@ const CourseDetail = () => {
     finalPrice,
     thumbnail,
     userId: author,
+    authorId,
     numOfReviews,
     totalVideosLength,
     sections,
@@ -212,6 +215,14 @@ const CourseDetail = () => {
     setIsPreviewModalVisible(false);
   };
 
+  const loadMoreCourseData = () => {
+    setVisibleCourseData((prevVisibleCourseData) => prevVisibleCourseData + 5);
+  };
+
+  const truncatedCourseData = courseData.slice(0, visibleCourseData);
+
+  const showLoadMoreButton = courseData.length > visibleCourseData;
+
   return (
     <div className='course-detail'>
       <div className='course-detail__wrap'>
@@ -224,7 +235,7 @@ const CourseDetail = () => {
                   items={[
                     {
                       title: 'Home'
-                    },
+                    }
                   ]}
                 />
 
@@ -364,12 +375,11 @@ const CourseDetail = () => {
         <div className='container'>
           <div className='course-detail__includes'>
             <div className='course-detail__includes-list'>
-              <div className='course-detail__includes-item'>
-                <div className='container course-detail__includes-wrap'>
+              <div className='course-detail__includes-item spacing-h-sm'>
+                <div className='container course-detail__includes-wrap '>
                   <List
                     header={<div className='course-detail__includes-header'>What you'll learn</div>}
-                    footer={<div className='course-detail__includes-footer'>Show more</div>}
-                    dataSource={courseData}
+                    dataSource={truncatedCourseData}
                     renderItem={(item) => (
                       <List.Item>
                         <Space>
@@ -381,11 +391,16 @@ const CourseDetail = () => {
                       </List.Item>
                     )}
                   />
+                  {showLoadMoreButton && (
+                    <Button className='course-detail__includes-footer' onClick={loadMoreCourseData}>
+                      Show more
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
           </div>
-          <div className='course-detail__content'>
+          <div className='course-detail__content spacing-h-sm'>
             <div className='course-detail__content-list'>
               <div className='course-detail__content-item'>
                 <h3 className='course-detail__content-title'>Course content</h3>
@@ -406,7 +421,7 @@ const CourseDetail = () => {
               </div>
             </div>
           </div>
-          <div className='course-detail__related-courses container'>
+          <div className='course-detail__related-courses'>
             {courseId !== undefined && <RelatedCourses courseId={courseId} />}
           </div>
         </div>
@@ -415,9 +430,9 @@ const CourseDetail = () => {
             <div className='course-detail__author-list'>
               <div className='course-detail__author-info'>
                 <p className='course-detail__author-intro'>Meet the intructor</p>
-                <h2 className='course-detail__author-name'>{author.name}</h2>
+                <h2 className='course-detail__author-name'>{authorId?.name}</h2>
                 <p className='course-detail__author-desc'>
-                  Patrick Jones is a content marketing professional since 2002. He has a Masters Degree in Digital
+                  {authorId?.name} is a content marketing professional since 2002. He has a Masters Degree in Digital
                   Marketing and a Bachelors in Education and has been teaching marketing strategies for over 15 years in
                   Chicago. Patrick enjoys teaching all levels and all ages. He looks forward to sharing his love of
                   building meaningful and effective content with all students to develop their marketing abilities.
@@ -426,8 +441,8 @@ const CourseDetail = () => {
               <div className='course-detail__author-avatar'>
                 <img
                   className='course-detail__author-img'
-                  src={author.avatar || 'https://www.w3schools.com/howto/img_avatar.png'}
-                  alt={author.name}
+                  src={authorId?.avatar || 'https://www.w3schools.com/howto/img_avatar.png'}
+                  alt={authorId?.name}
                 />
               </div>
             </div>

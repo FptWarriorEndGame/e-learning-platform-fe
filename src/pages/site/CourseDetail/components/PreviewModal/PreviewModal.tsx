@@ -85,6 +85,17 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ courseId, lessonId, courseN
     >
       <Title level={4}>{courseName}</Title>
       <div>
+        {(!data || !data.lessons || data.lessons.length === 0) && (
+          <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ReactPlayer
+              url='https://www.youtube.com/watch?v=yHePy1TMUMI&t'
+              controls
+              width='100%'
+              playing={true}
+              onReady={() => setIsVideoReady(true)}
+            />
+          </div>
+        )}
         {data && data.lessons && data.lessons.length > 0 && (
           <div style={{ marginTop: '20px' }}>
             <ReactPlayer

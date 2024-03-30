@@ -180,7 +180,7 @@ const CourseItem = (props: CourseItemProps) => {
               <Progress className='course-item__process' percent={progressPercent as number} />
             )}
             {/* Số lượt đánh giá! */}
-            {props.courseState !== "ordered" && (
+            {props.courseItem.avgRatings != null && props.courseState !== "ordered" && (
               <div className="mt-4">
               <span className="text-2xl mr-2">{props.courseItem.avgRatings } </span><Rate className="text-3xl mr-2" disabled value={props.courseItem.avgRatings}/>
               <span>

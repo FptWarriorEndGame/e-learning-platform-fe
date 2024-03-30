@@ -195,7 +195,7 @@ const ListDiscuss: React.FC<IDisCussProps> = ({ data, onDiscussEdit, course, sec
         columns={columns}
         dataSource={discusss}
         pagination={{ current: currentPage, pageSize, onChange: handleTableChange }}
-        scroll={{ x: 'max-content' }}
+        scroll={{ x: '1200px', y: 'calc(100vh - 300px)' }}
       />
       <ViewDetailDiscuss isVisible={detailVisible} onClose={() => setDetailVisible(false)} discussId={discussId} />
       <ViewHistoryDiscuss isVisible={historyVisible} onClose={() => setHistoryVisible(false)} discussId={discussId} />

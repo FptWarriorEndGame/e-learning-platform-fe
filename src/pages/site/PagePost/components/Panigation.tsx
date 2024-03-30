@@ -1,21 +1,16 @@
 import { Pagination } from 'antd';
 
 interface PaginationProps {
-  page: number;
+  total?: number;
   pageSize: number;
-  totalPages: number;
-  onPageChange: (page: number, pageSize: number) => void;
+  current: number;
+  onChange: (page: number, pageSize?: number) => void;
 }
 
-const Panigation = ({ page, pageSize, onPageChange, totalPages }: PaginationProps) => {
+const Panigation = ({ current, pageSize, total, onChange }: PaginationProps) => {
   return (
     <div>
-      <Pagination
-        current={page}
-        pageSize={pageSize}
-        total={totalPages * pageSize}
-        onChange={(page, pageSize) => onPageChange(page, pageSize)}
-      />
+      <Pagination current={current} pageSize={pageSize} total={total} onChange={onChange} />
     </div>
   );
 };

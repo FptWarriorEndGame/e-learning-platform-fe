@@ -23,7 +23,7 @@ const RootAdminLayout: React.FC = () => {
             <Outlet />
           </Content>
           {/* Admin Footer here */}
-          <Footer style={{ textAlign: 'center' }}>©2023 Created by Sang Tran Dev</Footer>
+          <Footer style={{ textAlign: 'center' }}>©{new Date().getFullYear()} Created by Warriror Endgame</Footer>
         </Layout>
       </Layout>
       {/* Drawer here let change later */}

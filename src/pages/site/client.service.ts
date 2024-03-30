@@ -190,7 +190,7 @@ export interface GetOrderByIdResponse {
 export interface GetAllBlogReponse {
   blogs: Blog[];
   message: string;
-  totalPages: number;
+  totalPages: number | undefined;
 }
 
 export interface GetBlogByIdResponse {

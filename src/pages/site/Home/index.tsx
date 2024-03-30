@@ -1,20 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   ApartmentOutlined,
   DingtalkOutlined,
   EditOutlined,
   FlagOutlined,
   FundFilled,
+  LeftOutlined,
+  RightOutlined,
   UserOutlined
 } from '@ant-design/icons';
 import { Card, Col, Row, Skeleton, Space } from 'antd';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
 import { RootState } from '../../../store/store';
 import { IParams } from '../../../types/params.type';
 import { openAuthModal } from '../../auth.slice';
-
+import { Switch } from 'antd';
 import {
   useGetAllBlogsQuery,
   useGetCoursesQuery,
@@ -29,11 +32,33 @@ import './Home.scss';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { sanitizeAndReturnHtml } from '../../../utils/functions';
+
+type CustomArrowProps = {
+  className?: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
+};
+
+const PrevArrow: React.FC<CustomArrowProps> = ({ className, style, onClick }) => (
+  <LeftOutlined
+    className={className}
+    style={{ ...style, display: 'block', fontSize: '20px', color: '#ccc' }}
+    onClick={onClick}
+  />
+);
+
+const NextArrow: React.FC<CustomArrowProps> = ({ className, style, onClick }) => (
+  <RightOutlined
+    className={className}
+    style={{ ...style, display: 'block', fontSize: '20px', color: '#ccc' }}
+    onClick={onClick}
+  />
+);
 
 const HomePage = () => {
   const [courseLimit, setCourseLimit] = useState(4);
-
-  // Update screenSize when the window is resized
+  const sliderRef = useRef(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,36 +68,14 @@ const HomePage = () => {
   const { data, isLoading } = useGetAllBlogsQuery({});
 
   const settings = {
-    dots: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    dots: false,
     infinite: false,
+    arrows: true,
     speed: 300,
     slidesToShow: 4,
-    slidesToScroll: 4,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
+    slidesToScroll: 4
   };
 
   const params: IParams = {
@@ -80,7 +83,11 @@ const HomePage = () => {
     _page: 1
   };
 
-  const [popularParams, setPopularParams] = useState(params);
+  const [popularParams, setPopularParams] = useState({
+    _limit: 4,
+    _page: 1,
+    _sort: "mostReviews"
+  });
 
   const [userCoursesParams, setUserCoursesParams] = useState({
     _limit: 4,
@@ -115,7 +122,7 @@ const HomePage = () => {
   const { data: frontendData, isFetching: isFrontendFetching } = useGetCoursesQuery(frontendParams);
   const { data: backendData, isFetching: isBackendFetching } = useGetCoursesQuery(backendParams);
   const { data: devopsData, isFetching: isDevopsFetching } = useGetCoursesQuery(devopsParams);
-  const { data: popularCoursesData, isFetching: isPoppularCoursesFetching } = useGetPopularCoursesQuery(popularParams);
+  const { data: popularCoursesData, isFetching: isPoppularCoursesFetching } = useGetCoursesQuery(popularParams);
 
   const isPopularLoadMore =
     (popularCoursesData?.pagination?._totalRows || 0) > (popularCoursesData?.courses?.length || 0);
@@ -440,7 +447,6 @@ const HomePage = () => {
         </div>
       </div>
 
-
       {/* Devops */}
 
       <div className='our-courses'>
@@ -470,7 +476,7 @@ const HomePage = () => {
       <div className='blogs mb-8'>
         <div className='container'>
           <h2 className='blogs__title text-6xl font-bold mb-16'>Blogs</h2>
-          <Slider {...settings}>
+          <Slider {...settings} className='mb-6'>
             {isLoading ? (
               <Skeleton />
             ) : (
@@ -481,15 +487,25 @@ const HomePage = () => {
                       className='mx-4'
                       key={blog._id}
                       hoverable
-                      style={{ width: 280 , minHeight: 400}}
-                      cover={<img alt={blog.title} src={blog.blogImg} className='w-full object-cover' />} // Đảm bảo hình ảnh phủ đầy thẻ Card
+                      style={{ width: 280, height: 400 }}
+                      cover={
+                        <img
+                          style={{ height: 400 }}
+                          alt={blog.title}
+                          src={blog.blogImg}
+                          className='w-full object-cover'
+                        />
+                      } // Đảm bảo hình ảnh phủ đầy thẻ Card
                     >
                       <Card.Meta
-                        title={blog.title}
+                        title={blog.title.length > 60 ? blog.title.substring(0, 60) + '...' : blog.title}
                         description={
-                          <div style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                            {blog.content}
-                          </div>
+                          <div
+                            className='title my-10 text-2xl opacity-90'
+                            dangerouslySetInnerHTML={sanitizeAndReturnHtml(
+                              blog.content.length > 160 ? blog.content.substring(0, 160) + '...' : blog.content
+                            )}
+                          ></div>
                         }
                       />
                     </Card>
@@ -498,7 +514,8 @@ const HomePage = () => {
               ))
             )}
           </Slider>
-          {/* Blogs */}
+
+          <div className='mb-4 opacity-0'>dsadsa</div>
         </div>
       </div>
     </div>

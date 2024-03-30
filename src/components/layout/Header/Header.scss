@@ -185,15 +185,17 @@
   position: relative;
   width: 2.2rem;
   height: 2.2rem;
+  z-index: 1;
   &::before{
     display: block;
     position: absolute;
     content: '';
-    width: 10rem;
-    height: 2rem;
+    width: 8rem;
+    height: 4rem;
     background: #fff;
-    top: 100%;
+    top: 50%;
     right: 0;
+    z-index: -1;
   }
   svg{
     width: 100%;
@@ -206,7 +208,7 @@
  }
  .input{
   position: absolute;
-  top: 100%;
+  top: 180%;
   right: 0;
   background: aliceblue;
   padding: 1.2rem;

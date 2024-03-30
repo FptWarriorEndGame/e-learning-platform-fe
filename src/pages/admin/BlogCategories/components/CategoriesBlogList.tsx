@@ -90,7 +90,9 @@ const CategoriesBlogList: React.FC<CategoryListProps> = ({ data, onCategoryEdit 
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
-      render: (_: ICategoryBlogs, record: ICategoryBlogs) => <span>{record.description}</span>
+      render: (_: ICategoryBlogs, record: ICategoryBlogs) => (
+        <span>{record.description.length > 60 ? record.description.substring(0, 60) + '...' : record.description}</span>
+      )
     },
 
     {

@@ -64,7 +64,7 @@ const CommentForm: React.FC<CommentListProps> = ({ blogId, commentLength, commen
 
   return (
     <form className='comment-form' onSubmit={handleSubmit}>
-      <div className='comment-title text-3xl mb-6 ml-14'>{commentLength} bình luận</div>
+      {/* <div className='comment-title text-3xl mb-6 ml-14'>{commentLength} bình luận</div> */}
       <div className='div flex mb-20'>
         <ReactQuill
           className='comment-input'

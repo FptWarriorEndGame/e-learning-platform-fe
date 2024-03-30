@@ -1,5 +1,6 @@
+import React, { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { Button, Collapse, CollapseProps } from 'antd';
+import { Button, Collapse } from 'antd';
 import { formatTime } from '../../../../../utils/functions';
 import { useGetSectionsByCourseIdQuery } from '../../../client.service';
 import CourseDetailLessonList from '../LessonList';
@@ -12,12 +13,17 @@ type SectionListProps = {
 
 const SectionList = (props: SectionListProps) => {
   const { data: sectionData } = useGetSectionsByCourseIdQuery(props.courseId);
+  const [visibleSections, setVisibleSections] = useState<number>(10);
 
   const onChange = (key: string | string[]) => {
     console.log(key);
   };
 
-  const sectionItems: CollapseProps['items'] = sectionData?.sections.map((sectionItem, index) => {
+  const loadMoreSections = () => {
+    setVisibleSections((prevVisibleSections) => prevVisibleSections + 10);
+  };
+
+  const sectionItems = sectionData?.sections.slice(0, visibleSections).map((sectionItem, index) => {
     const { _id, name, numOfLessons, totalVideosLength } = sectionItem;
 
     const sectionTemplateItem = {
@@ -42,9 +48,11 @@ const SectionList = (props: SectionListProps) => {
         defaultActiveKey={sectionData?.sections.map((sectionItem, index) => `${index}`)}
         onChange={onChange}
       />
-      <Button className='course-detail__content-collapse-btn'>
-        10 more section <DownOutlined />
-      </Button>
+      {sectionData && sectionData.sections.length > visibleSections && (
+        <Button className='course-detail__content-collapse-btn' onClick={loadMoreSections}>
+          Load more sections <DownOutlined />
+        </Button>
+      )}
     </div>
   );
 };

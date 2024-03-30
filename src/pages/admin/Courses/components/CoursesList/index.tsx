@@ -99,6 +99,7 @@ const CoursesList: React.FC<CoursesListProps> = (props) => {
       title: 'Categories',
       dataIndex: 'categories',
       filters: cateFilterList,
+      width: '10%',
       onFilter: (value: string | number | boolean, record: DataCourseType) =>
         record.categories.startsWith(value.toString()),
       filterSearch: true
@@ -166,7 +167,7 @@ const CoursesList: React.FC<CoursesListProps> = (props) => {
         dataSource={props.courseData}
         onChange={onChange}
         pagination={tableParams.pagination}
-        scroll={{ y: 400 }}
+        scroll={{ y: 'calc(100vh - 420px)' }}
       />
     </div>
   );

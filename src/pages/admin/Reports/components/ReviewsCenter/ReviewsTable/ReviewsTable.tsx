@@ -206,7 +206,7 @@ const ReviewsTable: React.FC = () => {
         rowKey='_id'
         // pagination={false}
         loading={isFetching}
-        scroll={{ y: 400 }}
+        scroll={{ y: 600 }}
       />
       {/* <Pagination
         style={{ float: 'right', marginRight: '0px' }}

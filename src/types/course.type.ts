@@ -34,7 +34,12 @@ export interface ICourse extends IBase {
     _id: string;
     name: string;
   }; // id of Lập trình/Khoa học máy tính
-  userId: {
+  userId?: {
+    _id: string;
+    name: string;
+    avatar: string;
+  }; // FK
+  authorId?: {
     _id: string;
     name: string;
     avatar: string;

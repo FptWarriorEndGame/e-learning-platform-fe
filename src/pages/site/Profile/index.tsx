@@ -19,7 +19,7 @@ const profileItems: TabsProps['items'] = [
         <p>About</p>
       </div>
     ),
-    children: `Content of Tab Pane 1`
+    children: ``
   },
   {
     key: 'activity',
@@ -31,7 +31,7 @@ const profileItems: TabsProps['items'] = [
         <p>Activities</p>
       </div>
     ),
-    children: `Content of Tab Pane 2`
+    children: `Some activies of users`
   }
 ];
 
