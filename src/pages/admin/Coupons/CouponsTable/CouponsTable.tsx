@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Table, Pagination, Button, Space, message, Popconfirm, Select } from 'antd';
+import { Input, Table, Pagination, Button, Space, message, Popconfirm, Select, DatePicker } from 'antd';
 import {
   EyeOutlined,
   HistoryOutlined,
@@ -25,12 +25,15 @@ const CouponsTable: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [dateRange, setDateRange] = useState<[moment.Moment | null, moment.Moment | null]>([null, null]);
 
   const { data, isFetching } = useGetCouponsQuery({
     _page: currentPage,
     _limit: pageSize,
     _q: searchTerm,
-    _status: statusFilter
+    _status: statusFilter,
+    dateStart: dateRange[0]?.toISOString(),
+    dateEnd: dateRange[1]?.toISOString()
   });
 
   const [updateActiveStatusCoupon] = useUpdateActiveStatusCouponMutation();
@@ -66,6 +69,16 @@ const CouponsTable: React.FC = () => {
   const handleChangeStatusFilter = (value: string) => {
     setStatusFilter(value);
     setCurrentPage(1);
+  };
+
+  const handleDateRangeChange = (dates: [moment.Moment | null, moment.Moment | null] | null) => {
+    if (dates) {
+      setDateRange(dates);
+      setCurrentPage(1);
+    } else {
+      setDateRange([null, null]);
+      setCurrentPage(1);
+    }
   };
 
   const columns = [
@@ -191,6 +204,14 @@ const CouponsTable: React.FC = () => {
         </Button>
         <div className='search-bar'>
           <Search placeholder='Search by description' onSearch={handleSearch} enterButton allowClear />
+        </div>
+        <div className='date-range-filter'>
+          <DatePicker.RangePicker
+            onChange={handleDateRangeChange}
+            style={{ width: 300, marginRight: 10 }}
+            placeholder={['Start Coupons', 'End Coupons']}
+            allowClear={true}
+          />
         </div>
         <div className='status-filter'>
           <Select defaultValue='all' style={{ width: 120 }} onChange={handleChangeStatusFilter}>

@@ -13,4 +13,6 @@ export interface IParams {
   _status?: string;
   _rating?: number;
   _date?: string;
+  dateStart?: string;
+  dateEnd?: string;
 }
