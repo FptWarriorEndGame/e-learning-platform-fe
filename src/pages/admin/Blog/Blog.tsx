@@ -1,6 +1,8 @@
-import { PlusOutlined } from '@ant-design/icons';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import { PlusOutlined, UndoOutlined } from '@ant-design/icons';
 import { Button, Input, Select, Skeleton, Space } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { startEditBlog } from './blog.slice';
 import AddBlog from './Components/AddBlog/AddBlog';
@@ -13,76 +15,35 @@ import { useGetBlogCategoriesQuery } from '../BlogCategories/categoriesBlog.serv
 const { Search } = Input;
 const { Option } = Select;
 
-type ParamsType = {
-  _q: string;
-  _page: number;
-  _limit: number;
-  _status?: string;
-  categoryId?: string;
-  tags?: string;
-};
-
 const Blogs = () => {
-  const [params, setParams] = useState<ParamsType>({
-    _limit: 10,
-    _page: 1,
-    _q: '',
-    tags: undefined
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [authorSearch, setAuthorSearch] = useState('');
+  const [tagsSearch, setTagsSearch] = useState('');
+  const [categorySearch, setCategorySearch] = useState(''); 
+
+  const {
+    data: blogsData,
+    isFetching: isFetchingBlogs,
+    refetch
+  } = useGetBlogsQuery({
+    _q: searchTerm,
+    _page: currentPage,
+    _limit: pageSize,
+    _author: authorSearch,
+    _status: statusFilter,
+    _tags: tagsSearch,
+    categoryId: categorySearch
   });
+  useEffect(() => {
+    refetch();
+  }, [searchTerm, statusFilter, authorSearch, tagsSearch, categorySearch]);
 
-  const { data: blogsData, isFetching: isFetchingBlogs } = useGetBlogsQuery(params);
-  const { data: categoriesResponse, isFetching: isFetchingCategories } = useGetBlogCategoriesQuery(params);
-
+  const { data: categoriesResponse, isFetching: isFetchingCategories } = useGetBlogCategoriesQuery({});
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-
-  const onTagClick = (tags: string) => {
-    if (tags === '') {
-      setParams((prevParams) => ({
-        ...prevParams,
-        _page: 1, // Trở lại trang đầu tiên
-        tags: undefined // Loại bỏ bộ lọc tags
-      }));
-    } else {
-      setParams((prevParams) => ({
-        ...prevParams,
-        _page: 1, // Trở lại trang đầu tiên
-        tags: tags // Cập nhật bộ lọc tag
-      }));
-    }
-  };
-
-  const onSearchHandler = (value: string) => {
-    setParams((prevParams) => {
-      const trimmedValue = value.trim();
-      if (trimmedValue) {
-        return {
-          ...prevParams,
-          _q: trimmedValue,
-          _page: 1
-        };
-      } else {
-        return {
-          ...prevParams,
-          _q: '',
-          _page: prevParams._page
-        };
-      }
-    });
-  };
-
-  const filterStatusHandler = (value: string) => {
-    setParams((prevParams) => {
-      return {
-        ...prevParams,
-        _status: value !== 'all' ? value : undefined // Gửi 'active' hoặc 'inactive', loại bỏ nếu chọn 'all'
-      };
-    });
-  };
-
-  const onSearchAuthorHandler = (value: string) => {
-    setParams((prevParams) => ({ ...prevParams, author: value.trim(), _page: 1 }));
-  };
 
   const blogEditHandler = (blogId: string) => {
     dispatch(startEditBlog(blogId));
@@ -98,22 +59,44 @@ const Blogs = () => {
     setOpen(false);
   };
 
+  const onSearchHandler = (value: string) => {
+    refetch();
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
+  const onSearchAuthorHandler = (value: string) => {
+    refetch();
+    setAuthorSearch(value);
+    setCurrentPage(1);
+  };
+
+  const filterStatusHandler = (value: string) => {
+    refetch();
+    setStatusFilter(value);
+    setCurrentPage(1);
+  };
+
   const onCategoryChangeHandler = (value: string) => {
-    setParams((prevParams) => {
-      if (value !== 'All') {
-        return {
-          ...prevParams,
-          categoryId: value,
-          _page: 1
-        };
-      } else {
-        return {
-          ...prevParams,
-          categoryId: '',
-          _page: 1
-        };
-      }
-    });
+    refetch();
+    setCategorySearch(value);
+    setCurrentPage(1);
+  };
+
+  const onTagClick = (value: string) => {
+    refetch();
+    setTagsSearch(value);
+    setCurrentPage(1);
+  };
+
+  const resetParams = () => {
+    refetch();
+    setSearchTerm('');
+    setAuthorSearch('');
+    setCategorySearch('');
+    setTagsSearch('');
+    setStatusFilter('all');
+    setCurrentPage(1);
   };
 
   return (
@@ -159,13 +142,16 @@ const Blogs = () => {
               onChange={onCategoryChangeHandler}
               placeholder='Select a category'
             >
-              <Option value='All'>All Categories</Option>
+              <Option value=''>All Categories</Option>
               {categoriesResponse?.blogsCategories.map((category) => (
                 <Option key={category._id} value={category._id}>
                   {category.name}
                 </Option>
               ))}
             </Select>
+            <Button onClick={resetParams} type='default' className='btn-wrap'>
+              <UndoOutlined />
+            </Button>
           </Space>
         </div>
         <div className='blogs__show-result'></div>

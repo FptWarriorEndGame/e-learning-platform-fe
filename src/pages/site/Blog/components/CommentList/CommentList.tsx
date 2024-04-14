@@ -35,9 +35,10 @@ export interface Comment {
 interface CommentListProps {
   comments: IBlogComment[];
   blogId: string;
+  onCommentDelete?: () => void;
 }
 
-const CommentList: React.FC<CommentListProps> = ({ comments, blogId }) => {
+const CommentList: React.FC<CommentListProps> = ({ comments, blogId, onCommentDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentComment, setCurrentComment] = useState<IBlogComment | null>(null);
   const [editContent, setEditContent] = useState('');
@@ -120,6 +121,9 @@ const CommentList: React.FC<CommentListProps> = ({ comments, blogId }) => {
           const updatedComments = localComments.filter((comment) => comment._id !== commentId);
           setLocalComments(updatedComments);
           notification.success({ message: 'Bình luận đã được xóa thành công.' });
+          if (onCommentDelete) {
+            onCommentDelete();
+          }
         } catch (error) {
           notification.error({ message: 'Lỗi khi xóa bình luận.' });
         }

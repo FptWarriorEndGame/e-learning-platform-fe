@@ -19,14 +19,6 @@ export default function Blog() {
   const commentCount = DataCommentBlogs ? DataCommentBlogs.comments.length : 0;
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
-  const handleCommentClick = () => {
-    if (isAuth) {
-      setModalOpen(true);
-    } else {
-      message.info('Please login in to comment.');
-    }
-  };
-
   return (
     <div className='mt-40'>
       <div className='mt-10 mb-8'>
@@ -39,17 +31,6 @@ export default function Blog() {
                     <div>
                       <div className='inline text-3xl'>{data?.blog.author}</div>
                       <hr className='my-3' />
-                    </div>
-                    <div className='flex items-center'>
-                      <HeartOutlined className='text-3xl mr-2' /> 0
-                      <SlidingModal
-                        blogId={id || 'default-id'}
-                        isOpen={isModalOpen}
-                        onClose={() => setModalOpen(false)}
-                      />
-                      <button onClick={handleCommentClick}>
-                        <CommentOutlined className='text-3xl ml-4 mr-2' /> {commentCount}
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -87,6 +68,9 @@ export default function Blog() {
                     </div>
                   </div>
                 </div>
+              </Card>
+              <Card className='mt-6'>
+                <SlidingModal blogId={id || 'default-id'} isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
               </Card>
             </Col>
           </Row>

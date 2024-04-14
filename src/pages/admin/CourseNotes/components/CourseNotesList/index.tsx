@@ -13,7 +13,7 @@ import { startEditNotesCourse } from '../../courseNotes.slice'; // Update the im
 
 interface DataNoteType {
   key: React.Key;
-  name: string;
+  name: string | undefined;
   avatar?: string;
   content: string;
   videoMinute?: string;
@@ -80,6 +80,11 @@ const CourseNotesList: React.FC<CourseNotesListProps> = ({ data, onNoteEdit }) =
       title: 'Name',
       key: 'user',
       render: (_, record) => <Space>{record.name}</Space>
+    },
+    {
+      title: 'Content',
+      key: 'content',
+      render: (_, record) => <Space>{record.content}</Space>
     },
     {
       title: 'Course Name',

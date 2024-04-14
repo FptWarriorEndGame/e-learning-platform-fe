@@ -1,39 +1,62 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Input, Select, Space } from 'antd';
-import { useState } from 'react';
+import { Breadcrumb, Button, Input, Select, Space } from 'antd';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { RootState } from '../../../store/store';
+import { ICourse } from '../../../types/course.type';
+import { UserRole } from '../../../types/user.type';
+import { useGetCoursesQuery } from '../Courses/course.service';
 import './Users.scss';
 import AddUser from './components/AddUser';
 import UsersList from './components/UsersList';
 import { startEditUser } from './user.slice';
-import { Breadcrumb } from 'antd';
-import { Link } from 'react-router-dom';
-import { RootState } from '../../../store/store';
-import { UserRole } from '../../../types/user.type';
+
 const { Search } = Input;
+const { Option } = Select;
 
 const Users = () => {
   const currentAdminRole = useSelector((state: RootState) => state.auth.adminRole) as UserRole;
-
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const [courses, setCourses] = useState<ICourse[]>([]);
+  const { data: dataList, isFetching: isFetchingCourse } = useGetCoursesQuery({ _q: '' });
+
+  useEffect(() => {
+    if (dataList) {
+      setCourses(dataList.courses);
+    }
+  }, [dataList]);
 
   const [searchValue, setSearchValue] = useState('');
+  const [searchCourse, setSearchCourse] = useState('');
+  const [searchRole, setSearchRole] = useState('');
+  const [status, setStatus] = useState('all');
+  const [date, setDate] = useState('all');
+
   const onSearchHandler = (value: string) => {
     setSearchValue(value);
   };
 
-  const onSelectChange = (value: string) => {
-    console.log(`selected ${value}`);
-  };
-
-  const onSelectSearch = (value: string) => {
-    console.log('search:', value);
+  const onSearchCourseHandler = (value: string) => {
+    setSearchCourse(value);
   };
 
   const createUserHandler = () => {
     setOpen(true);
     dispatch(startEditUser(''));
+  };
+
+  const onSearchRole = (role: string) => {
+    setSearchRole(role);
+  };
+
+  const onStatusHandler = (value: string) => {
+    setStatus(value);
+  };
+
+  const onDatesHandler = (value: string) => {
+    setDate(value);
   };
 
   return (
@@ -60,7 +83,7 @@ const Users = () => {
             )}
 
             <Search
-              placeholder='Search Name of User'
+              placeholder='Search Name of Email'
               onSearch={onSearchHandler}
               style={{ width: 200 }}
               className='search-wrap'
@@ -69,63 +92,40 @@ const Users = () => {
               showSearch
               placeholder='Search by course'
               optionFilterProp='children'
-              onChange={onSelectChange}
-              onSearch={onSelectSearch}
-              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
-              options={[
-                {
-                  value: 'Course: HTML CSS',
-                  label: 'Course: HTML CSS'
-                },
-                {
-                  value: 'Course: Javascript',
-                  label: 'Course: Javascript'
-                },
-                {
-                  value: 'Course: Reactjs',
-                  label: 'Course: Reactjs'
-                }
-              ]}
-            />
+              onChange={onSearchCourseHandler}
+            >
+              {courses.map((course) => (
+                <Option key={course._id} value={course._id}>
+                  {course.name}
+                </Option>
+              ))}
+            </Select>
 
             <Select
               size='middle'
               placeholder='Date'
-              defaultValue={['All dates']}
-              // onChange={handleChange}
+              onChange={onDatesHandler}
               style={{ width: '20rem' }}
               options={[
                 {
-                  value: 'jack',
-                  label: 'New Users today'
+                  value: 'all',
+                  label: 'All dates'
                 },
                 {
-                  value: 'lucy',
-                  label: 'New Users Yesterdays day'
+                  value: 'today',
+                  label: 'Today'
                 },
                 {
-                  value: 'New Users the last 7 days',
-                  label: 'New Users the last 7 days'
+                  value: 'yesterday',
+                  label: 'Yesterday'
                 },
                 {
-                  value: 'New Users the last 30 days',
-                  label: 'New Users the last 30 days'
+                  value: '7days',
+                  label: 'Last 7 days'
                 },
                 {
-                  value: 'jack',
-                  label: 'Active users today'
-                },
-                {
-                  value: 'lucy',
-                  label: 'Active users Yesterdays day'
-                },
-                {
-                  value: 'Active users the last 7 days',
-                  label: 'Active users the last 7 days'
-                },
-                {
-                  value: 'Active users the last 30 days',
-                  label: 'Active users the last 30 days'
+                  value: '30days',
+                  label: 'Last 30 days'
                 }
               ]}
             />
@@ -134,21 +134,32 @@ const Users = () => {
               <Select
                 size='middle'
                 placeholder='Role'
-                defaultValue={['All Roles']}
-                // onChange={handleChange}
+                onChange={onSearchRole}
                 style={{ width: '10rem' }}
                 options={[
                   {
-                    value: 'Users',
-                    label: 'Users'
+                    value: '',
+                    label: 'All roles'
                   },
                   {
-                    value: 'Admins',
-                    label: 'Admins'
+                    value: 'STUDENT',
+                    label: 'Student'
                   },
                   {
-                    value: 'Teachers',
-                    label: 'Teachers'
+                    value: 'USER',
+                    label: 'User'
+                  },
+                  {
+                    value: 'ADMIN',
+                    label: 'Admin'
+                  },
+                  {
+                    value: 'AUTHOR',
+                    label: 'Author'
+                  },
+                  {
+                    value: 'Employee',
+                    label: 'Employee'
                   }
                 ]}
               />
@@ -157,21 +168,20 @@ const Users = () => {
             <Select
               size='middle'
               placeholder='Status'
-              defaultValue={['Status']}
-              // onChange={handleChange}
+              onChange={onStatusHandler}
               style={{ width: '15rem' }}
               options={[
                 {
-                  value: 'Suspending',
-                  label: 'Suspending'
+                  value: 'all',
+                  label: 'All'
                 },
                 {
-                  value: 'Active',
+                  value: 'active',
                   label: 'Active'
                 },
                 {
-                  value: 'Paying',
-                  label: 'Paying'
+                  value: 'inactive',
+                  label: 'Inactive'
                 }
               ]}
             />
@@ -179,7 +189,14 @@ const Users = () => {
         </div>
         <div className='users__show-result'></div>
         <div className='users__content'>
-          <UsersList searchValue={searchValue} onEditUser={() => setOpen(true)} />
+          <UsersList
+            searchValue={searchValue}
+            searchCourseValue={searchCourse}
+            onEditUser={() => setOpen(true)}
+            status={status}
+            date={date}
+            searchRole={searchRole}
+          />
         </div>
       </div>
       <AddUser isOpen={open} onClose={() => setOpen(false)} />

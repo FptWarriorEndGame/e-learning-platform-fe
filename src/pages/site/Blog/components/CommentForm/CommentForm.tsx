@@ -20,10 +20,9 @@ function htmlToText(htmlString: string) {
 interface CommentListProps {
   comments: IBlogComment[];
   blogId: string;
-  commentLength: number;
 }
 
-const CommentForm: React.FC<CommentListProps> = ({ blogId, commentLength, comments }) => {
+const CommentForm: React.FC<CommentListProps> = ({ blogId, comments }) => {
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
   const [addComment, { isLoading }] = useAddBlogCommentMutation();
@@ -68,7 +67,7 @@ const CommentForm: React.FC<CommentListProps> = ({ blogId, commentLength, commen
       <div className='div flex mb-20'>
         <ReactQuill
           className='comment-input'
-          placeholder='Thêm bình luận...'
+          placeholder='Comments...'
           value={comment}
           onChange={handleContentChange}
         />

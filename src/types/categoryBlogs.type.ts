@@ -5,6 +5,7 @@ export interface ICategoryBlogs extends IBase {
   code: string;
   name: string;
   cateImage: string;
+  thumbnail: string;
   description: string;
   actions: JSX.Element;
 }

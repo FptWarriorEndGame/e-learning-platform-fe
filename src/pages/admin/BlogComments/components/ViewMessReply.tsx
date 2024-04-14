@@ -1,4 +1,4 @@
-import { Modal } from 'antd';
+import { Carousel, Modal } from 'antd';
 import { transformDate } from '../../../../utils/functions';
 import { useGetBlogCommentsByIdQuery } from '../blogComments.service';
 import { Empty, Card } from 'antd';
@@ -18,15 +18,29 @@ const ViewMessReply: React.FC<ViewMessReplyProps> = ({ blogCommentId, isVisible,
         {dataBlogCommentsDetail ? (
           <>
             <div className='title text-3xl mb-7 flex justify-center'>
-              <span className='text-4xl'>Blog Comments Reply</span>
+              <span className='text-2xl'>Blog Comments Reply</span>
             </div>
-            <div className='name text-2xl mb-7'>
+            <Carousel dotPosition='top' className='name text-2xl mb-7 flex'>
               {dataBlogCommentsDetail.replies.length > 0 ? (
                 dataBlogCommentsDetail.replies.map((reply, index) => (
                   <Card key={index} style={{ marginBottom: '15px' }}>
-                    <img src={reply.userId?.avatar} alt={reply.userId?.name} />
-                    <p className='text-3xl mt-4'>Name: {reply.userId?.name}</p>
-                    <p className='text-3xl mt-4'>Reply: {reply.content}</p>
+                    <img
+                      style={{
+                        width: '50px',
+                        height: '50px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        display: 'block'
+                      }}
+                      src={reply.userId?.avatar}
+                      alt={reply.userId?.name}
+                    />
+                    <p className='text-2xl mt-4 opacity-75'>
+                      Name: <span className='opacity-75'>{reply.userId?.name}</span>{' '}
+                    </p>
+                    <p className='text-2xl mt-4 opacity-75'>
+                      Reply: <span className='opacity-75'>{reply.content}</span>
+                    </p>
                   </Card>
                 ))
               ) : (
@@ -34,7 +48,7 @@ const ViewMessReply: React.FC<ViewMessReplyProps> = ({ blogCommentId, isVisible,
                   <Empty description='No Reply' />
                 </div>
               )}
-            </div>
+            </Carousel>
           </>
         ) : (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>

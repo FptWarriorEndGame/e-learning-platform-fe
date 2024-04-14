@@ -15,6 +15,7 @@ import CouponDetailsModal from '../CouponDetailsModal/CouponDetailsModal';
 import CouponHistoriesModal from '../CouponHistoryModal/CouponHistoryModal';
 import CreateCouponDrawer from '../CreateCouponDrawer/CreateCouponDrawer';
 import UpdateCouponDrawer from '../UpdateCouponDrawer/UpdateCouponDrawer';
+import { transformDate } from '../../../../utils/functions';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -86,8 +87,29 @@ const CouponsTable: React.FC = () => {
       title: 'Discount Amount',
       dataIndex: 'discountAmount',
       key: 'discountAmount',
-      width: '10%',
+      width: '20%',
       render: (_: ICoupon, record: ICoupon) => <span>{record.discountAmount}</span>
+    },
+    {
+      title: 'Start Coupon',
+      dataIndex: 'dateStart',
+      key: 'dateStart',
+      width: '20%',
+      render: (_: ICoupon, record: ICoupon) => <span>{record.dateStart ? transformDate(record.dateStart) : 'N/A'}</span>
+    },
+    {
+      title: 'End Coupon',
+      dataIndex: 'EndDate',
+      key: 'EndDate',
+      width: '20%',
+      render: (_: ICoupon, record: ICoupon) => <span>{transformDate(record.dateEnd)}</span>
+    },
+    {
+      title: 'Create At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width: '20%',
+      render: (_: ICoupon, record: ICoupon) => <span>{record.createdAt ? transformDate(record.createdAt) : 'N/A'}</span>
     },
     {
       title: 'Status',

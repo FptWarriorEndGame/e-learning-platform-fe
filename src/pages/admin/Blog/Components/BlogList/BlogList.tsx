@@ -83,6 +83,14 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories, onTa
       )
     },
     {
+      title: 'Thumbnail Blogs',
+      dataIndex: 'Thumbnail',
+      key: 'Thumbnail',
+      render: (_: IBlog, record: IBlog) => (
+        <img className='rounded-full' style={{ width: '50px', height: '50px' }} src={record?.thumbnail}></img>
+      )
+    },
+    {
       title: 'Category',
       dataIndex: 'category',
       key: 'category',
@@ -109,6 +117,7 @@ const BlogsList: React.FC<BlogListProps> = ({ data, onBlogEdit, categories, onTa
       sorter: (a, b) => a.author.localeCompare(b.author),
       render: (_: IBlog, record: IBlog) => <span>{record.author}</span>
     },
+
     {
       title: 'Content',
       dataIndex: 'content',

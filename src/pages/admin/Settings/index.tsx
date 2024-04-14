@@ -3,23 +3,23 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useEffect, useState } from 'react';
+import { UploadOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Card, Form, Input, Select, Upload, notification } from 'antd';
-import { Link } from 'react-router-dom';
-import './setting.scss';
 import TextArea from 'antd/es/input/TextArea';
 import { Option } from 'antd/es/mentions';
-import { UploadOutlined } from '@ant-design/icons';
-import { useGetUserQuery, useUpdateUserMutation } from '../Users/user.service';
+import { UploadChangeParam } from 'antd/lib/upload/interface';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { RootState } from '../../../store/store';
 import { IUser } from '../../../types/user.type';
-import { UploadChangeParam } from 'antd/lib/upload/interface';
+import { useGetUserQuery, useUpdateUserSettingMutation } from '../Users/user.service';
+import './setting.scss';
 
 const Settings = () => {
   const [form] = Form.useForm();
   const userId = useSelector((state: RootState) => state.auth.adminId);
-  const [updateUser] = useUpdateUserMutation();
+  const [updateUser] = useUpdateUserSettingMutation();
   const { data: user } = useGetUserQuery(userId);
   const [formInitialValues, setFormInitialValues] = useState({});
   const [fileList, setFileList] = useState<any[]>([]);
@@ -59,12 +59,13 @@ const Settings = () => {
       });
   };
 
-  +useEffect(() => {
+  useEffect(() => {
     if (user) {
       const initialValues = {
         name: user.user.name,
         username: user.user.username,
         email: user.user.email,
+        role: user.user.role,
         phone: user.user.phone,
         headline: user.user.headline,
         biography: user.user.biography,
@@ -106,6 +107,14 @@ const Settings = () => {
                   rules={[{ required: true, message: 'Please input your name!' }]}
                 >
                   <Input placeholder='Enter your full name' />
+                </Form.Item>
+                <Form.Item
+                  className='setting-group-item'
+                  label='Role'
+                  name='role'
+                  rules={[{ required: true, message: 'Please input your role!' }]}
+                >
+                  <Input placeholder='Enter your role' />
                 </Form.Item>
                 <Form.Item
                   className='setting-group-item'
@@ -178,7 +187,6 @@ const Settings = () => {
                   <Input placeholder='Enter your youtube (http://youtube.com/)' />
                 </Form.Item>
               </div>
-
             </div>
           </div>
           <Form.Item className='setting-btn'>

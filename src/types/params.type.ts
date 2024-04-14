@@ -12,4 +12,10 @@ export interface IParams {
   _cateName?: string;
   _status?: string;
   _rating?: number;
+  _date?: string;
+  _tags?: string;
+  _title?: string;
+  categoryId?: string;
+  _courses?: string;
+  _role?: string;
 }

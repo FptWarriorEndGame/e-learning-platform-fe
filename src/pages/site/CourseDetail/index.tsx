@@ -1,7 +1,7 @@
 import { CheckOutlined, HeartOutlined, RightCircleFilled, StarFilled } from '@ant-design/icons';
 import { Breadcrumb, Button, Col, List, Row, Space, Typography, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ButtonCmp from '../../../components/Button';
 import { BACKEND_URL } from '../../../constant/backend-domain';
@@ -15,7 +15,8 @@ import {
   useCreateOrderMutation,
   useGetCourseDetailQuery,
   useGetSectionsByCourseIdQuery,
-  useGetUserQuery
+  useGetUserQuery,
+  useIncreaseCourseViewMutation
 } from '../client.service';
 import { addToCart } from '../client.slice';
 import './CourseDetail.scss';
@@ -45,7 +46,8 @@ const initCourseDetail = {
   authorId: {
     _id: '6468a145401d3810494f4797',
     name: 'Nguyen Van A',
-    avatar: ''
+    avatar: '',
+    biography: ''
   },
   numOfReviews: 0,
   totalVideosLength: 0,
@@ -55,7 +57,8 @@ const initCourseDetail = {
   avgRatingStars: 0,
   isBought: false,
   createdAt: '',
-  updatedAt: ''
+  updatedAt: '',
+  views: 0
 };
 
 const CourseDetail = () => {
@@ -70,6 +73,8 @@ const CourseDetail = () => {
 
   const { courseId } = params;
 
+  const [increaseCourseView] = useIncreaseCourseViewMutation();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [isPreviewModalVisible, setIsPreviewModalVisible] = useState(false);
@@ -79,6 +84,24 @@ const CourseDetail = () => {
   const { data } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
 
   const courseData = data?.course.willLearns || [];
+
+  const increaseView = async () => {
+    try {
+      if (!courseId) {
+        console.error('Course ID is undefined');
+        return;
+      }
+
+      await increaseCourseView(courseId);
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      console.error('Error increasing course view:', error);
+    }
+  };
+
+  useEffect(() => {
+    increaseView().catch((error) => console.error('Error in increaseView:', error));
+  }, [courseId, increaseCourseView]);
 
   const [createOrder, createOrderResult] = useCreateOrderMutation();
   const navigate = useNavigate();
@@ -107,7 +130,8 @@ const CourseDetail = () => {
     avgRatingStars,
     students,
     isBought,
-    updatedAt
+    updatedAt,
+    views
   } = courseDetail;
 
   let thumbnailUrl = '';
@@ -265,11 +289,17 @@ const CourseDetail = () => {
                       <span>students</span>
                     </Space>
                   </div>
+                  <div className='course-detail__info-item course-detail__info-views'>
+                    <Space>
+                      <span>{views}</span>
+                      <span>views</span>
+                    </Space>
+                  </div>
                 </div>
                 <div className='course-detail__intro-author'>
                   <span className=''>Author</span>
-                  <Link to={`/user/${author._id}`} className='course-detail__intro-author-name'>
-                    {author.name}
+                  <Link to={`/user/${authorId?._id}`} className='course-detail__intro-author-name'>
+                    {authorId?.name}
                   </Link>
                 </div>
                 <div className='course-detail__intro-updated-at'>Last updated {transformDate(updatedAt)}</div>
@@ -392,7 +422,11 @@ const CourseDetail = () => {
                     )}
                   />
                   {showLoadMoreButton && (
-                    <Button className='course-detail__includes-footer' onClick={loadMoreCourseData}>
+                    <Button
+                      className='course-detail__includes-footer'
+                      style={{ marginBottom: '20px' }}
+                      onClick={loadMoreCourseData}
+                    >
                       Show more
                     </Button>
                   )}
@@ -432,10 +466,7 @@ const CourseDetail = () => {
                 <p className='course-detail__author-intro'>Meet the intructor</p>
                 <h2 className='course-detail__author-name'>{authorId?.name}</h2>
                 <p className='course-detail__author-desc'>
-                  {authorId?.name} is a content marketing professional since 2002. He has a Masters Degree in Digital
-                  Marketing and a Bachelors in Education and has been teaching marketing strategies for over 15 years in
-                  Chicago. Patrick enjoys teaching all levels and all ages. He looks forward to sharing his love of
-                  building meaningful and effective content with all students to develop their marketing abilities.
+                  {authorId?.name} {authorId?.biography}
                 </p>
               </div>
               <div className='course-detail__author-avatar'>

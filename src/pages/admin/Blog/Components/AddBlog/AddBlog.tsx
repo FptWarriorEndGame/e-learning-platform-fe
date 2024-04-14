@@ -90,6 +90,13 @@ const AddBlog: React.FC<CreateBlogProps> = ({ isOpen, onClose, categories }) => 
             <Form.Item name='author' label='Author' rules={[{ required: true, message: 'Please enter author name' }]}>
               <Input placeholder='Enter author name' />
             </Form.Item>
+            <Form.Item
+              name='thumbnail'
+              label='Thumbnail'
+              rules={[{ required: true, message: 'Please enter Thumbnail' }]}
+            >
+              <Input placeholder='Enter Thumbnail' />
+            </Form.Item>
             <Form.Item name='tags' label='Tags'>
               <Input placeholder='Enter tags' />
             </Form.Item>

@@ -1,5 +1,6 @@
 import { Col, Row, Tabs, TabsProps } from 'antd';
 import './Profile.scss';
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 // type Props = {}
 import { ReadOutlined, StockOutlined, UserOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -7,6 +8,11 @@ import Button from '../../../components/Button';
 import { RootState } from '../../../store/store';
 import { formatVideoLengthToHours } from '../../../utils/functions';
 import { useGetUserDetailQuery } from '../client.service';
+
+interface AchievementData {
+  image: string;
+  text: string;
+}
 
 const profileItems: TabsProps['items'] = [
   {
@@ -53,6 +59,39 @@ const Profile = () => {
   const { data, isFetching } = useGetUserDetailQuery(params, {
     skip: !userId
   });
+
+  const achievements = {
+    Newbie: {
+      image: 'https://lwfiles.mycourse.app/65ac73296e5c564383a8e28b-public/badges/newbie.png',
+      text: 'Newbie'
+    },
+    Intermediate: {
+      image: 'https://thumb.ac-illust.com/d9/d9577885428afb171e9d09dad899ee1e_t.jpeg',
+      text: 'Intermediate'
+    },
+    Excellence: {
+      image: 'https://thumbs.dreamstime.com/b/print-235466646.jpg',
+      text: 'Excellence'
+    },
+    Legend: {
+      image:
+        'https://static.vecteezy.com/system/resources/previews/033/507/252/non_2x/dragon-cartoon-illustration-isolated-on-white-background-cute-dragon-icon-vector.jpg',
+      text: 'Legend'
+    }
+  };
+
+  const [achievementData, setAchievementData]: [
+    AchievementData | null,
+    Dispatch<SetStateAction<AchievementData | null>>
+  ] = useState<AchievementData | null>(null);
+
+  useEffect(() => {
+    if (data && data.user.achievement) {
+      const achievementKey = data.user.achievement as keyof typeof achievements;
+
+      setAchievementData(achievements[achievementKey]);
+    }
+  }, [data]);
 
   const sumTotalVideosLengthDone = data?.user.courses.reduce((acc, course) => {
     return acc + course.totalVideosLengthDone;
@@ -158,12 +197,14 @@ const Profile = () => {
             <div className='profile-achievements-tt'>ACHIEVEMENTS</div>
             <div className='profile-achievements-list'>
               <div className='profile-achievements-item'>
-                <div className='level'>
-                  <div className='level-img'>
-                    <img src='https://lwfiles.mycourse.app/65ac73296e5c564383a8e28b-public/badges/newbie.png' alt='' />
+                {achievementData && (
+                  <div className='level'>
+                    <div className='level-img'>
+                      <img src={achievementData.image} alt='' style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                    </div>
+                    <div className='level-text'>{achievementData.text}</div>
                   </div>
-                  <div className='level-text'>Newbie</div>
-                </div>
+                )}
               </div>
               <div className='profile-achievements-item'>
                 <div className='profile-achievements-star'>

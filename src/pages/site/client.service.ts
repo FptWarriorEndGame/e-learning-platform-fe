@@ -88,7 +88,7 @@ export interface getLessonsResponse {
   message: string;
 }
 
-export interface getUserByLessonResponse {
+export interface getUserByCourseResponse {
   users: IUser[];
   message: string;
 }
@@ -146,6 +146,7 @@ export interface getUserResponse {
 
 export interface IUserDetail extends IUser {
   courses: ICourseEnrolledByUser[];
+  achievement: string;
 }
 
 export interface getUserDetailResponse {
@@ -248,6 +249,7 @@ export interface CreateContactResponse {
 }
 
 export interface GetBlogCommentsResponse {
+  length: number;
   comments: IBlogComment[];
   message: string;
 }
@@ -387,14 +389,14 @@ export const clientApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}`,
     prepareHeaders(headers) {
-      headers.set('authorization', 'Bearer ABCXYZ');
-
       const token = localStorage.getItem('token');
 
       if (token) {
         const decodedToken: { exp: number; iat: number; userId: string; email: string } = jwtDecode(token);
         headers.set('authorization', `Bearer ${token}`);
         headers.set('UserId', decodedToken.userId);
+      } else {
+        headers.set('role', 'client');
       }
 
       return headers;
@@ -665,9 +667,9 @@ export const clientApi = createApi({
         }
       })
     }),
-    getAllUserByLesson: build.query<getUserByLessonResponse, { lessonId: string }>({
+    getAllUserByCourse: build.query<getUserByCourseResponse, { courseId: string }>({
       query: (payload) => ({
-        url: `lessons/lesson/${payload.lessonId}/users`
+        url: `/courses/course/getUserByCourse/${payload.courseId}`
       })
     }),
     getAllLessons: build.query<getLessonsResponse, void>({
@@ -826,7 +828,7 @@ export const clientApi = createApi({
         url: `/comments/${commentId}`,
         method: 'DELETE'
       }),
-      invalidatesTags: (result, error, { commentId }) => [{ type: 'BlogComment', id: commentId }]
+      invalidatesTags: () => [{ type: 'BlogComment', id: 'LIST' }]
     }),
     toggleLikeComment: build.mutation<{ message: string }, { commentId: string; userId: string }>({
       query: (likeData) => ({
@@ -990,6 +992,12 @@ export const clientApi = createApi({
       }),
       providesTags: () => [{ type: 'Courses', id: 'LIST' }]
     }),
+    increaseCourseView: build.mutation<void, string>({
+      query: (courseId) => ({
+        url: `courses/course/increase-view/${courseId}`,
+        method: 'POST'
+      })
+    }),
     // Discuss
     getAllDiscussions: build.query<GetAllDiscussionsResponse, void>({
       query: () => ({
@@ -1115,7 +1123,8 @@ export const {
   useGetValidCouponsForCoursesWithoutUserQuery,
   useGetTotalPriceWithoutUserQuery,
   useGetFreeLessonsByCourseIdQuery,
-  useGetAllUserByLessonQuery,
+  useGetAllUserByCourseQuery,
+  useIncreaseCourseViewMutation,
   // Discuss
   useGetAllDiscussionsQuery,
   useGetDiscussionsByLessonIdQuery,

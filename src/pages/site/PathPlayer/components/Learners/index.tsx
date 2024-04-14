@@ -2,17 +2,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { useSelector } from 'react-redux';
-import { useGetAllUserByLessonQuery } from '../../../client.service';
+import { useGetAllUserByCourseQuery } from '../../../client.service';
 import { RootState } from '../../../../../store/store';
 import { Avatar, Card, Tooltip } from 'antd';
+import { useSearchParams } from 'react-router-dom';
 
 type Props = {
   className: string;
 };
 
 const Learners = (props: Props) => {
-  const lessonId = useSelector((state: RootState) => state.client.lessonId);
-  const { data: usersData, isLoading: isLoadingUsers } = useGetAllUserByLessonQuery({ lessonId });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const courseId = searchParams.get('courseId') || '';
+
+  const { data: usersData, isLoading: isLoadingUsers } = useGetAllUserByCourseQuery({ courseId });
 
   const userAvatars = usersData?.users;
 
@@ -29,7 +32,7 @@ const Learners = (props: Props) => {
           ) : (
             userAvatars?.map((user) => (
               <Tooltip title={user.name} key={user._id}>
-                <Avatar src={user.avatar} className='cursor-pointer' />
+                <Avatar src={`https://loremflickr.com/320/240?random=${user._id}`} className='cursor-pointer' />
               </Tooltip>
             ))
           )}

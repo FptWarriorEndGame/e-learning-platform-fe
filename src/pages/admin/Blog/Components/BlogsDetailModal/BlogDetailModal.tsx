@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'antd';
 import { IBlog } from '../../../../../types/blog.type';
 import { ICategoryBlogs } from '../../../../../types/categoryBlogs.type';
-import { transformDate } from '../../../../../utils/functions';
+import { sanitizeAndReturnHtml, transformDate } from '../../../../../utils/functions';
 
 interface BlogDetailModalProps {
   blog: IBlog | null;
@@ -57,17 +57,14 @@ const BlogDetailModal: React.FC<BlogDetailModalProps> = ({ blog, isVisible, onCl
               {transformDate(blog.createdAt ? blog.createdAt : new Date().toISOString())}
             </span>
           </p>
-          <div>
+          <p>
             Content:
-            <span className='opacity-70'>
-              {showFullContent ? blog.content : `${blog.content.substring(0, 100)}...`}
-            </span>
-            {blog.content.length > 100 && (
-              <Button type='link' onClick={toggleContentVisibility}>
-                {showFullContent ? 'Show Less' : 'Read More'}
-              </Button>
-            )}
-          </div>
+            <div
+              dangerouslySetInnerHTML={sanitizeAndReturnHtml(
+                showFullContent ? blog.content : blog.content.substring(0, 200)
+              )}
+            ></div>
+          </p>
         </div>
       </div>
     </Modal>

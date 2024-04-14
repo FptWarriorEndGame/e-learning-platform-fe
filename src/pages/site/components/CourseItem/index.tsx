@@ -240,8 +240,8 @@ const CourseItem = (props: CourseItemProps) => {
                         <div className='course-item__prices-free'>FREE</div>
                       ) : (
                         <>
-                          <span className='course-item__prices-old'>${props.courseItem.price}</span>
-                          <span className='course-item__prices-new'>${props.courseItem.finalPrice}</span>
+                          <span className='course-item__prices-old'>${props.courseItem.price.toFixed(1)}</span>
+                          <span className='course-item__prices-new'>${props.courseItem.finalPrice.toFixed(1)}</span>
                         </>
                       )}
                     </div>

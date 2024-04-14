@@ -59,6 +59,8 @@ const Courses = () => {
 
   const userId = useSelector((state: RootState) => state.auth.userId);
 
+  console.log("userId", userId)
+
   const searchValue = searchParams.get('_q') || '';
   const sortValue = searchParams.get('_sort') || 'mostReviews';
   const authorValue = searchParams.getAll('_author') || '';
@@ -77,7 +79,7 @@ const Courses = () => {
     _sort: sortValue,
     _topic: topicValue,
     _avgRatings: avgRatingsValue,
-    userId
+    userId: userId
   };
   const [searchFilterParams, setSearchFilterParams] = useState(params)
 

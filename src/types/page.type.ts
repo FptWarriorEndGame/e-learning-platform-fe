@@ -12,6 +12,7 @@ export interface Blog extends IBase {
   datePublished: string;
   content: string;
   userId: string;
+  thumbnail: string;
   categoryId: ICategoryBlogs;
   __v: number;
 }

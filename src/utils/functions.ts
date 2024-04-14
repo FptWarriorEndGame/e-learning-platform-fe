@@ -44,7 +44,7 @@ export const sanitizeAndReturnHtml = (htmlContent: string): SanitizedHtml => {
   return { __html: sanitizedContent };
 };
 
-export const transformDate = (apiDate: string) => {
+export const transformDate = (apiDate: Date | string) => {
   const parsedDate = dayjs(apiDate);
   const formattedDate = parsedDate.format('DD/MM/YYYY HH:mm:ss');
   return formattedDate;

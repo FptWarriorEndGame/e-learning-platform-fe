@@ -24,12 +24,14 @@ const ReviewsTable: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [dateFilterValue, setDateFilterValue] = useState('all');
 
   const { data, isFetching } = useGetReviewsQuery({
     _page: currentPage,
     _limit: pageSize,
     _q: searchTerm,
-    _status: statusFilter
+    _status: statusFilter,
+    _date: dateFilterValue
   });
 
   const [updateActiveStatusReview] = useUpdateActiveStatusReviewMutation();
@@ -89,6 +91,11 @@ const ReviewsTable: React.FC = () => {
     setIsRepliesModalVisible(true);
   };
 
+  const ReviewDateFilterChange = (value: string) => {
+    setDateFilterValue(value);
+    setCurrentPage(1);
+  };
+
   const columns = [
     {
       title: 'Course Name',
@@ -117,7 +124,8 @@ const ReviewsTable: React.FC = () => {
       dataIndex: 'ratingStar',
       key: 'ratingStar',
       ellipsis: true,
-      width: '10%'
+      width: '10%',
+      sorter: (a: IReview, b: IReview) => a.ratingStar - b.ratingStar
     },
     {
       title: 'Status',
@@ -125,6 +133,15 @@ const ReviewsTable: React.FC = () => {
       key: 'isDeleted',
       render: (_: IReview, record: IReview) => <span>{record.isDeleted ? 'Inactive' : 'Active'}</span>,
       width: '10%'
+    },
+    {
+      title: 'Create at',
+      dataIndex: 'Create at',
+      key: 'createAt',
+      render: (_: IReview, record: IReview) => (
+        <span>{record.createdAt ? new Date(record.createdAt).toLocaleString() : 'N/A'}</span>
+      ),
+      width: '20%'
     },
     {
       title: 'Actions',
@@ -183,7 +200,7 @@ const ReviewsTable: React.FC = () => {
   return (
     <div className='reviews-table'>
       <div className='search-bar-container'>
-        <div className='search-bar'>
+        <div className='w-3/5 mr-3'>
           <Search
             placeholder='Search by title'
             onSearch={handleSearch}
@@ -192,6 +209,35 @@ const ReviewsTable: React.FC = () => {
             className='search-wrap'
           />
         </div>
+        <Select
+          size='middle'
+          placeholder='All Dates'
+          defaultValue={'All dates'}
+          onChange={ReviewDateFilterChange}
+          style={{ width: '200px', marginRight: '10px' }}
+          options={[
+            {
+              value: 'all',
+              label: 'All dates'
+            },
+            {
+              value: 'today',
+              label: 'Today'
+            },
+            {
+              value: 'yesterday',
+              label: 'yesterday'
+            },
+            {
+              value: '7days',
+              label: 'Last 7 days'
+            },
+            {
+              value: '30days',
+              label: 'Last 30 days'
+            }
+          ]}
+        />
         <div className='status-filter'>
           <Select defaultValue='all' style={{ width: 120 }} onChange={handleChangeStatusFilter}>
             <Option value='all'>All</Option>

@@ -1,4 +1,4 @@
-@import "../../../assets/sass/base";
+@import '../../../assets/sass/base';
 
 .course-detail {
   margin-top: $header-height;
@@ -36,7 +36,7 @@
 
   &__title {
     color: $light-text-color;
-    @include h-style("h3");
+    @include h-style('h3');
     margin-top: 2rem;
   }
 
@@ -104,7 +104,7 @@
     }
 
     &-header {
-      @include h-style("h3");
+      @include h-style('h3');
     }
   }
 
@@ -112,7 +112,7 @@
 
   &__content {
     &-title {
-      @include h-style("h3");
+      @include h-style('h3');
     }
 
     &-wrap {
@@ -162,7 +162,7 @@
     }
 
     &-name {
-      @include h-style("h2");
+      @include h-style('h2');
       margin: 1rem 0rem 2rem 0rem;
     }
 
@@ -194,7 +194,7 @@
     }
 
     &-price {
-      @include h-style("h3");
+      @include h-style('h3');
       color: $dark-text-color;
     }
 
@@ -446,12 +446,8 @@
     flex-wrap: wrap;
   }
 }
-.course-detail__content {
-  // margin-top: 4%;
-}
 .course-detail__includes {
-  max-height: 47.5rem;
-  height: 47.5rem;
+  min-height: 50rem;
   &-list {
     height: 100%;
   }
@@ -459,6 +455,7 @@
     height: 100%;
   }
 }
+
 .course-detail__includes-wrap {
   padding-top: 4rem !important;
   .ant-list-item {
@@ -473,28 +470,6 @@
   width: 70%;
   @media (max-width: 992px) {
     width: 100%;
-  }
-}
-.course-detail__content {
-  // margin-top: 4%;
-}
-.course-detail__includes {
-  max-height: 47.5rem;
-  height: 47.5rem;
-  &-list {
-    height: 100%;
-  }
-  &-item {
-    height: 100%;
-  }
-}
-.course-detail__includes-wrap {
-  padding-top: 4rem !important;
-  .ant-list-item {
-    padding: 1.6rem 0 !important;
-  }
-  .ant-list-footer {
-    padding-top: 4rem !important;
   }
 }
 .course-detail__intro-wrap-course {
@@ -555,6 +530,7 @@
     box-shadow:
       0 2px 4px rgba(0, 0, 0, 0.08),
       0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 10;
     @media (max-width: 992px) {
       position: relative;
     }

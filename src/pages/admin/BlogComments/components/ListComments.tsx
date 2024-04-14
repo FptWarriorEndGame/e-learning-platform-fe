@@ -133,12 +133,14 @@ const ListComments: React.FC<IBlogProps> = ({ data, onBlogCommentsEdit, blog }) 
             icon={<MessageOutlined style={{ color: '#1890ff' }} />}
             onClick={() => handleViewMess(record.blogId)}
             className='btn-wrap'
-          ></Button>
-          <Button
+          >
+            <span style={{ color: '#1890ff' }}>{record.replies.length}</span>
+          </Button>
+          {/* <Button
             icon={<EditOutlined style={{ color: '#1890ff' }} />}
             onClick={() => BlogCommentsEditHandler(record.blogId)}
             className='btn-wrap'
-          ></Button>
+          ></Button> */}
           <Button icon={<EyeOutlined style={{ color: '#1890ff' }} />} onClick={() => handleViewDetail(record.blogId)} />
           <Button
             icon={<HistoryOutlined style={{ color: '#1890ff' }} />}

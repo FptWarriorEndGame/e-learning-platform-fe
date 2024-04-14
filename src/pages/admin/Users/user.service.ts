@@ -126,7 +126,7 @@ export const userApi = createApi({
       }
     }),
     // Generic type theo thứ tự là kiểu response trả về và argument
-    getUsersSelect: build.query<getUsersSelectResponse, {role?: string}>({
+    getUsersSelect: build.query<getUsersSelectResponse, { role?: string }>({
       query: (params) => ({
         url: '/users/select',
         params: params
@@ -307,6 +307,17 @@ export const userApi = createApi({
       // Trong trường hợp này thì Users sẽ chạy lại
       invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Users', id: 'LIST' }])
     }),
+    updateUserSetting: build.mutation<IUser, { _id: string; body: Omit<IUser, '_id'> }>({
+      query(data) {
+        return {
+          url: `/users/user/setting/${data._id}`,
+          method: 'PUT',
+          body: data.body
+        };
+      },
+      // Trong trường hợp này thì Users sẽ chạy lại
+      invalidatesTags: (result, error, data) => (error ? [] : [{ type: 'Users', id: 'LIST' }])
+    }),
     updateActiveStatusUser: build.mutation<UpdateActiveStatusUserResponse, Partial<{ userId: string }>>({
       query: (data) => ({
         url: 'users/user/update-active-status',
@@ -356,5 +367,6 @@ export const {
   useUpdatePermissionMutation,
   useApproveUserMutation,
   useGetUserHistoriesQuery,
-  useChangePasswordMutation
+  useChangePasswordMutation,
+  useUpdateUserSettingMutation
 } = userApi;

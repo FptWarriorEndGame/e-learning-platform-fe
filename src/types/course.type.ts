@@ -43,6 +43,7 @@ export interface ICourse extends IBase {
     _id: string;
     name: string;
     avatar: string;
+    biography: string;
   }; // FK
   requirements?: string[];
   willLearns?: string[];

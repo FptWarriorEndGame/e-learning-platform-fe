@@ -85,7 +85,7 @@ const CourseItem = (props: CourseItemProps) => {
               className='course-content__item-meta'
               avatar={
                 <Popover content={<AuthorInfo info={userId} />} title='Author Info' placement='topLeft'>
-                  <Avatar src={userId.avatar} />
+                  <Avatar src={userId.avatar } />
                 </Popover>
               }
               title={name}

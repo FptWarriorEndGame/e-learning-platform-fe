@@ -13,6 +13,6 @@ if (process.env.NODE_ENV === 'development') {
     BACKEND_API = 'http://localhost:9000'; // Local or Development API URL
   } else {
     // Production (assume process.env.BACKEND_URL is set on your server)
-    BACKEND_API = process.env.BACKEND_URL ?? "https://e-learning-api-dev.trannhatsang.com"; 
+    BACKEND_API = process.env.BACKEND_URL ?? "https://e-learning-api.trannhatsang.com"; 
   }
   export const BACKEND_URL = BACKEND_API

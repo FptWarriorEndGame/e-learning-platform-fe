@@ -31,6 +31,13 @@ const ReviewRepliesModal: React.FC<ReviewRepliesModalProps> = ({ reviewId, isOpe
       ellipsis: true
     },
     {
+      title: 'Created At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width: '20%',
+      render: (createdAt: string) => <span>{createdAt ? new Date(createdAt).toLocaleString() : 'N/A'}</span>
+    },
+    {
       title: 'Created By',
       dataIndex: 'createBy',
       key: 'createBy',

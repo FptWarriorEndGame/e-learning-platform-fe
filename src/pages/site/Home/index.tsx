@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   ApartmentOutlined,
@@ -86,7 +87,7 @@ const HomePage = () => {
   const [popularParams, setPopularParams] = useState({
     _limit: 4,
     _page: 1,
-    _sort: "mostReviews"
+    _sort: 'mostReviews'
   });
 
   const [userCoursesParams, setUserCoursesParams] = useState({
@@ -492,7 +493,7 @@ const HomePage = () => {
                         <img
                           style={{ height: 400 }}
                           alt={blog.title}
-                          src={blog.blogImg}
+                          src={blog.thumbnail}
                           className='w-full object-cover'
                         />
                       } // Đảm bảo hình ảnh phủ đầy thẻ Card

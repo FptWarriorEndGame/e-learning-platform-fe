@@ -13,7 +13,7 @@ interface ViewHistoryBlogCommentsProps {
 const ViewHistoryBlogComments: React.FC<ViewHistoryBlogCommentsProps> = ({ blogCommentId, isVisible, onClose }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  
+
   const { data: commentsHistories, isFetching: isHistoryFetching } = useLoadHistoriesForBlogCommentsQuery({
     commentId: blogCommentId,
     params: { _page: currentPage, _limit: pageSize }
@@ -41,7 +41,7 @@ const ViewHistoryBlogComments: React.FC<ViewHistoryBlogCommentsProps> = ({ blogC
 
   return (
     <>
-      <Modal title='Category Blog History' visible={isVisible} onCancel={onClose} footer={null} width={1500}>
+      <Modal title='Comments Blog History' visible={isVisible} onCancel={onClose} footer={null} width={1500}>
         <Table
           dataSource={commentsHistories?.results as IActionLog[]}
           columns={columns}

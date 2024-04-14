@@ -1,27 +1,26 @@
 import {
   CheckCircleOutlined,
   CheckOutlined,
-  CloseCircleOutlined,
   EditOutlined,
-  EllipsisOutlined,
   HistoryOutlined,
   ProfileOutlined,
   StopOutlined
 } from '@ant-design/icons';
-import { Avatar, Button, Popconfirm, Popover, Skeleton, Space, Table, Tag, Tooltip, message, notification } from 'antd';
+import { Avatar, Button, Popconfirm, Skeleton, Space, Table, Tag, Tooltip, message, notification } from 'antd';
 import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
 import type { FilterValue } from 'antd/es/table/interface';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../../store/store';
+import { IUser, UserRole } from '../../../../../types/user.type';
+import { Helper } from '../../../../../utils/helper';
+import { useGetCoursesQuery } from '../../../Courses/course.service';
 import { useApproveUserMutation, useGetUsersQuery, useUpdateActiveStatusUserMutation } from '../../user.service';
 import { startEditUser } from '../../user.slice';
-import './UsersList.scss';
 import ViewHistoryUser from '../HistoryUser/HistoryUser';
-import { Helper } from '../../../../../utils/helper';
 import ViewDetailUser from '../ViewDetailUser';
-import { IUser, UserRole } from '../../../../../types/user.type';
-import { RootState } from '../../../../../store/store';
+import './UsersList.scss';
 
 interface TableParams {
   pagination?: TablePaginationConfig;
@@ -35,11 +34,14 @@ interface UserListProps {
   searchValue: string;
   userId?: string;
   isDeleted?: boolean;
+  searchCourseValue: string;
+  searchRole: string;
+  status: string;
+  date: string;
 }
 
 const UsersList: React.FC<UserListProps> = (props) => {
   const currentUserRole = useSelector((state: RootState) => state.auth.adminRole) as UserRole;
-
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -84,18 +86,17 @@ const UsersList: React.FC<UserListProps> = (props) => {
     setHistoryUserId(null);
   };
 
-  const [usersParams, setUsersParams] = useState({
-    _q: props.searchValue
-  });
   const helper = new Helper();
   const enumData = helper.getEnumData;
-  useEffect(() => {
-    setUsersParams({
-      _q: props.searchValue
-    });
-  }, [props.searchValue]);
 
-  const { data, isFetching } = useGetUsersQuery(usersParams);
+  const { data, isFetching } = useGetUsersQuery({
+    _q: props.searchValue,
+    _courses: props.searchCourseValue,
+    _role: props.searchRole,
+    _status: props.status,
+    _date: props.date
+  });
+
   const [approveUser, _] = useApproveUserMutation();
   const dispatch = useDispatch();
   const showUserDetail = () => {
@@ -202,41 +203,43 @@ const UsersList: React.FC<UserListProps> = (props) => {
               <HistoryOutlined />
             </Button>
 
-            {currentUserRole !== UserRole.AUTHOR && (user.isDeleted ? (
-              <Popconfirm
-                title='Are you sure you want to activate this blog?'
-                placement='topRight'
-                onConfirm={() => updateActiveStatusUserHandler(user._id)}
-                okText='Yes'
-                cancelText='No'
-              >
-                <Button icon={<CheckCircleOutlined style={{ color: '#52c41a' }} />} />
-              </Popconfirm>
-            ) : (
-              <Popconfirm
-                title='Are you sure you want to deactivate this blog category?'
-                placement='topRight'
-                onConfirm={() => updateActiveStatusUserHandler(user._id)}
-                okText='Yes'
-                cancelText='No'
-              >
-                <Button icon={<StopOutlined style={{ color: '#ff4d4f' }} />} danger />
-              </Popconfirm>
-            ))}
+            {currentUserRole !== UserRole.AUTHOR &&
+              (user.isDeleted ? (
+                <Popconfirm
+                  title='Are you sure you want to activate this blog?'
+                  placement='topRight'
+                  onConfirm={() => updateActiveStatusUserHandler(user._id)}
+                  okText='Yes'
+                  cancelText='No'
+                >
+                  <Button icon={<CheckCircleOutlined style={{ color: '#52c41a' }} />} />
+                </Popconfirm>
+              ) : (
+                <Popconfirm
+                  title='Are you sure you want to deactivate this blog category?'
+                  placement='topRight'
+                  onConfirm={() => updateActiveStatusUserHandler(user._id)}
+                  okText='Yes'
+                  cancelText='No'
+                >
+                  <Button icon={<StopOutlined style={{ color: '#ff4d4f' }} />} danger />
+                </Popconfirm>
+              ))}
 
-            {currentUserRole !== UserRole.AUTHOR && user.status == 'NEW' && ( // Check if user.status is not 'new'
-              <Popconfirm
-                title='Approve User'
-                description='Are you sure to approve this user to become an author?'
-                onConfirm={() => onApproveUser(user._id)}
-                okText='Yes'
-                cancelText='No'
-              >
-                <Button className='btn-wrap'>
-                  <CheckOutlined />
-                </Button>
-              </Popconfirm>
-            )}
+            {currentUserRole !== UserRole.AUTHOR &&
+              user.status == 'NEW' && ( // Check if user.status is not 'new'
+                <Popconfirm
+                  title='Approve User'
+                  description='Are you sure to approve this user to become an author?'
+                  onConfirm={() => onApproveUser(user._id)}
+                  okText='Yes'
+                  cancelText='No'
+                >
+                  <Button className='btn-wrap'>
+                    <CheckOutlined />
+                  </Button>
+                </Popconfirm>
+              )}
           </Space>
         )
       };

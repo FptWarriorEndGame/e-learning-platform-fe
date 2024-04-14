@@ -14,7 +14,7 @@ interface CommentsProps {
 }
 
 const CommentList: React.FC<CommentsProps> = ({ userId, lessonId, courseId }) => {
-  const { data, isLoading, isError } = useGetDiscussionsByLessonIdQuery(lessonId);
+  const { data, isLoading, isError, refetch } = useGetDiscussionsByLessonIdQuery(lessonId);
   const discuss = data?.discuss;
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -61,6 +61,9 @@ const CommentList: React.FC<CommentsProps> = ({ userId, lessonId, courseId }) =>
             message: 'Success',
             description: 'Discussion deleted successfully'
           });
+          if (refetch) {
+            refetch;
+          }
         } catch (error) {
           notification.error({
             message: 'Error',

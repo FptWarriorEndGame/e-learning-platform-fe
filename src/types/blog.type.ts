@@ -9,6 +9,7 @@ export interface IBlog extends IBase {
   technology: string;
   tags: string[];
   readTime: any;
+  thumbnail: string;
   datePublished: string;
   content: string;
   userId: string;

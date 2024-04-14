@@ -130,9 +130,11 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ courseId, lessonId, courseN
                   <div>{lesson.name}</div>
                   <div>{lesson.description}</div>
                 </div>
-                <div style={{ marginLeft: '10px' }}>
-                  {lesson.videoLength ? formatVideoLength(lesson.videoLength) : 'Unknown'}
-                </div>
+                {index !== 0 && (
+                  <div style={{ marginLeft: '10px' }}>
+                    {lesson.videoLength ? formatVideoLength(lesson.videoLength) : 'Unknown'}
+                  </div>
+                )}
                 {currentLessonIndex === index && isVideoReady && <i className='fas fa-play-circle'></i>}
               </List.Item>
             )}

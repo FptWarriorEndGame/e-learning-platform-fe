@@ -38,8 +38,14 @@ const AddCourseNotes: React.FC<AddCourseNoteProps> = ({ isOpen, onClose }) => {
     if (noteResponse && !isFetching) {
       form.setFieldsValue({
         ...noteResponse,
-        lessonId: noteResponse.notes?.lessonId?._id,
-        courseId: noteResponse.notes?.courseId?._id
+        lessonId:
+          typeof noteResponse.notes?.lessonId !== 'string'
+            ? noteResponse.notes?.lessonId._id
+            : noteResponse.notes?.lessonId,
+        courseId:
+          typeof noteResponse.notes?.courseId !== 'string'
+            ? noteResponse.notes?.courseId._id
+            : noteResponse.notes?.courseId
       });
     } else {
       form.resetFields();
@@ -89,7 +95,7 @@ const AddCourseNotes: React.FC<AddCourseNoteProps> = ({ isOpen, onClose }) => {
         <Form.Item name='content' label='Content' rules={[{ required: true, message: 'Please enter the content' }]}>
           <Input placeholder='Enter the content' />
         </Form.Item>
-        <Form.Item name='course' label='Course Id' rules={[{ required: true, message: 'Please enter the Course Id' }]}>
+        {/* <Form.Item name='courseId' label='Course name' rules={[{ required: true, message: 'Please enter the Course' }]}>
           <Select placeholder='Select a course'>
             {course?.courses.map((course) => (
               <Select.Option key={course._id} value={course._id}>
@@ -98,15 +104,15 @@ const AddCourseNotes: React.FC<AddCourseNoteProps> = ({ isOpen, onClose }) => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item name='lesson' label='Lesson Id' rules={[{ required: true, message: 'Please enter the Lesson Id' }]}>
+        <Form.Item name='lessonId' label='Lesson name' rules={[{ required: true, message: 'Please enter the Lesson' }]}>
           <Select placeholder='Select a lesson'>
             {lessons?.lessons.map((lesson) => (
               <Select.Option key={lesson._id} value={lesson._id}>
                 {lesson.name}
               </Select.Option>
             ))}
-          </Select>
-        </Form.Item>
+          </Select> */}
+        {/* </Form.Item> */}
 
         <Form.Item
           name='videoMinute'

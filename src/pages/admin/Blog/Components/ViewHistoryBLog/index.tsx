@@ -40,7 +40,7 @@ const ViewHistoryBlog: React.FC<ViewHistoryBlogProps> = ({ blogId, isVisible, on
 
   return (
     <>
-      <Modal title='Category Blog History' visible={isVisible} onCancel={onClose} footer={null} width={1500}>
+      <Modal title='Blog History' visible={isVisible} onCancel={onClose} footer={null} width={1500}>
         <Table
           dataSource={blogHistories?.results as IActionLog[]}
           columns={columns}

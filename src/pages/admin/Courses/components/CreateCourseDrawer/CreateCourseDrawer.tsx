@@ -90,6 +90,13 @@ const CreateCourseDrawer: React.FC<CreateCourseDrawerProps> = ({ isOpen, onClose
           <Input placeholder='Enter thumbnail URL' />
         </Form.Item>
         <Form.Item
+          name='coursePreview'
+          label='Course Preview'
+          rules={[{ required: true, message: 'Please enter the course preview URL!' }]}
+        >
+          <Input placeholder='Enter course preview URL' />
+        </Form.Item>
+        <Form.Item
           name='price'
           label='Price'
           rules={[

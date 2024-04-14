@@ -47,16 +47,16 @@ const Notes = (props: Props) => {
   const {
     data: lessonNotesData,
     error,
-    isLoading: isLoadingLesson
+    isLoading: isLoadingLesson,
   } = useGetNotesByLessonIdQuery(filter, {
     skip: filter === 'all',
-    refetchOnMountOrArgChange: true // Đảm bảo refetch dữ liệu mỗi khi component mount hoặc argument thay đổi
+    refetchOnMountOrArgChange: true
   });
 
   const {
     data: allNotesData,
     error: errorAll,
-    isLoading: isLoadingAll
+    isLoading: isLoadingAll,
   } = useGetAllNotesQuery(filter, {
     skip: filter !== 'all',
     refetchOnMountOrArgChange: true
