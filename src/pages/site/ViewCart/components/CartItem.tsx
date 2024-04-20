@@ -20,7 +20,7 @@ const CartItem = (props: CartItemProps) => {
     name,
     finalPrice,
     thumbnail,
-    userId: author,
+    authorId: author,
     avgRatingStars,
     numOfReviews,
     lessons,
@@ -52,7 +52,7 @@ const CartItem = (props: CartItemProps) => {
                 {name}
               </Link>
               <p className='view-cart__list-item-info-line view-cart__list-item-info-author'>
-                By <Link to={`/user/${author._id}`}>{author.name}</Link> and 1 other
+                By <Link to={`/user/${author._id}`}>{author.name}</Link>
               </p>
               <div className='view-cart__list-item-info-line view-cart__list-item-info-rating'>
                 <div className='info-rating'>
@@ -80,7 +80,6 @@ const CartItem = (props: CartItemProps) => {
             <div className='view-cart__list-item-info-line view-cart__list-item-info__btns'>
               <Space direction='vertical'>
                 <Button onClick={() => props.onRemove(_id)}>Remove</Button>
-                <Button>Save for later</Button>
               </Space>
             </div>
           </Col>

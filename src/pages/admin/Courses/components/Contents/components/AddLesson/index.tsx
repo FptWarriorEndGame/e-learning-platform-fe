@@ -16,6 +16,7 @@ type AddLessonProps = {
   // onSubmit: (formData: Omit<ILesson, '_id'>) => void;
   // videoLength?: number;
   // onCloseActivies: () => void;
+  sectionId: string;
 };
 
 interface UploadVideoResponse {
@@ -23,7 +24,7 @@ interface UploadVideoResponse {
   videoPath: string;
 }
 
-const AddLesson: React.FC<AddLessonProps> = () => {
+const AddLesson: React.FC<AddLessonProps> = ({sectionId}) => {
   const { courseId } = useParams();
 
   const [open, setOpen] = useState(false);
@@ -88,8 +89,6 @@ const AddLesson: React.FC<AddLessonProps> = () => {
     accept: '.pdf'
   };
 
-  const sectionId = useSelector((state: RootState) => state.course.sectionId);
-
   const showDrawer = () => {
     setOpen(true);
   };
@@ -148,7 +147,7 @@ const AddLesson: React.FC<AddLessonProps> = () => {
       type: lessonType,
       description: formData.description,
       videoLength: videoLength,
-      courseId: courseId
+      courseId: courseId as string
     };
 
     addLesson(lessonData)

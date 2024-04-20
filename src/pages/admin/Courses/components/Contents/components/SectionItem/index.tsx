@@ -52,7 +52,7 @@ const SectionItem = (props: SectionItemProps) => {
               {/* <AddActivities sectionId={props.section._id} /> */}
               {/* or
               <Button>Import activity</Button> */}
-              <AddLesson/>
+              <AddLesson sectionId={props.section._id} />
             </Space>
           </div>
         </div>

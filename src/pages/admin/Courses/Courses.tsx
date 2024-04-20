@@ -222,6 +222,7 @@ const Courses = () => {
           thumbnail,
           categoryId,
           userId,
+          learners,
           createdAt,
           updatedAt,
           isDeleted
@@ -248,7 +249,7 @@ const Courses = () => {
           access: Access.FREE,
           finalPrice: finalPrice,
           price: price,
-          learners: 10,
+          learners: learners,
           createdAt: '18 jun 2023',
           updatedAt: '18 jun 2023',
           actions: (
@@ -291,6 +292,7 @@ const Courses = () => {
           level,
           thumbnail,
           categoryId,
+          learners,
           userId,
           createdAt,
           updatedAt,
@@ -318,7 +320,7 @@ const Courses = () => {
           // Gio Tinh. -> Course detail
           finalPrice: finalPrice,
           price: price,
-          learners: 10,
+          learners: learners,
           createdAt: moment(createdAt).format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: moment(updatedAt).format('YYYY-MM-DD HH:mm:ss'),
           actions: (

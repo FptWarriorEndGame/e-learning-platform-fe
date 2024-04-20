@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   CalendarOutlined,
   ClockCircleOutlined,
   DollarOutlined,
   FolderOpenOutlined,
-  FundOutlined,
+  ShoppingOutlined,
   ReadOutlined,
   RetweetOutlined,
   StockOutlined,
@@ -16,7 +21,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../../store/store';
-import { useGetSummaryReportsQuery } from '../report.service';
+import { useGetSummaryReportsQuery, useGetTopUsersQuery, useGetTopOrdersQuery } from '../report.service';
 import { selectPreviousDays, showChart } from '../report.slice';
 import './Dashboard.scss';
 import Chart from './components/Chart';
@@ -29,15 +34,17 @@ const Dashboard: React.FC = () => {
 
   const { data: summaryReportsData } = useGetSummaryReportsQuery();
 
+  const { data: topUsersData } = useGetTopUsersQuery();
+
+  const { data: topOrdersData } = useGetTopOrdersQuery();
+
   const chartName = useSelector((state: RootState) => state.report.chartName);
 
   const handleChange = (value: string) => {
-
     dispatch(selectPreviousDays(Number(value)));
   };
 
   const showNewUserSignupsChart = () => {
-
     dispatch(showChart('new-signups'));
   };
 
@@ -49,10 +56,10 @@ const Dashboard: React.FC = () => {
     dispatch(showChart('course-sales'));
   };
 
-    // const socket = io(`${BACKEND_URL} ` );
-    //   socket.on("auth", (data) => {
-    //    console.log("Socket connect!", data)
-    //  })
+  // const socket = io(`${BACKEND_URL} ` );
+  //   socket.on("auth", (data) => {
+  //    console.log("Socket connect!", data)
+  //  })
 
   return (
     <div className='dashboard'>
@@ -148,11 +155,12 @@ const Dashboard: React.FC = () => {
                   <Statistic
                     className='dashboard__statistic-item'
                     valueStyle={statisticItemStyle}
-                    title='Avg time'
-                    value={`${summaryReportsData?.reports.avgTimeLearningPerUser || 0} min`}
-                    prefix={<ClockCircleOutlined />}
+                    title='30 Days Orders'
+                    value={`${summaryReportsData?.reports.totalOrdersIn30Days || 0}`}
+                    prefix={<ShoppingOutlined />}
                   />
                 </Col>
+
                 <Col md={8}>
                   <Link to='/author/courses'>
                     <Statistic
@@ -189,88 +197,54 @@ const Dashboard: React.FC = () => {
               <div className='latest-users'>
                 <div className='latest-users__header dashboard__latest-item-header'>
                   <UserOutlined className='latest-users__header-icon dashboard__latest-item-header-icon' />
-                  <h3 className='latest-users__header-title dashboard__latest-item-header-title'>New users</h3>
+                  <h3 className='latest-users__header-title dashboard__latest-item-header-title'>Top Users</h3>
                   <a href='#' className='latest-users__header-view-all dashboard__latest-item-header-view-all'>
                     see all
                   </a>
                 </div>
                 <div className='latest-users__body dashboard__latest-item-body'>
-                  <div className='latest-users__item'>
-                    <img
-                      alt=''
-                      src='https://lwfiles.mycourse.app/648eaf1c0c0c35ee7db7e0a2-public/avatars/thumbs/648eaf1c0c0c35ee7db7e0a3.jpg'
-                      className='latest-users__item-avatar'
-                    ></img>
-                    <div className='latest-users__item-info'>
-                      <div className='latest-users__item-name'>Tran Nhat Sang</div>
-                      <div className='latest-users__item-time'>1 month</div>
+                  {topUsersData?.topUsers.map((user) => (
+                    <div className='latest-users__item' key={user._id}>
+                      <img alt='' src={user.avatar} className='latest-users__item-avatar' />
+                      <div className='latest-users__item-info'>
+                        <div className='latest-users__item-name'>{user.name }</div>
+                        <div className='latest-users__item-time'>{user.joinTime }</div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
           </Col>
           {/* Posts */}
           <Col md={6}>
-            <div className='dashboard__latest-posts dashboard__latest-item'>
-              <div className='latest-posts'>
-                <div className='latest-posts__header dashboard__latest-item-header'>
-                  <FundOutlined className='latest-posts__header-icon dashboard__latest-item-header-icon' />
-                  <h3 className='latest-posts__header-title dashboard__latest-item-header-title'>Latest posts</h3>
-                  <a href='#' className='latest-posts__header-view-all dashboard__latest-item-header-view-all'>
+            <div className='dashboard__latest-orders dashboard__latest-item'>
+              <div className='latest-orders'>
+                <div className='latest-orders__header dashboard__latest-item-header'>
+                  <ShoppingOutlined className='latest-orders__header-icon dashboard__latest-item-header-icon' />
+                  <h3 className='latest-orders__header-title dashboard__latest-item-header-title'>Top Orders</h3>
+                  <a href='#' className='latest-orders__header-view-all dashboard__latest-item-header-view-all'>
                     see all
                   </a>
                 </div>
-                <div className='latest-posts__body dashboard__latest-item-body'>
-                  <div className='latest-posts__item'>
-                    <WechatOutlined className='latest-posts__item-icon' />
-                    <div className='latest-posts__item-info'>
-                      <a href='#' className='latest-posts__item-name'>
-                        Tran Nhat Sang
-                      </a>{' '}
-                      <span className='latest-posts__item-action'>Said</span>
-                      <div className='latest-posts__item-content'>
-                        <a href='#' className='latest-posts__item-text'>
-                          Hello world What ?
-                        </a>
+                <div className='latest-orders__body dashboard__latest-item-body'>
+                  {topOrdersData?.topOrders.map((order, index) => (
+                    <div className='latest-orders__item' key={order._id}>
+                      <div className='latest-orders__item-info'>
+                        <span className='latest-orders__item-number'>{index + 1} - </span>
+                        <span className='latest-orders__item-name'>{order.user.name} - </span>
+                        <span className='latest-orders__item-time'>{order.orderTime}</span>
+                        <div className='latest-orders__item-totalPrice'>Total Price: ${order.totalPrice}</div>
+                        <div className='latest-orders__item-transaction'>Transaction: {order.transaction.method}</div>
+                        <div className='latest-orders__item-numItems'>Number of Items: {order.items.length}</div>
                       </div>
                     </div>
-                    <div className='latest-posts__item-time'>5 days</div>
-                  </div>
-                  <div className='latest-posts__item'>
-                    <WechatOutlined className='latest-posts__item-icon' />
-                    <div className='latest-posts__item-info'>
-                      <a href='#' className='latest-posts__item-name'>
-                        Tran Nhat Sang
-                      </a>{' '}
-                      <span className='latest-posts__item-action'>Said</span>
-                      <div className='latest-posts__item-content'>
-                        <a href='#' className='latest-posts__item-text'>
-                          Hello world What ?
-                        </a>
-                      </div>
-                    </div>
-                    <div className='latest-posts__item-time'>5 days</div>
-                  </div>
-                  <div className='latest-posts__item'>
-                    <WechatOutlined className='latest-posts__item-icon' />
-                    <div className='latest-posts__item-info'>
-                      <a href='#' className='latest-posts__item-name'>
-                        Tran Nhat Sang
-                      </a>{' '}
-                      <span className='latest-posts__item-action'>Said</span>
-                      <div className='latest-posts__item-content'>
-                        <a href='#' className='latest-posts__item-text'>
-                          Hello world What ?
-                        </a>
-                      </div>
-                    </div>
-                    <div className='latest-posts__item-time'>5 days</div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
           </Col>
+
           {/* Events Log */}
           <Col md={6}>
             <div className='dashboard__latest-users dashboard__latest-item'>
@@ -307,8 +281,7 @@ const Dashboard: React.FC = () => {
                   <h3 className='online-users__header-title dashboard__latest-item-header-title'>Online Users</h3>
                 </div>
                 <div className='online-users__body dashboard__latest-item-body'>
-                  <div className='online-users__item'>
-                  </div>
+                  <div className='online-users__item'></div>
                 </div>
               </div>
             </div>

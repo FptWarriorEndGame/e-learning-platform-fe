@@ -138,6 +138,9 @@ const Checkout = () => {
   };
 
   const cart = useSelector((state: RootState) => state.client.cart);
+
+  console.log("cart: ", cart)
+
   const selectedCoupon = useSelector((state: RootState) => state.client.selectedCoupon);
   const courseIds = cart.items.map((item) => item.courseId);
 

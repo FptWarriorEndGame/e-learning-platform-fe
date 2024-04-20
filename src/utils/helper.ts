@@ -11,9 +11,6 @@ export class Helper {
   constructor() {
     this.enumData = JSON.parse(localStorage.getItem("enumData") as string)
     this.adminRole = localStorage.getItem("adminRole") as UserRole
-
-    console.log("adminRole: ", this.adminRole)
-  
     this.Role = this.enumData?.Role 
     this.listPermission = JSON.parse(localStorage.getItem("listPermission") as string)
   }

@@ -22,11 +22,13 @@ const ViewMessDiscuss: React.FC<ViewMessReplyProps> = ({ discussId, isVisible, o
               {datadiscussDetail.replies.length > 0 ? (
                 datadiscussDetail.replies.map((reply, index) => (
                   <Card key={index} style={{ marginBottom: '15px' }}>
-                    <div className='flex justify-between'>
-                      <img src={reply.userId?.avatar} alt={reply.userId?.name} />
+                    <div className='flex flex-col	flex-wrap text-center'>
+                      <div className='flex justify-center'>
+                        <img style={{ width: 200 }} src={reply.userId?.avatar} alt={reply.userId?.name} />
+                      </div>
                       <div>
-                        <p className='text-3xl mt-4'>Name: {reply.userId?.name}</p>
-                        <p className='text-3xl mt-4'>Reply: {reply.comments}</p>
+                        <p className='text-1xl mt-4'>Name: {reply.userId?.name}</p>
+                        <p className='text-1xl mt-4'>Reply: {reply.comments}</p>
                       </div>
                     </div>
                   </Card>

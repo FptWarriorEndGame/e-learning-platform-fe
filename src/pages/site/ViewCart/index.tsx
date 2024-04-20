@@ -25,7 +25,7 @@ const ViewCart = () => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
   const userId = useSelector((state: RootState) => state.auth.userId);
-
+  const [isSkip, setIsSkip] = useState(false)
   const [couponQuery, setCouponQuery] = useState(() =>
     isAuth ? useGetCouponsValidForCoursesQuery : useGetValidCouponsForCoursesWithoutUserQuery
   );
@@ -42,15 +42,24 @@ const ViewCart = () => {
 
   useEffect(() => {
     setCourseIds([]);
-    setTimeout(() => {
-      const newCourseIds = cart.items.map((item) => item.courseId);
-      setCourseIds(newCourseIds);
-    }, 0);
+    const newCourseIds = cart.items.map((item) => item.courseId);
+    setCourseIds(newCourseIds);
   }, [isAuth, cart]);
+
+  // Skip call API when cart is empty
+  useEffect(() => {
+    if(courseIds.length >0) {
+      setIsSkip(false)
+    }else {
+      setIsSkip(true)
+    }
+  }, [courseIds]) 
 
   const { data: couponsData, isFetching: isCouponsFetching } = couponQuery(courseIds.join(','));
 
-  const { data: cartData, isFetching: isCartFetching } = useGetRetrieveCartQuery({ courseIds, userId });
+  const { data: cartData, isFetching: isCartFetching, refetch } = useGetRetrieveCartQuery({ courseIds, userId }, {
+    skip: isSkip
+  });
 
   const { data: totalPriceData } = priceQuery({
     courseIds: courseIds.join(','),
@@ -80,7 +89,11 @@ const ViewCart = () => {
 
   const removeCartHandler = (courseId: string) => {
     dispatch(removeCart(courseId));
-
+    refetch().then((res) => {
+      console.log("res", res)
+    }).catch((err: any) => {
+      console.log("err", err)
+    })
     notification.success({
       message: 'Course removed from cart'
     });
@@ -181,7 +194,7 @@ const ViewCart = () => {
                     <div className='view-cart__summary-promo-input-group'>
                       <Space.Compact style={{ width: '100%' }}>
                         <Input defaultValue='Enter Coupon' value={selectedCoupon ?? ''} />
-                        <ButtonCmp className='btn btn-sm'>Apply</ButtonCmp>
+                        {/* <ButtonCmp className='btn btn-sm'>Apply</ButtonCmp> */}
                       </Space.Compact>
                     </div>
                   </div>

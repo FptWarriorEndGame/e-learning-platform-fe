@@ -48,6 +48,7 @@ export interface ICourse extends IBase {
   requirements?: string[];
   willLearns?: string[];
   tags?: string[];
+  learners?: number;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -98,9 +98,6 @@ const DiscussCourse = () => {
       <div className='blog-categories__wrap'>
         <div className='blog-categories__filter'>
           <Space className='sub-header__wrap'>
-            <Button onClick={newDiscussHandler} type='primary' icon={<PlusOutlined />} className='btn-wrap'>
-              New discuss
-            </Button>
             <Search
               placeholder='Search discuss'
               onSearch={onSearchHandler}
@@ -128,7 +125,7 @@ const DiscussCourse = () => {
           )}
         </div>
       </div>
-      <AddDiscuss isOpen={open} onClose={closeDrawerHandler} course={CourseResponse?.courses || []} />
+      {/* <AddDiscuss isOpen={open} onClose={closeDrawerHandler} course={CourseResponse?.courses || []} /> */}
     </div>
   );
 };

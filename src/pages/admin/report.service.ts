@@ -1,6 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BACKEND_URL } from '../../constant/backend-domain';
 import { IReport } from '../../types/report.type';
+import { ITransaction } from '../../types/transaction.type';
+import { IUser } from '../../types/user.type';
+import { ICourse } from '../../types/note.type';
 
 /**
  * Mô hình sync dữ liệu danh sách bài post dưới local sau khi thêm 1 bài post
@@ -69,6 +72,33 @@ export interface getReportsCourseInsightsResponse {
     numberOfWishlist: number;
     numberOfRatings: number;
     avgRatings: number;
+  }[];
+}
+
+export interface getTopUsersResponse {
+  message: string;
+  topUsers: {
+    _id: string;
+    name: string;
+    email: string;
+    avatar: string;
+    coursesCount: number;
+    joinTime: string;
+  }[];
+}
+export interface getTopOrdersResponse {
+  message: string;
+  topOrders: {
+    _id: string;
+    vatFee?: number;
+    transaction: ITransaction;
+    note?: string;
+    totalPrice?: number;
+    user: IUser;
+    couponCode: string;
+    items: ICourse[];
+    status: string;
+    orderTime: string;
   }[];
 }
 
@@ -252,7 +282,10 @@ export const reportApi = createApi({
         return [{ type: 'Reports', id: 'LIST' }];
       }
     }),
-    getReportsUserProgress: build.query<getReportsUserProgressResponse, {dateStart: string, dateEnd: string, authorId: string}>({
+    getReportsUserProgress: build.query<
+      getReportsUserProgressResponse,
+      { dateStart: string; dateEnd: string; authorId: string }
+    >({
       query: (params) => ({
         url: `/reports/users-progress`,
         params
@@ -293,7 +326,10 @@ export const reportApi = createApi({
         return [{ type: 'Reports', id: 'LIST' }];
       }
     }),
-    getReportsCourseInsights: build.query<getReportsCourseInsightsResponse, {dateStart: string, dateEnd: string, authorId: string}>({
+    getReportsCourseInsights: build.query<
+      getReportsCourseInsightsResponse,
+      { dateStart: string; dateEnd: string; authorId: string }
+    >({
       query: (params) => ({
         url: `/reports/course-insights`,
         params
@@ -334,7 +370,7 @@ export const reportApi = createApi({
         return [{ type: 'Reports', id: 'LIST' }];
       }
     }),
-    getCoursesReportByAuthor: build.query<{reports: Array<any>}, {dateStart?: string, dateEnd?: string}>({
+    getCoursesReportByAuthor: build.query<{ reports: Array<any> }, { dateStart?: string; dateEnd?: string }>({
       query: (params) => ({
         url: `/reports/courses-report-by-author`,
         params
@@ -374,6 +410,16 @@ export const reportApi = createApi({
         // return final
         return [{ type: 'Reports', id: 'LIST' }];
       }
+    }),
+    getTopUsers: build.query<getTopUsersResponse, void>({
+      query: () => ({
+        url: `/reports/get-top-users`
+      })
+    }),
+    getTopOrders: build.query<getTopOrdersResponse, void>({
+      query: () => ({
+        url: `/reports/get-top-orders`
+      })
     })
   })
 });
@@ -385,5 +431,7 @@ export const {
   useGetRevenueQuery,
   useGetReportsUserProgressQuery,
   useGetReportsCourseInsightsQuery,
-  useGetCoursesReportByAuthorQuery
+  useGetCoursesReportByAuthorQuery,
+  useGetTopUsersQuery,
+  useGetTopOrdersQuery
 } = reportApi;

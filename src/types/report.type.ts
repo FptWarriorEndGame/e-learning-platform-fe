@@ -6,6 +6,6 @@ export interface IReport {
   users: number;
   orders: IOrder[];
   saleOf30days: number;
-  avgTimeLearningPerUser: number;
+  totalOrdersIn30Days: number;
   conversions: number;
 }

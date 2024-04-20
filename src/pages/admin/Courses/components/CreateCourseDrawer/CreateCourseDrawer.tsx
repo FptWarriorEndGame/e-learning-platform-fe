@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drawer, Form, Button, Input, Select, message } from 'antd';
 import { useAddCourseMutation } from '../../course.service';
-import { useGetAllCategoriesQuery } from '../../../Categories/category.service';
+import { useGetAllCategoriesQuery, useGetCategoriesQuery } from '../../../Categories/category.service';
 import { ICourse } from '../../../../../types/course.type';
 
 const { Option } = Select;
@@ -15,7 +15,7 @@ const CreateCourseDrawer: React.FC<CreateCourseDrawerProps> = ({ isOpen, onClose
   const [form] = Form.useForm();
   const [postCourse] = useAddCourseMutation();
 
-  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery();
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategoriesQuery();
 
   const handleSubmit = (values: ICourse) => {
     postCourse(values)

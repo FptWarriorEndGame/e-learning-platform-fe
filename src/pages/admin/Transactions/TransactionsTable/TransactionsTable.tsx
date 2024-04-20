@@ -89,12 +89,17 @@ const TransactionsTable: React.FC = () => {
             {
               title: <Link to='#'>Transactions</Link>
             }
-            
           ]}
         />
       </div>
       <div className='search-bar'>
-        <Search placeholder='Search by user name or email' onSearch={handleSearch} enterButton allowClear className='search-wrap'/>
+        <Search
+          placeholder='Search by user name or email'
+          onSearch={handleSearch}
+          enterButton
+          allowClear
+          className='search-wrap'
+        />
       </div>
       <Table
         dataSource={data?.transactions as TransactionResponse[]}
@@ -102,8 +107,10 @@ const TransactionsTable: React.FC = () => {
         rowKey='orderId'
         pagination={false}
         loading={isFetching}
+        scroll={{ y: 400 }}
       />
       <Pagination
+        style={{ float: 'right', marginRight: '0px' }}
         className='pagination'
         current={currentPage}
         pageSize={pageSize}

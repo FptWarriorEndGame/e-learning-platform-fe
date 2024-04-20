@@ -27,7 +27,6 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-
 interface OrdersListProps {
   ordersList: IOrder[];
 }
@@ -96,10 +95,8 @@ const OrdersList: React.FC<OrdersListProps> = (props) => {
     {
       title: 'Action',
       key: 'action',
-      render: (text, record) => (
-        <a onClick={() => showDetailModal(record.key.toString())}>View Details</a>
-      ),
-    },
+      render: (text, record) => <a onClick={() => showDetailModal(record.key.toString())}>View Details</a>
+    }
   ];
 
   const ordersData: DataOrderType[] =
@@ -122,17 +119,15 @@ const OrdersList: React.FC<OrdersListProps> = (props) => {
         ),
         register: <div className='txt-desc'>{moment(order.createdAt).format('YYYY-MM-DD HH:mm:ss') || ''}</div>,
         courses: (
-          <Avatar.Group maxCount={1} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
-            {(items || []).map((course) => (
-              <Avatar src={course?.thumbnail} />
-            ))}
-            <Tooltip title='Courses' placement='top'>
-              {(items || []).map((course) => (
-                <Avatar src={course?.thumbnail} />
+          <Tooltip title='Courses' placement='top'>
+            <Avatar.Group maxCount={1} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
+              {(items || []).map((course, index) => (
+                <Avatar key={index} src={course?.thumbnail} />
               ))}
-            </Tooltip>
-          </Avatar.Group>
+            </Avatar.Group>
+          </Tooltip>
         ),
+
         transaction: (
           <>
             <div className='txt-desc'>
@@ -142,9 +137,9 @@ const OrdersList: React.FC<OrdersListProps> = (props) => {
             </div>
             <div className='txt-desc'>sandbox_64bccb1fc177e</div>
           </>
-        ),        
-        amount:  <div className='txt-desc'>{`$${totalPrice}`}</div>,
-        payment:  <div className='txt-desc'>{transaction?.method}</div>,
+        ),
+        amount: <div className='txt-desc'>{`$${totalPrice}`}</div>,
+        payment: <div className='txt-desc'>{transaction?.method}</div>
       };
 
       return orderTemplateItem;
@@ -158,7 +153,6 @@ const OrdersList: React.FC<OrdersListProps> = (props) => {
   });
 
   const onChange: TableProps<DataOrderType>['onChange'] = (pagination, filters, sorter, extra) => {
-
     setTableParams({
       pagination
     });
@@ -167,14 +161,16 @@ const OrdersList: React.FC<OrdersListProps> = (props) => {
   return (
     <Fragment>
       <div className='users-list'>
-        <Table scroll={{ x: 'max-content', y: 'calc(100vh - 400px)' }} columns={columns} dataSource={ordersData} onChange={onChange} pagination={tableParams.pagination} />
+        <Table
+          scroll={{ x: 'max-content', y: 'calc(100vh - 400px)' }}
+          columns={columns}
+          dataSource={ordersData}
+          onChange={onChange}
+          pagination={tableParams.pagination}
+        />
       </div>
       {isModalVisible && selectedOrderId && (
-        <OrderDetailModal 
-          isVisible={isModalVisible} 
-          onClose={handleModalClose} 
-          orderId={selectedOrderId}
-        />
+        <OrderDetailModal isVisible={isModalVisible} onClose={handleModalClose} orderId={selectedOrderId} />
       )}
     </Fragment>
   );

@@ -184,25 +184,6 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
                 />
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item name='type' label='Type'>
-                <Select placeholder='Please choose the type'>
-                  <Option value='private'>Private</Option>
-                  <Option value='public'>Public</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col span={12}>
-              <Form.Item name='parentCate' label='Parent Category'>
-                <Select placeholder='Please choose the parent category'>
-                  <Option value='1'>parent 1</Option>
-                  <Option value='2'>parent 2</Option>
-                </Select>
-              </Form.Item>
-            </Col>
           </Row>
 
           <Row gutter={16}>
