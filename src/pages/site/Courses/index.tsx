@@ -58,9 +58,7 @@ const Courses = () => {
   const [sortParams, setSortParams] = useSearchParamsState(sortDefaults);
 
   const userId = useSelector((state: RootState) => state.auth.userId);
-
-  console.log("userId", userId)
-
+  const searchQuery = useSelector((state: RootState) => state.client.searchQuery);
   const searchValue = searchParams.get('_q') || '';
   const sortValue = searchParams.get('_sort') || 'mostReviews';
   const authorValue = searchParams.getAll('_author') || '';
@@ -81,6 +79,8 @@ const Courses = () => {
     _avgRatings: avgRatingsValue,
     userId: userId
   };
+
+
   const [searchFilterParams, setSearchFilterParams] = useState(params)
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
@@ -104,6 +104,13 @@ const Courses = () => {
   })
 
   useEffect(() => {
+    setSearchFilterParams({
+      ...searchFilterParams,
+      _q: searchQuery
+    })
+  },[searchQuery])
+
+  useEffect(() => {
     setSearchFilterParams(searchFilterParams)
     refetch().then((res) => {
       console.log("res", res);
@@ -112,6 +119,8 @@ const Courses = () => {
     })
   },[refetch, searchFilterParams])
 
+
+  
 
   const categoriesList = categoriesData?.categories || [];
 
@@ -245,7 +254,7 @@ const Courses = () => {
                         All
                       </a>
                     </li> */}
-                    {isAuth && (
+                    {/* {isAuth && (
                       <>
                         <li className='status-filter__item'>
                           <a onChange={enrollFilterHandler} href='' className='status-filter__item-link'>
@@ -258,7 +267,7 @@ const Courses = () => {
                           </a>
                         </li>
                       </>
-                    )}
+                    )} */}
                   </ul>
                 </div>
               </div>

@@ -58,11 +58,16 @@ const CourseItem = (props: CourseItemProps) => {
     const btnEl = e.target as HTMLButtonElement;
     const dataAction = btnEl.dataset.action;
 
+    const saveCourseToSessionStorage = (courseId: string) => {
+      sessionStorage.removeItem('selectedCourse');
+      sessionStorage.setItem('selectedCourse', courseId);
+  };
+
     // If already logined
 
     if (isAuth) {
       if (dataAction === 'buynow') {
-        dispatch(addToCart(props.courseItem._id));
+        saveCourseToSessionStorage(props.courseItem._id);
 
         navigate('/checkout');
       } else if (dataAction === 'enroll') {
@@ -182,7 +187,7 @@ const CourseItem = (props: CourseItemProps) => {
             {/* Số lượt đánh giá! */}
             {props.courseItem.avgRatings != null && props.courseState !== "ordered" && (
               <div className="mt-4">
-              <span className="text-2xl mr-2">{props.courseItem.avgRatings } </span><Rate className="text-3xl mr-2" disabled value={props.courseItem.avgRatings}/>
+              <span className="text-2xl mr-2">{props.courseItem.avgRatings.toFixed(2) } </span><Rate className="text-3xl mr-2" disabled value={props.courseItem.avgRatings}/>
               <span>
               ({props.courseItem.numberUsersOfCourse})
               </span>

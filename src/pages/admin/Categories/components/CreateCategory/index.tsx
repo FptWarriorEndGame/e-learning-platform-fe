@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Button, Col, Drawer, Form, Input, Row, Select, Space, Upload, notification } from 'antd';
+import { Button, Col, Drawer, Form, Input, Row, Select, Space, Upload, message, notification } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { ICategory } from '../../../../../types/category.type';
 import { CategoryError } from '../../../../../utils/errorHelpers';
 import { useAddCategoryMutation, useGetCategoryQuery, useUpdateCategoryMutation } from '../../category.service';
-import { UploadChangeParam } from 'antd/lib/upload/interface';
+import { UploadChangeParam, UploadProps } from 'antd/lib/upload/interface';
 import { UploadOutlined } from '@ant-design/icons';
+import { UPLOAD_URL } from '../../../../../constant/constant';
 
 const { Option } = Select;
 
@@ -24,20 +25,43 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
   const categoryId = useSelector((state: RootState) => state.category.categoryId);
   const { data, isFetching } = useGetCategoryQuery(categoryId);
   const [fileList, setFileList] = useState<any[]>([]);
-
+  const [imagePath, setImagePath] = useState<string>("")
   const initialCategory: ICategory = useMemo(
     () => ({
       _id: categoryId,
       name: data?.category.name || '',
-      cateImage: data?.category.cateImage || '',
+      cateImage:  "",
       cateSlug: data?.category.cateSlug || '',
       description: data?.category.description || ''
     }),
     [categoryId, data]
   );
-
   const [formData, setFormData] = useState<ICategory>(initialCategory);
 
+  const uploadImageProps: UploadProps = {
+    name: 'imageFile',
+    action: `${UPLOAD_URL}/uploads/image`,
+    fileList: fileList,
+    maxCount: 1,
+    onChange(info) {
+      setFileList(info.fileList);
+      if (info.file.status === 'done') {
+        void message.success(`${info.file.name} file uploaded successfully`);
+
+        const response = info.file.response as { imagePath: string };
+        if (response && response.imagePath) {
+          const imagePath = response.imagePath
+          setImagePath(imagePath)
+                  setFormData({
+                    ...formData,
+                    cateImage: imagePath
+                  });
+        }
+      } else if (info.file.status === 'error') {
+        void message.error(`${info.file.name} file upload failed.`);
+      }
+    }
+  }
   useEffect(() => {
     if (categoryId && data) {
       setFormData(initialCategory);
@@ -61,7 +85,6 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
 
     return () => {
       // form.resetFields();
-      // console.log('Unmount data: ');
     };
   }, [categoryId, data, form]);
 
@@ -70,18 +93,16 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
   };
 
   const submitHandler = (formData: Omit<ICategory, '_id'>) => {
-    fileList.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setFormData((prev) => ({ ...prev, cateImage: event.target?.result }));
-      };
-      reader.readAsDataURL(file.originFileObj);
-    });
-
     const updatedCategory = {
       _id: categoryId,
-      ...formData
+      ...formData,
+      cateImage: imagePath
     };
+
+    const createdCategory = {
+      ...formData,
+      cateImage: imagePath
+    }
 
     if (categoryId) {
       props.onClose();
@@ -100,7 +121,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
           });
         });
     } else {
-      addCategory(formData)
+      addCategory(createdCategory)
         .unwrap()
         .then((result) => {
           props.onClose();
@@ -162,7 +183,7 @@ const CreateCategory: React.FC<CreateCategoryProps> = (props) => {
                 label='Cate Image'
                 rules={[{ required: true, message: 'Please enter cate image' }]}
               >
-                <Upload beforeUpload={() => false} onChange={handleChange} multiple={false} fileList={fileList}>
+                <Upload {...uploadImageProps} >
                   <Button icon={<UploadOutlined style={{ color: '#000' }} />}>Select Image</Button>
                 </Upload>
               </Form.Item>

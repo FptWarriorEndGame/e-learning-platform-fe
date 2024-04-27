@@ -18,10 +18,6 @@ const DiscussList = () => {
   const userId = useSelector<RootState, string>((state: RootState) => state.auth.userId);
   const courseId = searchParams.get('courseId');
 
-  console.log('lessonId:', lessonId);
-  console.log('userId:', userId);
-  console.log('courseId:', courseId);
-
   return (
     <>
       <DiscussForm userId={userId} lessonId={lessonId} courseId={courseId} />

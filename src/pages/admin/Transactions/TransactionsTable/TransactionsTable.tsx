@@ -4,6 +4,7 @@ import { useGetTransactionsQuery, TransactionResponse } from '../transaction.ser
 import TransactionDetailsModal from '../TransactionDetailsModal/TransactionDetailsModal';
 import './TransactionsTable.scss';
 import { Breadcrumb } from 'antd';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 const { Search } = Input;
 
@@ -31,38 +32,49 @@ const TransactionsTable: React.FC = () => {
       title: 'User Name',
       dataIndex: ['user', 'name'],
       key: 'userName',
-      ellipsis: true
+      ellipsis: true,
+      sorter: (a: TransactionResponse, b: TransactionResponse) => a.user.name.localeCompare(b.user.name)
     },
     {
       title: 'Amount',
       dataIndex: ['transaction', 'amount'],
       key: 'amount',
       ellipsis: true,
-      render: (amount: number) => `$${amount}`
+      render: (amount: number) => `$${amount}`,
+      sorter: (a: TransactionResponse, b: TransactionResponse) => a.transaction.amount - b.transaction.amount
     },
     {
       title: 'Method',
       dataIndex: ['transaction', 'method'],
       key: 'method',
-      ellipsis: true
+      ellipsis: true,
+      sorter: (a: TransactionResponse, b: TransactionResponse) =>
+        a.transaction.method.localeCompare(b.transaction.method)
     },
     {
       title: 'Pay Date',
       dataIndex: ['transaction', 'payDate'],
       key: 'payDate',
-      ellipsis: true
+      ellipsis: true,
+      sorter: (a: TransactionResponse, b: TransactionResponse) =>
+        moment(a.transaction.payDate).diff(moment(b.transaction.payDate)),
+      render: (payDate: string) => moment(payDate).format('YYYY-MM-DD')
     },
     {
       title: 'Bank',
       dataIndex: ['transaction', 'bankCode'],
       key: 'bankCode',
-      ellipsis: true
+      ellipsis: true,
+      sorter: (a: TransactionResponse, b: TransactionResponse) =>
+        a.transaction.bankCode.localeCompare(b.transaction.bankCode)
     },
     {
       title: 'Card Type',
       dataIndex: ['transaction', 'cardType'],
       key: 'cardType',
-      ellipsis: true
+      ellipsis: true,
+      sorter: (a: TransactionResponse, b: TransactionResponse) =>
+        a.transaction.cardType.localeCompare(b.transaction.cardType)
     },
     {
       title: 'Actions',
@@ -105,18 +117,8 @@ const TransactionsTable: React.FC = () => {
         dataSource={data?.transactions as TransactionResponse[]}
         columns={columns}
         rowKey='orderId'
-        pagination={false}
         loading={isFetching}
         scroll={{ y: 400 }}
-      />
-      <Pagination
-        style={{ float: 'right', marginRight: '0px' }}
-        className='pagination'
-        current={currentPage}
-        pageSize={pageSize}
-        total={data?.total}
-        onChange={handlePageChange}
-        showSizeChanger
       />
       {selectedTransaction && (
         <TransactionDetailsModal

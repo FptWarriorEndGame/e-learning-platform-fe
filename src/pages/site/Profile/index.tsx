@@ -27,18 +27,18 @@ const profileItems: TabsProps['items'] = [
     ),
     children: ``
   },
-  {
-    key: 'activity',
-    label: (
-      <div className='tab-item'>
-        <p className='tab-item__text'>
-          <StockOutlined className='tab-item__icon' />
-        </p>
-        <p>Activities</p>
-      </div>
-    ),
-    children: `Some activies of users`
-  }
+  // {
+  //   key: 'activity',
+  //   label: (
+  //     <div className='tab-item'>
+  //       <p className='tab-item__text'>
+  //         <StockOutlined className='tab-item__icon' />
+  //       </p>
+  //       <p>Activities</p>
+  //     </div>
+  //   ),
+  //   children: `Some activies of users`
+  // }
 ];
 
 const tabBarStyleCss = {
@@ -60,7 +60,7 @@ const Profile = () => {
     skip: !userId
   });
 
-  const achievements = {
+  const achievements: Record<string, AchievementData> = {
     Newbie: {
       image: 'https://lwfiles.mycourse.app/65ac73296e5c564383a8e28b-public/badges/newbie.png',
       text: 'Newbie'
@@ -80,16 +80,18 @@ const Profile = () => {
     }
   };
 
-  const [achievementData, setAchievementData]: [
-    AchievementData | null,
-    Dispatch<SetStateAction<AchievementData | null>>
-  ] = useState<AchievementData | null>(null);
+  const [achievementData, setAchievementData]: [AchievementData[], Dispatch<SetStateAction<AchievementData[]>>] =
+    useState<AchievementData[]>([]);
 
   useEffect(() => {
-    if (data && data.user.achievement) {
-      const achievementKey = data.user.achievement as keyof typeof achievements;
+    if (data && data.user && data.user.achievement) {
+      const achievedLevel = data.user.achievement;
+      const levels = Object.keys(achievements);
 
-      setAchievementData(achievements[achievementKey]);
+      const achievedLevels = levels.filter((level) => levels.indexOf(level) <= levels.indexOf(achievedLevel));
+      const achievedData: AchievementData[] = achievedLevels.map((level) => achievements[level]);
+
+      setAchievementData(achievedData);
     }
   }, [data]);
 
@@ -197,34 +199,17 @@ const Profile = () => {
             <div className='profile-achievements-tt'>ACHIEVEMENTS</div>
             <div className='profile-achievements-list'>
               <div className='profile-achievements-item'>
-                {achievementData && (
-                  <div className='level'>
+                {achievementData.map((achievement, index) => (
+                  <div key={index} className='level'>
                     <div className='level-img'>
-                      <img src={achievementData.image} alt='' style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                      <img src={achievement.image} alt='' style={{ maxWidth: '100px', maxHeight: '100px' }} />
                     </div>
-                    <div className='level-text'>{achievementData.text}</div>
+                    <div className='level-text'>{achievement.text}</div>
                   </div>
-                )}
-              </div>
-              <div className='profile-achievements-item'>
-                <div className='profile-achievements-star'>
-                  <div className='profile-achievements-star-img'>
-                    <img src='https://cdn.mycourse.app/v3.0.4/images/initial-badge.png' alt='' />
-                  </div>
-                  <div className='profile-achievements-star-img'>
-                    <img src='https://cdn.mycourse.app/v3.0.4/images/initial-badge.png' alt='' />
-                  </div>
-                  <div className='profile-achievements-star-img'>
-                    <img src='https://cdn.mycourse.app/v3.0.4/images/initial-badge.png' alt='' />
-                  </div>
-                  <div className='profile-achievements-star-img'>
-                    <img src='https://cdn.mycourse.app/v3.0.4/images/initial-badge.png' alt='' />
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
-
           <div className='profile-network'>
             <div className='profile-network-tt'>NETWORK</div>
             <div className='profile-network-list'>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Table, Pagination, Button, Space, message, Popconfirm, Select, Badge } from 'antd';
+import moment from 'moment';
 import {
   EyeOutlined,
   HistoryOutlined,
@@ -103,6 +104,7 @@ const ReviewsTable: React.FC = () => {
       key: 'courseId',
       ellipsis: true,
       width: '20%',
+      sorter: (a: IReview, b: IReview) => a.courseId?.name.localeCompare(b.courseId?.name),
       render: (_: IReview, record: IReview) => record.courseId?.name || 'N/A'
     },
     {
@@ -110,6 +112,7 @@ const ReviewsTable: React.FC = () => {
       dataIndex: 'title',
       key: 'title',
       width: '20%',
+      sorter: (a: IReview, b: IReview) => a.title.localeCompare(b.title),
       ellipsis: true
     },
     {
@@ -124,7 +127,7 @@ const ReviewsTable: React.FC = () => {
       dataIndex: 'ratingStar',
       key: 'ratingStar',
       ellipsis: true,
-      width: '10%',
+      width: '7%',
       sorter: (a: IReview, b: IReview) => a.ratingStar - b.ratingStar
     },
     {
@@ -132,16 +135,17 @@ const ReviewsTable: React.FC = () => {
       dataIndex: 'isDeleted',
       key: 'isDeleted',
       render: (_: IReview, record: IReview) => <span>{record.isDeleted ? 'Inactive' : 'Active'}</span>,
-      width: '10%'
+      width: '7%'
     },
     {
       title: 'Create at',
-      dataIndex: 'Create at',
-      key: 'createAt',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      sorter: (a: IReview, b: IReview) => moment(a.createdAt).diff(moment(b.createdAt)),
       render: (_: IReview, record: IReview) => (
-        <span>{record.createdAt ? new Date(record.createdAt).toLocaleString() : 'N/A'}</span>
+        <span>{record.createdAt ? moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</span>
       ),
-      width: '20%'
+      width: '15%'
     },
     {
       title: 'Actions',

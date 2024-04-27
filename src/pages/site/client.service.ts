@@ -369,6 +369,11 @@ export interface GetFreeLessonsByCourseIdResponse {
   lessons: ILesson[];
 }
 
+export interface getAllLessonsByCourseIdResponse {
+  message: string;
+  lessons: ILesson[];
+}
+
 export const clientApi = createApi({
   reducerPath: 'clientApi',
   tagTypes: [
@@ -992,6 +997,12 @@ export const clientApi = createApi({
       }),
       providesTags: () => [{ type: 'Courses', id: 'LIST' }]
     }),
+    getAllLessonsByCourseId: build.query<getAllLessonsByCourseIdResponse, string>({
+      query: (courseId) => ({
+        url: `lessons/course/${courseId}/all-lessons`
+      }),
+      providesTags: () => [{ type: 'Courses', id: 'LIST' }]
+    }),
     increaseCourseView: build.mutation<void, string>({
       query: (courseId) => ({
         url: `courses/course/increase-view/${courseId}`,
@@ -1125,6 +1136,7 @@ export const {
   useGetFreeLessonsByCourseIdQuery,
   useGetAllUserByCourseQuery,
   useIncreaseCourseViewMutation,
+  useGetAllLessonsByCourseIdQuery,
   // Discuss
   useGetAllDiscussionsQuery,
   useGetDiscussionsByLessonIdQuery,

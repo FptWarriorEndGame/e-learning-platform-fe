@@ -12,6 +12,10 @@ interface TransactionDetailsModalProps {
 }
 
 const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ transaction, isOpen, onClose }) => {
+  console.log("transaction", transaction);
+  
+
+
   return (
     <Modal
       className='transaction-details-modal'

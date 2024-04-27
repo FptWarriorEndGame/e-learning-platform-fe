@@ -1,252 +1,249 @@
-@import "../../../assets/sass/base";
+@import '../../../assets/sass/base';
 
 .profile {
-    margin-top: $header-height;
-    &__wrap {
-        padding: 8rem 0;
-        background-color: $dark-bg-color;
-        color: $light-text-color;
-    }
-    .row-wrap{
-        gap: 0 2.4rem;
-        flex-wrap: nowrap;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        @media(max-width: 768px){
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-          @media(max-width: 400px){
-            flex-direction: column;
-            gap: 2.4rem;
-        }
-    }
-    .col{
-        width: 20%;
-        @media(max-width: 768px){
-            width: 46%;
-        }
-        @media(max-width: 400px){
-            width: 100%;
-        }
-    }
-    .col.col-wrap{
-        @media(max-width: 768px){
-            width: 70%;
-        }
-        @media(max-width: 400px){
-            width: 100%;
-        }
-    }
-    &__header {
-        &-wrap {
-
-        }
-
-        &-item {
-            text-align: center;
-            &-img {
-                width: 10rem;
-                height: 10rem;
-                border-radius: 50%;
-            }
-            &-icon {
-                display: flex;
-                justify-content: center;
-                font-size: 4rem;
-                margin-bottom: 1.5rem;
-            }
-
-            &-number {
-                font-size: 2.2rem;
-                margin-bottom: 1.5rem;
-            }
-
-            &-text {
-                text-transform: uppercase;
-                font-weight: 700;
-            }
-
-            &-name {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                &-text {
-                    font-size: 1.8rem;
-                }
-
-                &-badge {
-                    background-color: $brand-primary-color;
-                    padding: 0.5rem;
-                    margin-left: 1rem;
-                }
-            }
-
-            &-btn-wrap {
-                margin: 3rem 0rem 1.5rem;
-            }
-        }
-    }
-
-    &__tabs {
-        justify-content: center;
-     
-        &-bar {
-            
-
-            .ant-tabs-nav {
-                background-color: $brand-primary-color;
-            }
-
-            .ant-tabs-tab-btn {
-                color: $light-text-color;
-                font-size: 2rem;
-            }
-
-            .tab-item {
-                padding: 0rem 4rem;
-                &__text {
-                    text-align: center;
-                }
-
-                &__icon {
-                    margin-right: 0!important;
-                    font-size: 3rem;
-                }
-            }
-        }
-    }
-
-    @media (max-width: map-get($breakpoint, tablet)) {
-        &__header {
-            &-item{
-                margin-bottom: 2rem;
-                &-icon {
-                }
-            }
-        }
-    }
-
-    @media (max-width: map-get($breakpoint, mobile)) {
-        
-    }
-
-}
-.profile__info{
-    background: #fff;
-    padding: 4rem 0;
-}
-.profile-achievements{
-    margin-bottom: 4rem;
-}
-.profile-achievements-tt{
-    font-size: 2.4rem;
-    line-height: 1.3;
-    font-weight: 700;
-    color: #112236;
-}
-
-.profile-achievements-list{
+  margin-top: $header-height;
+  &__wrap {
+    padding: 8rem 0;
+    background-color: $dark-bg-color;
+    color: $light-text-color;
+  }
+  .row-wrap {
+    gap: 0 2.4rem;
+    flex-wrap: nowrap;
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    width: calc(100% * (11.5/12));
-    margin: 0 auto;
-    gap: 2.4rem;
-}
-.profile-achievements-item{
-    &:nth-child(1){
-        width: calc(100% * (2/10));
+    @media (max-width: 768px) {
+      flex-wrap: wrap;
+      justify-content: center;
     }
-    &:nth-child(2){
-        width: calc(100% * (8/10));
+    @media (max-width: 400px) {
+      flex-direction: column;
+      gap: 2.4rem;
     }
-}
-
-.level{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 1.8rem;
-}
-.level-img{
-    width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.level-text{
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #112236;
-    line-height: 1.3;
-
-}
-
-.profile-achievements-star{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 2.4rem;
-}
-.profile-achievements-star-img{
-    width: 8%;
-    img{
-        width: 100%;
-        height: auto;
+  }
+  .col {
+    width: 20%;
+    @media (max-width: 768px) {
+      width: 46%;
     }
-}
+    @media (max-width: 400px) {
+      width: 100%;
+    }
+  }
+  .col.col-wrap {
+    @media (max-width: 768px) {
+      width: 70%;
+    }
+    @media (max-width: 400px) {
+      width: 100%;
+    }
+  }
+  &__header {
+    &-wrap {
+    }
 
-// 
-
-.profile-network{
-    position: relative;
-}
-.profile-network-tt{
-    font-size: 2.4rem;
-    line-height: 1.3;
-    font-weight: 700;
-    color: #112236;
-    margin-bottom: 2.4rem;
-}
-.profile-network-list{
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 2.4rem;
-}
-.profile-network-item{
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    .content{
-        background-color: #194583;
-        color: #fff;
-        padding: 2.4rem;
-        width: 100%;
+    &-item {
+      text-align: center;
+      &-img {
+        width: 10rem;
+        height: 10rem;
+        border-radius: 50%;
+      }
+      &-icon {
         display: flex;
         justify-content: center;
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+      }
+
+      &-number {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      &-text {
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      &-name {
+        display: flex;
         align-items: center;
-        flex-direction: column;
-    }
-    .number{
-        font-size: 6rem;
-        font-weight: 600;
-        line-height: 1.3;
-    }
-    .text{
-        font-size: 3rem;
-        font-weight: 500;
-        line-height: 1.3;
-    }
-    .img{
-        width: 100%;
-        img{
-            width: 100%;
+        justify-content: center;
+        &-text {
+          font-size: 1.8rem;
         }
+
+        &-badge {
+          background-color: $brand-primary-color;
+          padding: 0.5rem;
+          margin-left: 1rem;
+        }
+      }
+
+      &-btn-wrap {
+        margin: 3rem 0rem 1.5rem;
+      }
     }
+  }
+
+  &__tabs {
+    justify-content: center;
+
+    &-bar {
+      .ant-tabs-nav {
+        background-color: $brand-primary-color;
+      }
+
+      .ant-tabs-tab-btn {
+        color: $light-text-color;
+        font-size: 2rem;
+      }
+
+      .tab-item {
+        padding: 0rem 4rem;
+        &__text {
+          text-align: center;
+        }
+
+        &__icon {
+          margin-right: 0 !important;
+          font-size: 3rem;
+        }
+      }
+    }
+  }
+
+  @media (max-width: map-get($breakpoint, tablet)) {
+    &__header {
+      &-item {
+        margin-bottom: 2rem;
+        &-icon {
+        }
+      }
+    }
+  }
+
+  @media (max-width: map-get($breakpoint, mobile)) {
+  }
+}
+.profile__info {
+  background: #fff;
+  padding: 4rem 0;
+}
+.profile-achievements {
+  margin-bottom: 4rem;
+}
+.profile-achievements-tt {
+  font-size: 2.4rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: #112236;
+}
+
+.profile-achievements-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: calc(100% * (11.5 / 12));
+  margin: 0 auto;
+  gap: 2.4rem;
+}
+.profile-achievements-item {
+  display: flex;
+  gap: 20rem;
+  padding-top: 3rem;
+  &:nth-child(1) {
+    width: calc(100% * (2 / 10));
+  }
+  &:nth-child(2) {
+    width: calc(100% * (8 / 10));
+  }
+}
+
+.level {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+.level-img {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.level-text {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #112236;
+  line-height: 1.3;
+}
+
+.profile-achievements-star {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2.4rem;
+}
+.profile-achievements-star-img {
+  width: 8%;
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+//
+
+.profile-network {
+  position: relative;
+}
+.profile-network-tt {
+  font-size: 2.4rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: #112236;
+  margin-bottom: 2.4rem;
+}
+.profile-network-list {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+.profile-network-item {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  .content {
+    background-color: #194583;
+    color: #fff;
+    padding: 2.4rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .number {
+    font-size: 6rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .text {
+    font-size: 3rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .img {
+    width: 100%;
+    img {
+      width: 100%;
+    }
+  }
 }

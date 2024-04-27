@@ -11,29 +11,12 @@ const CourseContents = () => {
   
   return (
     <div className='course-contents'>
-      {/* <div className="">
-        <Breadcrumb
-            items={[
-              {
-                title: 'Course',
-              },
-              {
-                title: <Link to="/author/courses">Course Manager</Link>,
-              },
-              {
-                title: <Link to="/author/courses">Section</Link>,
-              },
-            ]}
-          />
-      </div> */}
       <div className='course-contents__wrap'>
         <h2 className='course-contents__create-title'>Start creating your course by adding the first section!</h2>
       </div>
       <div className='course-contents__add-section'>
         <Space>
           <AddSection courseId={courseId as string} />
-          {/* or
-          <Button type='primary'>Import section</Button> */}
         </Space>
       </div>
       <div className='course-contents__list'>

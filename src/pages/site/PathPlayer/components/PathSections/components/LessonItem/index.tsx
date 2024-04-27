@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../../../store/store';
 import { ILesson } from '../../../../../../../types/lesson.type';
 import { formatTime } from '../../../../../../../utils/functions';
-import { startPlayingVideo, updateIsLessonChange } from '../../../../../client.slice';
+import { startPlayingVideo, updateIsLessonChange, setCurrentLessonIndex } from '../../../../../client.slice';
 import './LessonItem.scss';
 
 interface LessonItemProps {
@@ -20,6 +20,8 @@ function LessonItem(props: LessonItemProps) {
   const currLessonId = useSelector((state: RootState) => state.client.lessonId);
   const lessonIdsDone = useSelector((state: RootState) => state.client.lessonIdsDoneByCourseId);
   const [isVideoDone, setIsVideoDone] = useState(isDone);
+
+  const lessonIds = useSelector((state: RootState) => state.client.lessonIds);
 
   const isCurrentLessonDone = lessonIdsDone.includes(_id);
 
@@ -36,6 +38,10 @@ function LessonItem(props: LessonItemProps) {
   const playerRef = useRef<ReactPlayer | null>(null);
 
   const playVideoHandler = () => {
+    const currentIndex = lessonIds.indexOf(_id);
+
+    dispatch(setCurrentLessonIndex(currentIndex));
+
     dispatch(updateIsLessonChange(_id));
 
     dispatch(

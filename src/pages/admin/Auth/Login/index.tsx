@@ -39,7 +39,6 @@ const AdminLogin: React.FC = () => {
     adminLogin(adminCredentials)
       .then((result) => {
         if ('data' in result) {
-          console.log("result: ", result);
           const loginResponse: {
             token: string;
             message: string;

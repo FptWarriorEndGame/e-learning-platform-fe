@@ -2,21 +2,35 @@
 
 .header__categories {
     overflow: hidden;
-    .header__categories-wrap{
-    @media(max-width: 768px) {
-        overflow-x: auto;
-        overflow-y: hidden;
-        .header__categories-item {
-            flex-shrink: 0;
+    .header__categories-wrap {
+        @media (max-width: 1920px) {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            &::-webkit-scrollbar {
+                width: 10px;
+                height: 4px;
+            }
+             
+            &::-webkit-scrollbar-track {
+                background-color: #ebebeb;
+                -webkit-border-radius: 10px;
+                border-radius: 10px;
+            }
+            
+            &::-webkit-scrollbar-thumb {
+                -webkit-border-radius: 10px;
+                border-radius: 10px;
+                background: #6d6d6d; 
+            }
+
+            .header__categories-item {
+                flex-shrink: 0;
+            }
         }
     }
-}
     @media (max-width: map-get($breakpoint, tablet)) {
         &-wrap {
-            padding: 0rem 2rem;  
+            padding: 0rem 2rem;
         }
     }
-
-
-    
 }

@@ -20,6 +20,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { BACKEND_URL } from '../../../../../../../constant/backend-domain';
 import ReactPlayer from 'react-player';
 import { useParams } from 'react-router-dom';
+import { UPLOAD_URL } from '../../../../../../../constant/constant';
 
 type EditLessonProps = {
   isVisible: boolean;
@@ -56,7 +57,7 @@ const EditLesson: React.FC<EditLessonProps> = ({ isVisible, onClose, lesson, sec
 
   const uploadVideoProps: UploadProps = {
     name: 'videoFile',
-    action: `${BACKEND_URL}/uploads/video`,
+    action: `${UPLOAD_URL}/uploads/video`,
     fileList: fileList,
     maxCount: 1,
     onChange(info) {
@@ -76,7 +77,7 @@ const EditLesson: React.FC<EditLessonProps> = ({ isVisible, onClose, lesson, sec
 
   const uploadPDFProps: UploadProps = {
     name: 'pdfFile',
-    action: `${BACKEND_URL}/uploads/pdf`,
+    action: `${UPLOAD_URL}/uploads/pdf`,
     fileList: pdfFileList,
     maxCount: 1,
     onChange(info) {

@@ -19,6 +19,8 @@ interface ClientState {
   isLessonChange: boolean;
   percentHavePlayed: number;
   selectedCoupon: string | null;
+  currentLessonIndex: number;
+  lessonIds: string[];
 }
 
 const storedCart = JSON.parse(localStorage.getItem('cart') || '{}') as ICart;
@@ -42,7 +44,9 @@ const initialState: ClientState = {
   certificatePath: '',
   isLessonChange: false,
   percentHavePlayed: 0,
-  selectedCoupon: null
+  selectedCoupon: null,
+  currentLessonIndex: 0,
+  lessonIds: []
 };
 
 const clientSlice = createSlice({
@@ -131,6 +135,13 @@ const clientSlice = createSlice({
     },
     setSelectedCoupon: (state, action: PayloadAction<string | null>) => {
       state.selectedCoupon = action.payload;
+    },
+    setCurrentLessonIndex: (state, action: PayloadAction<number>) => {
+      state.currentLessonIndex = action.payload;
+      
+    },
+    setLessonIds: (state, action: PayloadAction<string[]>) => {
+      state.lessonIds = action.payload;
     }
   }
 });
@@ -153,7 +164,9 @@ export const {
   updateIsLessonChange,
   resetLessonChange,
   setPercentHavePlayed,
-  setSelectedCoupon
+  setSelectedCoupon,
+  setCurrentLessonIndex,
+  setLessonIds
   // refetchCourseEnrolledbyUser
 } = clientSlice.actions;
 export default clientReducer;

@@ -11,6 +11,7 @@ import { ILesson } from '../../../../../../../types/lesson.type';
 import { formatTime } from '../../../../../../../utils/functions';
 import { useAddLessonMutation } from '../../../../course.service';
 import { useParams } from 'react-router-dom';
+import { UPLOAD_URL } from '../../../../../../../constant/constant';
 
 type AddLessonProps = {
   // onSubmit: (formData: Omit<ILesson, '_id'>) => void;
@@ -44,7 +45,7 @@ const AddLesson: React.FC<AddLessonProps> = ({sectionId}) => {
   const widthInPercentage = (widthInPixels / containerWidth) * 100;
   const uploadVideoProps: UploadProps = {
     name: 'videoFile',
-    action: `${BACKEND_URL}/uploads/video`,
+    action: `${UPLOAD_URL}/uploads/video`,
     fileList: fileList,
     maxCount: 1,
     onChange(info) {
@@ -64,7 +65,7 @@ const AddLesson: React.FC<AddLessonProps> = ({sectionId}) => {
 
   const uploadPDFProps: UploadProps = {
     name: 'pdfFile',
-    action: `${BACKEND_URL}/uploads/pdf`,
+    action: `${UPLOAD_URL}/uploads/pdf`,
     fileList: pdfFileList,
     maxCount: 1,
     onChange(info) {

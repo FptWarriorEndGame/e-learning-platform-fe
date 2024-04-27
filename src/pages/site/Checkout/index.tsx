@@ -139,10 +139,9 @@ const Checkout = () => {
 
   const cart = useSelector((state: RootState) => state.client.cart);
 
-  console.log("cart: ", cart)
-
   const selectedCoupon = useSelector((state: RootState) => state.client.selectedCoupon);
-  const courseIds = cart.items.map((item) => item.courseId);
+  const storedCourseId = sessionStorage.getItem('selectedCourse');
+  const courseIds = storedCourseId ? [storedCourseId] : cart.items.map((item) => item.courseId);
 
   const userId = useSelector((state: RootState) => state.auth.userId);
 
@@ -169,11 +168,20 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  console.log(cart?.items);
+  
+
   const checkoutHandler = () => {
     const couponCode = selectedCoupon !== null && selectedCoupon !== undefined ? selectedCoupon : null;
 
+    let items = cart?.items || [];
+
+    if (storedCourseId) {
+      items = [{ courseId: storedCourseId }];
+    }
+
     const newOrder = {
-      items: cart?.items || [],
+      items: items,
       user: {
         _id: userData?.user._id,
         email: userData?.user.email,

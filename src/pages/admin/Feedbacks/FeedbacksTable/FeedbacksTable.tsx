@@ -8,6 +8,7 @@ import {
   StopOutlined,
   SolutionOutlined
 } from '@ant-design/icons';
+import moment from 'moment';
 import { useGetFeedbacksQuery, useUpdateActiveStatusFeedbackMutation } from '../feedback.service';
 import FeedbackDetailsModal from '../FeedbackDetailsModal/FeedbackDetailsModal';
 import FeedbackHistoryModal from '../FeedbackHistoryModal/FeedbackHistoryModal';
@@ -92,21 +93,34 @@ const FeedbacksTable: React.FC = () => {
       dataIndex: 'name',
       key: 'name',
       ellipsis: true,
-      width: '20%'
+      width: '20%',
+      sorter: (a: IContact, b: IContact) => a.name.localeCompare(b.name)
     },
     {
       title: 'Message',
       dataIndex: 'message',
       key: 'message',
       width: '20%',
-      ellipsis: true
+      ellipsis: true,
+      sorter: (a: IContact, b: IContact) => a.message.localeCompare(b.message)
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
       width: '25%',
-      ellipsis: true
+      ellipsis: true,
+      sorter: (a: IContact, b: IContact) => a.email.localeCompare(b.email)
+    },
+    {
+      title: 'Create At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width: '15%',
+      render: (_: IContact, record: IContact) => (
+        <span>{record.createdAt ? moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</span>
+      ),
+      sorter: (a: IContact, b: IContact) => (moment(a.createdAt).valueOf() || 0) - (moment(b.createdAt).valueOf() || 0)
     },
     {
       title: 'Status',
@@ -188,18 +202,8 @@ const FeedbacksTable: React.FC = () => {
         dataSource={data?.feedbacks as IContact[]}
         columns={columns}
         rowKey='_id'
-        pagination={false}
         loading={isFetching}
         scroll={{ y: 400 }}
-      />
-      <Pagination
-        style={{ float: 'right', marginRight: '0px' }}
-        className='pagination'
-        current={currentPage}
-        pageSize={pageSize}
-        total={data?.total}
-        onChange={handlePageChange}
-        showSizeChanger
       />
       {selectedFeedbackId && (
         <FeedbackDetailsModal

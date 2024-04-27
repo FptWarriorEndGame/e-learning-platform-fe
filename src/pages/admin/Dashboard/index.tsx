@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   CalendarOutlined,
   ClockCircleOutlined,
@@ -56,7 +51,7 @@ const Dashboard: React.FC = () => {
     dispatch(showChart('course-sales'));
   };
 
-  // const socket = io(`${BACKEND_URL} ` );
+  // const socket = io(${BACKEND_URL}  );
   //   socket.on("auth", (data) => {
   //    console.log("Socket connect!", data)
   //  })
@@ -146,7 +141,7 @@ const Dashboard: React.FC = () => {
                       className='dashboard__statistic-item'
                       valueStyle={statisticItemStyle}
                       title='30 days sales'
-                      value={summaryReportsData?.reports.saleOf30days}
+                      value={summaryReportsData?.reports.saleOf30days.toFixed(2)}
                       prefix={<DollarOutlined />}
                     />
                   </Link>
@@ -198,17 +193,20 @@ const Dashboard: React.FC = () => {
                 <div className='latest-users__header dashboard__latest-item-header'>
                   <UserOutlined className='latest-users__header-icon dashboard__latest-item-header-icon' />
                   <h3 className='latest-users__header-title dashboard__latest-item-header-title'>Top Users</h3>
-                  <a href='#' className='latest-users__header-view-all dashboard__latest-item-header-view-all'>
+                  <Link
+                    to='/author/users'
+                    className='latest-users__header-view-all dashboard__latest-item-header-view-all'
+                  >
                     see all
-                  </a>
+                  </Link>
                 </div>
                 <div className='latest-users__body dashboard__latest-item-body'>
                   {topUsersData?.topUsers.map((user) => (
                     <div className='latest-users__item' key={user._id}>
-                      <img alt='' src={user.avatar} className='latest-users__item-avatar' />
+                      <img alt='' src={user.avatar} className='latest-users__item-avatar' style={{ objectFit: 'cover' }} />
                       <div className='latest-users__item-info'>
-                        <div className='latest-users__item-name'>{user.name }</div>
-                        <div className='latest-users__item-time'>{user.joinTime }</div>
+                        <div className='latest-users__item-name'>{user.name}</div>
+                        <div className='latest-users__item-time'>{user.joinTime}</div>
                       </div>
                     </div>
                   ))}
@@ -223,9 +221,12 @@ const Dashboard: React.FC = () => {
                 <div className='latest-orders__header dashboard__latest-item-header'>
                   <ShoppingOutlined className='latest-orders__header-icon dashboard__latest-item-header-icon' />
                   <h3 className='latest-orders__header-title dashboard__latest-item-header-title'>Top Orders</h3>
-                  <a href='#' className='latest-orders__header-view-all dashboard__latest-item-header-view-all'>
+                  <Link
+                    to='/author/orders'
+                    className='latest-orders__header-view-all dashboard__latest-item-header-view-all'
+                  >
                     see all
-                  </a>
+                  </Link>
                 </div>
                 <div className='latest-orders__body dashboard__latest-item-body'>
                   {topOrdersData?.topOrders.map((order, index) => (

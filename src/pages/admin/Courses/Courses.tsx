@@ -249,7 +249,7 @@ const Courses = () => {
           access: Access.FREE,
           finalPrice: finalPrice,
           price: price,
-          learners: learners,
+          learners: learners ?? 0,
           createdAt: '18 jun 2023',
           updatedAt: '18 jun 2023',
           actions: (
@@ -314,13 +314,13 @@ const Courses = () => {
               <span className='table__col-name-text'>{name}</span>
             </div>
           ),
-          author: userId?.name,
+          author: userId?.name ?? "",
           categories: categoryId?.name,
           access: Access.FREE,
           // Gio Tinh. -> Course detail
           finalPrice: finalPrice,
           price: price,
-          learners: learners,
+          learners: learners ?? 0,
           createdAt: moment(createdAt).format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: moment(updatedAt).format('YYYY-MM-DD HH:mm:ss'),
           actions: (

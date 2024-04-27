@@ -1,13 +1,15 @@
-import { Button, Col, Drawer, Form, Input, Row, Select, Space, Upload, notification } from 'antd';
+import { Button, Col, Drawer, Form, Input, Row, Select, Space, Upload, message, notification } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../store/store';
 import { IUser, UserRole } from '../../../../../types/user.type';
 import { UserError } from '../../../../../utils/errorHelpers';
 import { useAddUserMutation, useGetUserQuery, useUpdateUserMutation } from '../../user.service';
-import type { UploadFile } from 'antd/es/upload/interface';
+import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { UploadOutlined } from '@ant-design/icons';
 import { UploadChangeParam } from 'antd/lib/upload/interface';
+import { BACKEND_URL } from '../../../../../constant/backend-domain';
+import { UPLOAD_URL } from '../../../../../constant/constant';
 
 const { Option } = Select;
 
@@ -36,7 +38,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
   const [form] = Form.useForm();
   const userId = useSelector((state: RootState) => state.user.userId);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
+  const [uploadedImagePath, setUploadedImagePath] = useState('');
   const { data } = useGetUserQuery(userId, {
     skip: !userId
   });
@@ -48,14 +50,14 @@ const AddUser: React.FC<AddUserProps> = (props) => {
       phone: formData.phone,
       role: formData.role,
       password: formData.password,
-      avatar: formData.avatar,
+      avatar: uploadedImagePath,
       status: 'ACTIVE',
       username: formData.username
     };
 
-    if (fileList.length > 0 && fileList[0].originFileObj) {
-      newUser.avatar = fileList[0].originFileObj;
-    }
+    // if (fileList.length > 0 && fileList[0].originFileObj) {
+    //   newUser.avatar = fileList[0].originFileObj;
+    // }
 
     if (userId) {
       updateUser({
@@ -70,6 +72,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
             message: 'Update User',
             description: 'Update user successfully!'
           });
+          form.resetFields()
         })
         .catch((error) => {
           console.log('error: ', error);
@@ -82,6 +85,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
             message: 'Add User',
             description: 'Add user successfully!'
           });
+          form.resetFields()
         })
         .catch((error: UserError) => {
           notification.error({
@@ -113,9 +117,30 @@ const AddUser: React.FC<AddUserProps> = (props) => {
     setFileList(info.fileList);
   };
 
+  const uploadImageProps: UploadProps = {
+    name: 'imageFile',
+    action: `${UPLOAD_URL}/uploads/image`,
+    fileList: fileList,
+    maxCount: 1,
+    onChange(info) {
+      setFileList(info.fileList);
+      if (info.file.status === 'done') {
+        void message.success(`${info.file.name} file uploaded successfully`);
+
+        const response = info.file.response as { imagePath: string };
+        if (response && response.imagePath) {
+          setUploadedImagePath(response.imagePath);
+        }
+      } else if (info.file.status === 'error') {
+        void message.error(`${info.file.name} file upload failed.`);
+      }
+    }
+  }
+
   return (
     <>
       <Drawer
+        destroyOnClose={true}
         title={userId ? 'Edit User' : 'Add a new User'}
         width={820}
         onClose={props.onClose}
@@ -169,7 +194,7 @@ const AddUser: React.FC<AddUserProps> = (props) => {
                 </Col>
                 <Col span={24}>
                   <Form.Item name='avatar' label='Avatar'>
-                    <Upload beforeUpload={() => false} onChange={handleFileChange} fileList={fileList}>
+                    <Upload {...uploadImageProps}>
                       <Button icon={<UploadOutlined style={{ color: '#000' }} />}>Select File</Button>
                     </Upload>
                   </Form.Item>

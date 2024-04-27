@@ -10,13 +10,16 @@ import {
   useGetCertificateQuery,
   useGetCourseEnrolledByUserQuery,
   useGetDiscussionsByLessonIdQuery,
-  useGetNotesByLessonIdQuery
+  useGetNotesByLessonIdQuery,
+  useGetAllLessonsByCourseIdQuery
 } from '../client.service';
 import {
   createCertificatePath,
   initCurrentProgress,
   initLessonsDoneOfCourse,
-  startPlayingVideo
+  startPlayingVideo,
+  setLessonIds,
+  setCurrentLessonIndex
 } from '../client.slice';
 import './PathPlayer.scss';
 import Discusses from './components/Discusses';
@@ -34,6 +37,58 @@ const PathPlayer = () => {
   const { data, isFetching } = useGetCourseEnrolledByUserQuery(courseId as string);
   const dispatch = useDispatch();
   const [createCertificate, createCertificateResult] = useCreateCertificateMutation();
+
+  const {
+    data: lessonsData,
+    error: lessonsError,
+    isLoading: lessonsIsLoading
+  } = useGetAllLessonsByCourseIdQuery(courseId || '');
+
+  useEffect(() => {
+    if (lessonsError) {
+      notification.error({ message: 'Failed to fetch lessons' });
+    }
+
+    if (lessonsData && !lessonsIsLoading) {
+      const lessonIds = lessonsData.lessons.map((lesson) => lesson._id);
+      dispatch(setLessonIds(lessonIds));
+    }
+  }, [lessonsData, lessonsError, lessonsIsLoading, dispatch]);
+
+  const currentLessonIndex = useSelector((state: RootState) => state.client.currentLessonIndex);
+  const lessonIds = useSelector((state: RootState) => state.client.lessonIds);
+
+  const handlePreviousClick = () => {
+    if (currentLessonIndex > 0) {
+      const previousLessonId = lessonIds[currentLessonIndex - 1];
+      const previousLesson = lessonsData?.lessons.find((lesson) => lesson._id === previousLessonId);
+      if (previousLesson) {
+        const lessonContent = previousLesson.content;
+        dispatch(startPlayingVideo({ lessonId: previousLessonId, content: lessonContent }));
+        dispatch(setCurrentLessonIndex(currentLessonIndex - 1));
+      } else {
+        console.log('Previous lesson not found');
+      }
+    } else {
+      console.log('Already at the first lesson');
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentLessonIndex < lessonIds.length - 1) {
+      const nextLessonId = lessonIds[currentLessonIndex + 1];
+      const nextLesson = lessonsData?.lessons.find((lesson) => lesson._id === nextLessonId);
+      if (nextLesson) {
+        const lessonContent = nextLesson.content;
+        dispatch(startPlayingVideo({ lessonId: nextLessonId, content: lessonContent }));
+        dispatch(setCurrentLessonIndex(currentLessonIndex + 1));
+      } else {
+        console.log('Next lesson not found');
+      }
+    } else {
+      console.log('Already at the last lesson');
+    }
+  };
 
   const cerficiateParams = {
     userId,
@@ -199,10 +254,10 @@ const PathPlayer = () => {
           <Col className='col col-right' md={24} lg={18} xl={18}>
             <div className='path-player__player'>
               <div className='path-player__player-nav'>
-                <div className='path-player__player-nav-item'>
+                <div className='path-player__player-nav-item' onClick={handlePreviousClick}>
                   <LeftOutlined /> Previous
                 </div>
-                <div className='path-player__player-nav-item'>
+                <div className='path-player__player-nav-item' onClick={handleNextClick}>
                   Next <RightOutlined />
                 </div>
               </div>

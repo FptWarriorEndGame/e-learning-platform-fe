@@ -1,5 +1,5 @@
 import { CheckOutlined, HeartOutlined, RightCircleFilled, StarFilled } from '@ant-design/icons';
-import { Breadcrumb, Button, Col, List, Row, Space, Typography, notification } from 'antd';
+import { Breadcrumb, Button, Col, List, Row, Skeleton, Space, Typography, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -81,7 +81,7 @@ const CourseDetail = () => {
 
   const [visibleCourseData, setVisibleCourseData] = useState<number>(10);
 
-  const { data } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
+  const { data, isFetching } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
 
   const courseData = data?.course.willLearns || [];
 
@@ -100,7 +100,24 @@ const CourseDetail = () => {
   };
 
   useEffect(() => {
-    increaseView().catch((error) => console.error('Error in increaseView:', error));
+    const increaseViewIfNeeded = async () => {
+      try {
+        if (!courseId) {
+          console.error('Course ID is undefined');
+          return;
+        }
+
+        const viewedCourses = sessionStorage.getItem('viewedCourses');
+        if (!viewedCourses || !viewedCourses.includes(courseId)) {
+          await increaseCourseView(courseId);
+          sessionStorage.setItem('viewedCourses', viewedCourses ? `${viewedCourses},${courseId}` : courseId);
+        }
+      } catch (error) {
+        console.error('Error increasing course view:', error);
+      }
+    };
+
+    increaseViewIfNeeded().catch((error) => console.error('Error in increaseView:', error));
   }, [courseId, increaseCourseView]);
 
   const [createOrder, createOrderResult] = useCreateOrderMutation();
@@ -207,8 +224,13 @@ const CourseDetail = () => {
   };
 
   const buyNowHandler = () => {
-    if (isAuth) {
-      dispatch(addToCart(courseId as string));
+    const saveCourseToSessionStorage = (courseId: string) => {
+      sessionStorage.removeItem('selectedCourse');
+      sessionStorage.setItem('selectedCourse', courseId);
+    };
+
+    if (isAuth && courseId) {
+      saveCourseToSessionStorage(courseId);
       navigate(`/checkout`);
     } else {
       notification.error({
@@ -247,6 +269,14 @@ const CourseDetail = () => {
 
   const showLoadMoreButton = courseData.length > visibleCourseData;
 
+  if(isFetching) {
+    return <>
+    <Skeleton.Button size="large"/>
+    <Skeleton.Button size="large"/>
+    <Skeleton.Button size="large"/>
+    </>
+  }
+
   return (
     <div className='course-detail'>
       <div className='course-detail__wrap'>
@@ -269,7 +299,7 @@ const CourseDetail = () => {
                   <div className='course-detail__info-item course-detail__info-status'>Bestseller</div>
                   <div className='course-detail__info-item course-detail__info-rating'>
                     <Space>
-                      <span>{avgRatingStars}</span>
+                      <span>{avgRatingStars.toFixed(1)}</span>
                       <span>
                         <StarFilled className='rating-icon' />
                         <StarFilled className='rating-icon' />

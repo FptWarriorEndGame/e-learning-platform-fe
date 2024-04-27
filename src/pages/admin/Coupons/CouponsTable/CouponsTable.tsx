@@ -16,6 +16,7 @@ import CouponHistoriesModal from '../CouponHistoryModal/CouponHistoryModal';
 import CreateCouponDrawer from '../CreateCouponDrawer/CreateCouponDrawer';
 import UpdateCouponDrawer from '../UpdateCouponDrawer/UpdateCouponDrawer';
 import { transformDate } from '../../../../utils/functions';
+import moment from 'moment';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -74,49 +75,78 @@ const CouponsTable: React.FC = () => {
       dataIndex: 'code',
       key: 'code',
       width: '15%',
-      ellipsis: true
+      ellipsis: true,
+      sorter: (a: ICoupon, b: ICoupon) => a.code.localeCompare(b.code)
     },
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
-      width: '50%',
-      ellipsis: true
+      width: '15%',
+      ellipsis: true,
+      sorter: (a: ICoupon, b: ICoupon) => a.description.localeCompare(b.description)
     },
     {
       title: 'Discount Amount',
       dataIndex: 'discountAmount',
       key: 'discountAmount',
-      width: '20%',
-      render: (_: ICoupon, record: ICoupon) => <span>{record.discountAmount}</span>
+      width: '15%',
+      render: (_: ICoupon, record: ICoupon) => <span>{record.discountAmount}</span>,
+      sorter: (a: ICoupon, b: ICoupon) => a.discountAmount - b.discountAmount
+    },
+    {
+      title: 'Coupon Type',
+      dataIndex: 'couponType',
+      key: 'couponType',
+      width: '15%',
+      render: (_: ICoupon, record: ICoupon) => (
+        <span>
+          {typeof record.couponTypeId === 'string' ? record.couponTypeId : record.couponTypeId?.name ?? 'N/A'}
+        </span>
+      ),
+      sorter: (a: ICoupon, b: ICoupon) => {
+        const idA = typeof a.couponTypeId === 'string' ? a.couponTypeId : a.couponTypeId?._id ?? '';
+        const idB = typeof b.couponTypeId === 'string' ? b.couponTypeId : b.couponTypeId?._id ?? '';
+        return idA.localeCompare(idB);
+      }
     },
     {
       title: 'Start Coupon',
       dataIndex: 'dateStart',
       key: 'dateStart',
-      width: '20%',
-      render: (_: ICoupon, record: ICoupon) => <span>{record.dateStart ? transformDate(record.dateStart) : 'N/A'}</span>
+      width: '12%',
+      render: (_: ICoupon, record: ICoupon) => (
+        <span>{record.dateStart ? moment(record.dateStart).format('YYYY-MM-DD') : 'N/A'}</span>
+      ),
+      sorter: (a: ICoupon, b: ICoupon) => (moment(a.dateStart).valueOf() || 0) - (moment(b.dateStart).valueOf() || 0)
     },
     {
       title: 'End Coupon',
-      dataIndex: 'EndDate',
-      key: 'EndDate',
-      width: '20%',
-      render: (_: ICoupon, record: ICoupon) => <span>{transformDate(record.dateEnd)}</span>
+      dataIndex: 'dateEnd',
+      key: 'dateEnd',
+      width: '12%',
+      render: (_: ICoupon, record: ICoupon) => (
+        <span>{record.dateEnd ? moment(record.dateEnd).format('YYYY-MM-DD') : 'N/A'}</span>
+      ),
+      sorter: (a: ICoupon, b: ICoupon) => (moment(a.dateEnd).valueOf() || 0) - (moment(b.dateEnd).valueOf() || 0)
     },
     {
       title: 'Create At',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      width: '20%',
-      render: (_: ICoupon, record: ICoupon) => <span>{record.createdAt ? transformDate(record.createdAt) : 'N/A'}</span>
+      width: '15%',
+      render: (_: ICoupon, record: ICoupon) => (
+        <span>{record.createdAt ? moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</span>
+      ),
+      sorter: (a: ICoupon, b: ICoupon) => (moment(a.createdAt).valueOf() || 0) - (moment(b.createdAt).valueOf() || 0)
     },
     {
       title: 'Status',
       dataIndex: 'isDeleted',
       key: 'isDeleted',
       width: '10%',
-      render: (_: ICoupon, record: ICoupon) => <span>{record.isDeleted ? 'Inactive' : 'Active'}</span>
+      render: (_: ICoupon, record: ICoupon) => <span>{record.isDeleted ? 'Inactive' : 'Active'}</span>,
+      sorter: (a: ICoupon, b: ICoupon) => (a.isDeleted ? 1 : 0) - (b.isDeleted ? 1 : 0)
     },
     {
       title: 'Actions',
@@ -204,18 +234,8 @@ const CouponsTable: React.FC = () => {
         dataSource={data?.coupons as ICoupon[]}
         columns={columns}
         rowKey='_id'
-        pagination={false}
         loading={isFetching}
         scroll={{ y: 400 }}
-      />
-      <Pagination
-        style={{ float: 'right', marginRight: '0px' }}
-        className='pagination'
-        current={currentPage}
-        pageSize={pageSize}
-        total={data?.total}
-        onChange={handlePageChange}
-        showSizeChanger
       />
       {selectedCouponId && (
         <CouponDetailsModal

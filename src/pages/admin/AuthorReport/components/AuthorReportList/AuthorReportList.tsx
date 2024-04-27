@@ -52,10 +52,6 @@ const AuthorReportList: React.FC<AuthorReportProps> = (props) => {
   const { data: categoriesData, isFetching: isCategoriesFetching } = useGetCategoriesQuery({ _q: '' });
   const { data: authorsData, isFetching: isAuthorFetching } = useGetAuthorsQuery();
 
-  if (dataList) {
-    console.log(dataList, isFetching);
-  }
-
   const columns: ColumnsType<DataCourseType> = [
     {
       title: 'Course Name',

@@ -94,21 +94,11 @@ const Header = () => {
       key: 'mylearning',
       icon: <UserOutlined />
     },
-    // {
-    //   label: 'Instructor Dashboard',
-    //   key: 'instructor',
-    //   icon: <UserOutlined />
-    // },
     {
       label: 'Notifications',
       key: 'notifications',
       icon: <UserOutlined />
     },
-    // {
-    //   label: 'Messages',
-    //   key: 'messages',
-    //   icon: <UserOutlined />
-    // },
     {
       label: (
         <Link to='/account-settings'>
@@ -141,11 +131,6 @@ const Header = () => {
       key: 'change-password',
       icon: <UserOutlined />
     },
-    // {
-    //   label: 'Edit Profile',
-    //   key: 'edit-profile',
-    //   icon: <UserOutlined />
-    // },
     {
       label: 'Help',
       key: 'help',
@@ -161,29 +146,6 @@ const Header = () => {
   ];
 
   const notificationItems: MenuProps['items'] = [
-    {
-      label: 'Note 1',
-      key: '1',
-      icon: <UserOutlined />
-    },
-    {
-      label: 'Note 2',
-      key: '2',
-      icon: <UserOutlined />
-    },
-    {
-      label: 'Note 3',
-      key: '3',
-      icon: <UserOutlined />,
-      danger: true
-    },
-    {
-      label: 'Note 4',
-      key: 'Note 5',
-      icon: <UserOutlined />,
-      danger: true
-      // disabled: true
-    }
   ];
 
   const wishlistItems: MenuProps['items'] = [
@@ -369,7 +331,7 @@ const Header = () => {
                     type='search'
                     name=''
                     id=''
-                    placeholder='Tìm kiếm khóa học...'
+                    placeholder='Search to find your suitable courses...'
                     onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                       if (event.key === 'Enter') {
                         onSearch(event.currentTarget.value);

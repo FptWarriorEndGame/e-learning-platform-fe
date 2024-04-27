@@ -151,7 +151,6 @@ export const reportApi = createApi({
               ...result.map(({ _id }: { _id: string }) => ({ type: 'Reports' as const, _id })),
               { type: 'Reports' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
 
             return final;
           }
@@ -191,7 +190,6 @@ export const reportApi = createApi({
               ...result.map(({ _id }: { _id: string }) => ({ type: 'Reports' as const, _id })),
               { type: 'Reports' as const, id: 'LIST' }
             ];
-            console.log('final: ', final);
 
             return final;
           }

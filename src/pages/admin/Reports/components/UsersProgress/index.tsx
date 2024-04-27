@@ -34,9 +34,6 @@ const UsersProgress = () => {
   const [isSearch, setIsSearch] = useState(true);
   const [currentParams, setCurrentParams] = useState({ dateStart: '', dateEnd: '', authorId: '' });
   const currentAdminRole = useSelector((state: RootState) => state.auth.adminRole) as UserRole;
-
-  console.log('currentAdminRole', currentAdminRole);
-
   const { data: dataAuthorSelect } = useGetAuthorsSelectQuery();
   const {
     data: usersProgressData,
