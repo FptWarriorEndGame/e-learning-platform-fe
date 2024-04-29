@@ -3,6 +3,7 @@ import './Profile.scss';
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 // type Props = {}
 import { ReadOutlined, StockOutlined, UserOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Button from '../../../components/Button';
 import { RootState } from '../../../store/store';
@@ -26,7 +27,7 @@ const profileItems: TabsProps['items'] = [
       </div>
     ),
     children: ``
-  },
+  }
   // {
   //   key: 'activity',
   //   label: (
@@ -140,11 +141,15 @@ const Profile = () => {
                       />
                     </div>
                     <div className='profile__header-item-name'>
-                      <div className='profile__header-item-name-text'>Tran Nhat Sang</div>
-                      <div className='profile__header-item-name-badge'>Staff</div>
+                      <div className='profile__header-item-name-text'>{data?.user.name}</div>
+                      <div className='profile__header-item-name-badge'>{data?.user.role}</div>
                     </div>
                     <div className='profile__header-item-btn-wrap'>
-                      <Button className=' profile__header-item-btn btn btn-sm btn-primary'>Edit</Button>
+                      <Link
+                        to='/account-settings'
+                      >
+                        <Button className=' profile__header-item-btn btn btn-sm btn-primary'>Edit</Button>
+                      </Link>
                     </div>
                   </div>
                 </Col>
@@ -162,7 +167,7 @@ const Profile = () => {
                     <div className='profile__header-item-icon'>
                       <ReadOutlined />
                     </div>
-                    <div className='profile__header-item-number'>0</div>
+                    <div className='profile__header-item-number'>{data?.user.numCourses}</div>
                     <div className='profile__header-item-text'>Achievement</div>
                   </div>
                 </Col>

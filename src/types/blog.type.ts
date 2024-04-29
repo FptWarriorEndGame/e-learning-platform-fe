@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { IBase } from './base.type';
+import { IUser } from './user.type';
 
 export interface IBlog extends IBase {
   _id: string | undefined;
@@ -12,6 +13,6 @@ export interface IBlog extends IBase {
   thumbnail: string;
   datePublished: string;
   content: string;
-  userId: string;
+  userId: IUser;
   categoryId: string;
 }

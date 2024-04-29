@@ -34,8 +34,6 @@ const DiscussCourse = () => {
   const { data: CourseResponse, isFetching: isFetchingCourse } = useGetCoursesQuery(params);
   const { data: SectionResponse, isFetching: isFetchingSection } = useGetSectionsQuery();
 
-  console.log('CourseResponse', CourseResponse);
-
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 

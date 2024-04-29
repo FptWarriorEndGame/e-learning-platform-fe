@@ -36,7 +36,7 @@ const ListComments: React.FC<IBlogProps> = ({ data, onBlogCommentsEdit, blog }) 
   const [historyVisible, setHistoryVisible] = useState(false);
   const [MessVisible, setMessVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
 
   const getBlogName = (blogId: string) => {
     const blogs = blog.find((c) => c._id === blogId);
@@ -178,7 +178,7 @@ const ListComments: React.FC<IBlogProps> = ({ data, onBlogCommentsEdit, blog }) 
         columns={columns}
         dataSource={comments}
         pagination={{ current: currentPage, pageSize, onChange: handleTableChange }}
-        scroll={{ x: 'max-content' }}
+        scroll={{ x: 'max-content', y: 800 }}
       />
       <ViewDetailBlogComments
         isVisible={detailVisible}

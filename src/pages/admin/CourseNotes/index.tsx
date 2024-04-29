@@ -27,7 +27,6 @@ const CourseNotes = () => {
   });
 
   const { data: courseNotesResponse, isFetching: isFetchingCourseNotes } = useGetNotesQuery(params);
-  console.log('courseNotesResponse', courseNotesResponse);
 
   const filteredCourseNotes =
     courseNotesResponse?.notes.filter((note) => {
@@ -89,8 +88,8 @@ const CourseNotes = () => {
         </Button>
         <Space>
           <Search placeholder='Search notes' onChange={onNameChange} style={{ width: 200 }} className='search-wrap'/>
-          <InputNumber min={0} placeholder='Min minute' onChange={onMinMinuteChange} style={{ width: 100 }} />
-          <InputNumber min={0} placeholder='Max minute' onChange={onMaxMinuteChange} style={{ width: 100 }} />
+          <InputNumber min={0} placeholder='Min minute' onChange={onMinMinuteChange} style={{ width: 200 }} />
+          <InputNumber min={0} placeholder='Max minute' onChange={onMaxMinuteChange} style={{ width: 200 }} />
         </Space>
       </Space>
       {isFetchingCourseNotes ? (

@@ -40,7 +40,7 @@ const ListDiscuss: React.FC<IDisCussProps> = ({ data, onDiscussEdit, course, sec
   const [historyVisible, setHistoryVisible] = useState(false);
   const [MessVisible, setMessVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
 
   const getCourseName = (courseId: string) => {
     const courseObj = course.find((c) => c._id === courseId);

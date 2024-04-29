@@ -23,7 +23,7 @@ const CategoriesBlogList: React.FC<CategoryListProps> = ({ data, onCategoryEdit 
   const [detailVisible, setDetailVisible] = useState(false);
   const [historyVisible, setHistoryVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
 
   const handleTableChange = (page: number, pageSize: number) => {
     setCurrentPage(page);
@@ -156,7 +156,7 @@ const CategoriesBlogList: React.FC<CategoryListProps> = ({ data, onCategoryEdit 
         columns={columns}
         dataSource={categories}
         pagination={{ current: currentPage, pageSize, onChange: handleTableChange }}
-        scroll={{ x: 'max-content' }}
+        scroll={{ x: 'max-content', y: 820 }}
       />
       <ViewDetailCategoryBlog
         isVisible={detailVisible}

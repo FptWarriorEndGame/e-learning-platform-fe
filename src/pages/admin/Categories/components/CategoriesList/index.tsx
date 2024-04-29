@@ -210,7 +210,7 @@ const CategoriesList: React.FC<CategoryListProps> = (props) => {
         dataSource={categoriesSource}
         onChange={onChange}
         pagination={tableParams.pagination}
-        scroll={{ y: 400 }}
+        scroll={{ y: 820 }}
       />
     </div>
   );

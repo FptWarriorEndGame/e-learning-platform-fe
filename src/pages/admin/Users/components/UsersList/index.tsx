@@ -299,7 +299,7 @@ const UsersList: React.FC<UserListProps> = (props) => {
             dataSource={usersData}
             onChange={onChange}
             pagination={tableParams.pagination}
-            scroll={{ x: 1200, y: 600 }}
+            scroll={{ x: 1200, y: 800 }}
           />
         </div>
       )}

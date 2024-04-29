@@ -1,4 +1,4 @@
-import { CheckOutlined, HeartOutlined, RightCircleFilled, StarFilled } from '@ant-design/icons';
+import { CheckOutlined, HeartOutlined, RightCircleFilled, StarFilled, HeartFilled } from '@ant-design/icons';
 import { Breadcrumb, Button, Col, List, Row, Skeleton, Space, Typography, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
@@ -16,7 +16,10 @@ import {
   useGetCourseDetailQuery,
   useGetSectionsByCourseIdQuery,
   useGetUserQuery,
-  useIncreaseCourseViewMutation
+  useIncreaseCourseViewMutation,
+  useCreateWishlistMutation,
+  useDeleteWishlistMutation,
+  useGetCourseIdsFromWishlistByUserIdQuery
 } from '../client.service';
 import { addToCart } from '../client.slice';
 import './CourseDetail.scss';
@@ -84,6 +87,46 @@ const CourseDetail = () => {
   const { data, isFetching } = useGetCourseDetailQuery({ courseId, userId } as { courseId: string; userId: string });
 
   const courseData = data?.course.willLearns || [];
+
+  const [createWishlist] = useCreateWishlistMutation();
+  const [deleteWishlist] = useDeleteWishlistMutation();
+  const { data: wishlistData } = useGetCourseIdsFromWishlistByUserIdQuery(userId, {
+    skip: !userId || !isAuth
+  });
+  const wishlistCourseIds: string[] = wishlistData?.data || [];
+  const isCourseInWishlist = wishlistCourseIds.includes(courseId || '');
+
+  const handleWishlistChange = async (courseId: string, isRemoving: boolean, userId: string) => {
+    if (!isAuth) {
+      dispatch(openAuthModal());
+      return;
+    }
+
+    try {
+      if (isRemoving) {
+        await deleteWishlist({ courseId, userId }).unwrap();
+        notification.success({
+          message: 'Removed from Wishlist',
+          description: `The course has been removed from your wishlist.`
+        });
+      } else {
+        await createWishlist({ courseId, userId }).unwrap();
+        notification.success({
+          message: 'Added to Wishlist',
+          description: `The course has been added to your wishlist.`
+        });
+      }
+    } catch {
+      notification.error({
+        message: 'Error Changing Wishlist',
+        description: `An error occurred while changing your wishlist.`
+      });
+    }
+  };
+
+  const handleWishlistClick = () => {
+    handleWishlistChange(courseId || '', isCourseInWishlist, userId || '').catch(console.error);
+  };
 
   const increaseView = async () => {
     try {
@@ -269,12 +312,14 @@ const CourseDetail = () => {
 
   const showLoadMoreButton = courseData.length > visibleCourseData;
 
-  if(isFetching) {
-    return <>
-    <Skeleton.Button size="large"/>
-    <Skeleton.Button size="large"/>
-    <Skeleton.Button size="large"/>
-    </>
+  if (isFetching) {
+    return (
+      <>
+        <Skeleton.Button size='large' />
+        <Skeleton.Button size='large' />
+        <Skeleton.Button size='large' />
+      </>
+    );
   }
 
   return (
@@ -378,8 +423,8 @@ const CourseDetail = () => {
                                 Add to Cart
                               </ButtonCmp>
                             )}
-                            <Button className='course-detail__overview-wishlist-btn'>
-                              <HeartOutlined />
+                            <Button className='course-detail__overview-wishlist-btn' onClick={handleWishlistClick}>
+                              {isCourseInWishlist ? <HeartFilled /> : <HeartOutlined />}
                             </Button>
                           </Space>
                           <div>

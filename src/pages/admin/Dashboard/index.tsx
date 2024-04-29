@@ -17,11 +17,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../../store/store';
 import { useGetSummaryReportsQuery, useGetTopUsersQuery, useGetTopOrdersQuery } from '../report.service';
+import { useGetAllBlogsQuery } from '../../site/client.service';
+import { useGetCouponsQuery } from '../Coupons/coupon.service';
 import { selectPreviousDays, showChart } from '../report.slice';
 import './Dashboard.scss';
 import Chart from './components/Chart';
 import { io } from 'socket.io-client';
 import { BACKEND_URL } from '../../../constant/backend-domain';
+import moment from 'moment';
 const statisticItemStyle = {};
 
 const Dashboard: React.FC = () => {
@@ -32,6 +35,14 @@ const Dashboard: React.FC = () => {
   const { data: topUsersData } = useGetTopUsersQuery();
 
   const { data: topOrdersData } = useGetTopOrdersQuery();
+
+  const { data: allBlogsData } = useGetAllBlogsQuery({});
+
+  const { data: couponData } = useGetCouponsQuery({});
+
+  const latestBlogs = allBlogsData?.blogs.slice(0, 10);
+
+  const latestCoupons = couponData?.coupons.slice(0, 10);
 
   const chartName = useSelector((state: RootState) => state.report.chartName);
 
@@ -203,7 +214,12 @@ const Dashboard: React.FC = () => {
                 <div className='latest-users__body dashboard__latest-item-body'>
                   {topUsersData?.topUsers.map((user) => (
                     <div className='latest-users__item' key={user._id}>
-                      <img alt='' src={user.avatar} className='latest-users__item-avatar' style={{ objectFit: 'cover' }} />
+                      <img
+                        alt=''
+                        src={user.avatar}
+                        className='latest-users__item-avatar'
+                        style={{ objectFit: 'cover' }}
+                      />
                       <div className='latest-users__item-info'>
                         <div className='latest-users__item-name'>{user.name}</div>
                         <div className='latest-users__item-time'>{user.joinTime}</div>
@@ -248,41 +264,106 @@ const Dashboard: React.FC = () => {
 
           {/* Events Log */}
           <Col md={6}>
-            <div className='dashboard__latest-users dashboard__latest-item'>
-              <div className='latest-users'>
-                <div className='latest-users__header dashboard__latest-item-header'>
-                  <StockOutlined className='latest-users__header-icon dashboard__latest-item-header-icon' />
-                  <h3 className='latest-users__header-title dashboard__latest-item-header-title'>Events Log</h3>
-                  <a href='#' className='latest-users__header-view-all dashboard__latest-item-header-view-all'>
+            <div className='dashboard__latest-blogs dashboard__latest-item'>
+              <div className='latest-blogs'>
+                <div className='latest-blogs__header dashboard__latest-item-header'>
+                  <CalendarOutlined className='latest-blogs__header-icon dashboard__latest-item-header-icon' />
+                  <h3 className='latest-blogs__header-title dashboard__latest-item-header-title'>Latest Blogs</h3>
+                  <Link
+                    to='/author/blog'
+                    className='latest-blogs__header-view-all dashboard__latest-item-header-view-all'
+                  >
                     see all
-                  </a>
+                  </Link>
                 </div>
-                <div className='latest-users__body dashboard__latest-item-body'>
-                  <div className='latest-users__item'>
-                    <img
-                      title='latest-users__item-avata'
-                      src='https://lwfiles.mycourse.app/648eaf1c0c0c35ee7db7e0a2-public/avatars/thumbs/648eaf1c0c0c35ee7db7e0a3.jpg'
-                      className='latest-users__item-avatar'
-                    ></img>
-                    <div className='latest-users__item-info'>
-                      <div className='latest-users__item-name'>Tran Nhat Sang</div>
-                      <div className='latest-users__item-time'>1 month</div>
+                <div className='latest-blogs__body dashboard__latest-item-body'>
+                  {latestBlogs?.map((blog) => (
+                    <div
+                      className='latest-blogs__item'
+                      key={blog._id}
+                      style={{
+                        marginBottom: '20px',
+                        padding: '10px',
+                        border: '1px solid #e0e0e0',
+                        borderRadius: '5px'
+                      }}
+                    >
+                      <img
+                        alt=''
+                        src={blog.blogImg}
+                        className='latest-blogs__item-thumbnail'
+                        style={{
+                          width: '100%',
+                          height: '200px',
+                          objectFit: 'cover',
+                          borderRadius: '5px'
+                        }}
+                      />
+                      <div className='latest-blogs__item-info' style={{ marginTop: '10px' }}>
+                        <h4
+                          className='latest-blogs__item-title'
+                          style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}
+                        >
+                          {blog.title}
+                        </h4>
+                        <div className='latest-blogs__item-meta' style={{ fontSize: '14px' }}>
+                          <span className='latest-blogs__item-author'>
+                            <UserOutlined /> {blog.author}
+                          </span>
+                          <span className='latest-blogs__item-date' style={{ marginLeft: '15px' }}>
+                            <CalendarOutlined /> {moment(blog.datePublished).format('DD/MM/YYYY')}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
           </Col>
           {/* Latest posts */}
           <Col md={6}>
-            <div className='dashboard__online-users dashboard__latest-item'>
-              <div className='online-users'>
-                <div className='online-users__header dashboard__latest-item-header'>
-                  <UserOutlined className='online-users__header-icon dashboard__latest-item-header-icon' />
-                  <h3 className='online-users__header-title dashboard__latest-item-header-title'>Online Users</h3>
+            <div className='dashboard__latest-coupons dashboard__latest-item'>
+              <div className='latest-coupons'>
+                <div className='latest-coupons__header dashboard__latest-item-header'>
+                  <DollarOutlined className='latest-coupons__header-icon dashboard__latest-item-header-icon' />
+                  <h3 className='latest-coupons__header-title dashboard__latest-item-header-title'>Latest Coupons</h3>
+                  <Link
+                    to='/author/marketing/coupons'
+                    className='latest-coupons__header-view-all dashboard__latest-item-header-view-all'
+                  >
+                    see all
+                  </Link>
                 </div>
-                <div className='online-users__body dashboard__latest-item-body'>
-                  <div className='online-users__item'></div>
+                <div className='latest-coupons__body dashboard__latest-item-body'>
+                  {latestCoupons?.map((coupon) => (
+                    <div
+                      className='latest-coupons__item'
+                      key={coupon._id}
+                      style={{
+                        marginBottom: '20px',
+                        padding: '10px',
+                        border: '1px solid #e0e0e0',
+                        borderRadius: '5px'
+                      }}
+                    >
+                      <div className='latest-coupons__item-info' style={{ marginTop: '10px' }}>
+                        <h4
+                          className='latest-coupons__item-title'
+                          style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}
+                        >
+                          {coupon.code}
+                        </h4>
+                        <div className='latest-coupons__item-meta' style={{ fontSize: '14px' }}>
+                          <span className='latest-coupons__item-description'>{coupon.description}</span>
+                          <span className='latest-coupons__item-date' style={{ marginLeft: '15px' }}>
+                            <UserOutlined /> {moment(coupon.dateStart).format('DD/MM/YYYY')} -{' '}
+                            {moment(coupon.dateEnd).format('DD/MM/YYYY')}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

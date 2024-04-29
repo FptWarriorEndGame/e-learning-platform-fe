@@ -118,7 +118,7 @@ const TransactionsTable: React.FC = () => {
         columns={columns}
         rowKey='orderId'
         loading={isFetching}
-        scroll={{ y: 400 }}
+        scroll={{ y: 800 }}
       />
       {selectedTransaction && (
         <TransactionDetailsModal

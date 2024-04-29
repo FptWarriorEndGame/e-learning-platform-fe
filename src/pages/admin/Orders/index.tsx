@@ -130,8 +130,8 @@ const Orders = () => {
         </div>
         <div className='orders__show-result'>
           <span className='orders__show-result-text'>Sales Count: {data?.count || 0}</span>
-          <span className='orders__show-result-text'>Amount: ${data?.total || 0}</span>
-          <span className='orders__show-result-text'>Taxes: $0</span>
+          <span className='orders__show-result-text'>Amount: ${data?.total.toFixed(2) || 0}</span>
+          {/* <span className='orders__show-result-text'>Taxes: $0</span> */}
         </div>
         <div className='orders__content'>
           {isFetching && <Skeleton />}

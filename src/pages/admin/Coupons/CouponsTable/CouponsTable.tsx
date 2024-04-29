@@ -235,7 +235,7 @@ const CouponsTable: React.FC = () => {
         columns={columns}
         rowKey='_id'
         loading={isFetching}
-        scroll={{ y: 400 }}
+        scroll={{ y: 800 }}
       />
       {selectedCouponId && (
         <CouponDetailsModal
