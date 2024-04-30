@@ -44,8 +44,9 @@ const Forgot: React.FC<ForgotProps> = (props) => {
           setIsSubmitting(false);
         }
       })
-      .catch((error) => {
-        console.log('error:', error);
+      .catch((error: any) => {
+        notification.error({ type: 'error', message: "Reset password fail", description: 'No Email founded at this website!' });
+        setIsSubmitting(false)
       });
   };
 

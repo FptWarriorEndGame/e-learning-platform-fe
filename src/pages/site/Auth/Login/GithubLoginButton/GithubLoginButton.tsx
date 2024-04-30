@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 import { notification } from 'antd';
 
-
 interface Response {
   code: string;
 }
@@ -73,7 +72,7 @@ const GithubLoginButton: React.FC = () => {
   return (
     <GitHubLogin
       clientId='2c54ea01c90e1cbc1e0f'
-      redirectUri='http://localhost:8000'
+      redirectUri='https://e-learning-platform.pro'
       onSuccess={onSuccess}
       onFailure={onFailure}
       className='github-login-button'

@@ -516,7 +516,7 @@ const HomePage = () => {
             )}
           </Slider>
 
-          <div className='mb-4 opacity-0'>dsadsa</div>
+          <div className='mb-4 opacity-0'></div>
         </div>
       </div>
     </div>

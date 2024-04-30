@@ -132,9 +132,6 @@ const CourseNotesList: React.FC<CourseNotesListProps> = ({ data, onNoteEdit }) =
       createdAt: transformDate(createdAt),
       actions: (
         <Space>
-          <Button onClick={() => noteEditHandler(_id)}>
-            <EditOutlined />
-          </Button>
           <Button onClick={() => softDeleteNoteHandler(_id)} danger>
             <StopOutlined />
           </Button>

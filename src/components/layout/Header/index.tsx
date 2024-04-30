@@ -5,7 +5,7 @@ import { useEffect, useState, useMemo, RefObject } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useLogoutMutation } from '../../../pages/auth.service';
-import { closeAuthModal, openAuthModal, setUnauthenticated } from '../../../pages/auth.slice';
+import { closeAuthModal, openAuthModal, resetAuthState, setUnauthenticated } from '../../../pages/auth.slice';
 import Login from '../../../pages/site/Auth/Login';
 import Signup from '../../../pages/site/Auth/Signup';
 import { useGetUserQuery } from '../../../pages/site/client.service';
@@ -57,6 +57,11 @@ const Header = () => {
       setUserData(data.user);
     }
   }, [data]);
+
+  useEffect(() => {
+    console.log("authStateGlobal", authStateGlobal)
+  }, [authStateGlobal])
+
   const menuRef = useRef<HTMLDivElement>(null);
   const menubtnRef = useRef<HTMLSpanElement>(null);
   const closebtnRef = useRef<HTMLSpanElement>(null);
@@ -163,10 +168,12 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const handleOk = () => {
+    dispatch(resetAuthState())
     dispatch(closeAuthModal());
   };
 
   const handleCancel = () => {
+    dispatch(resetAuthState())
     dispatch(closeAuthModal());
   };
 

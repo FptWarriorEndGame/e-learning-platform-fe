@@ -46,6 +46,9 @@ const authSlice = createSlice({
     setAuthState(state, action: PayloadAction<string>) {
       state.authState = action.payload;
     },
+    resetAuthState(state) {
+      state.authState = ""
+    },
     setCurrentUserId(state, action: PayloadAction<string>) {
       state.userId = action.payload;
     },
@@ -99,6 +102,7 @@ export const {
   logout,
   adminLogout,
   setAuthState,
-  setCurrentUserId
+  setCurrentUserId,
+  resetAuthState
 } = authSlice.actions;
 export default authReducer;

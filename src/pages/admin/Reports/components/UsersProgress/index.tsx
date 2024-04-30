@@ -60,7 +60,6 @@ const UsersProgress = () => {
       lastLogin: report.lastLogin,
       lastEnrollment: report.lastEnrollment,
       studyTime: +report.studyTime,
-      totalTimeOnPlatform: report.totalTimeOnPlatform,
       allCourses: report.allCourses,
       completedCourses: report.completedCourses,
       inCompletedCourses: report.inCompletedCourses
@@ -369,14 +368,6 @@ const UsersProgress = () => {
               scroll={{ x: 'max-content' }}
               columns={columns}
               dataSource={reportData}
-              summary={() => (
-                <Table.Summary fixed>
-                  <Table.Summary.Row>
-                    <Table.Summary.Cell index={0}>Summary</Table.Summary.Cell>
-                    <Table.Summary.Cell index={1}>This is a summary content</Table.Summary.Cell>
-                  </Table.Summary.Row>
-                </Table.Summary>
-              )}
             />
           )}
         </div>

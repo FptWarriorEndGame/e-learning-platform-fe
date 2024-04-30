@@ -112,7 +112,7 @@ const Dashboard: React.FC = () => {
                       { value: '7', label: 'Last 7 days' },
                       { value: '30', label: 'Last 30 days' },
                       { value: '60', label: 'Last 60 days' },
-                      { value: 'all', label: 'All' }
+                      // { value: 'all', label: 'All' }
                     ]}
                   />
                 </div>

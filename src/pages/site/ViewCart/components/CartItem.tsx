@@ -52,11 +52,11 @@ const CartItem = (props: CartItemProps) => {
                 {name}
               </Link>
               <p className='view-cart__list-item-info-line view-cart__list-item-info-author'>
-                By <Link to={`/user/${author._id}`}>{author.name}</Link>
+                By <Link to={`/user/${author?._id ?? ""}`}>{author?.name}</Link>
               </p>
               <div className='view-cart__list-item-info-line view-cart__list-item-info-rating'>
                 <div className='info-rating'>
-                  <div className='info-rating__point'>{avgRatingStars}</div>
+                  <div className='info-rating__point'>{avgRatingStars.toFixed(2)}</div>
                   <div className='info-rating__icons'>
                     <StarFilled className='info-rating__icons-item' />
                     <StarFilled className='info-rating__icons-item' />

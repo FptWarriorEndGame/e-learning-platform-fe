@@ -12,16 +12,6 @@ const PurchaseHistory: React.FC = () => {
             key: '1',
             children: <CoursesTable />
         },
-        {
-            label: 'Subscriptions',
-            key: '2',
-            children: 'Content of Tab Pane 2'
-        },
-        {
-            label: 'Refunds',
-            key: '3',
-            children: 'Content of Tab Pane 3'
-        }
     ];
 
     return (
