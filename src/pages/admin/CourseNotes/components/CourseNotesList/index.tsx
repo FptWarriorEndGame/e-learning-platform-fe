@@ -157,7 +157,7 @@ const CourseNotesList: React.FC<CourseNotesListProps> = ({ data, onNoteEdit }) =
   };
 
   return (
-    <div className='course-notes-list'>
+    <div className='course-notes-list mt-4'>
       <Table
         columns={columns}
         scroll={{ x: 'min-content' }}

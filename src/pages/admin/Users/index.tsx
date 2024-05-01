@@ -88,7 +88,7 @@ const Users = () => {
               style={{ width: 200 }}
               className='search-wrap'
             />
-            <Select
+            {/* <Select
               showSearch
               placeholder='Search by course'
               optionFilterProp='children'
@@ -99,7 +99,7 @@ const Users = () => {
                   {course.name}
                 </Option>
               ))}
-            </Select>
+            </Select> */}
 
             <Select
               size='middle'

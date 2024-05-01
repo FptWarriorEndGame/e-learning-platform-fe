@@ -190,7 +190,7 @@ const ListDiscuss: React.FC<IDisCussProps> = ({ data, onDiscussEdit, course, sec
   ];
 
   return (
-    <div className='categories-list'>
+    <div className='categories-list mt-4'>
       <Table
         columns={columns}
         dataSource={discusss}

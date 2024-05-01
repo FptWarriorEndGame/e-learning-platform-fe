@@ -6,6 +6,7 @@ import CourseReviewModal from './CourseReviewModal/CourseReviewModal';
 import styles from './OrderDetailsModal.module.scss';
 import { message } from 'antd';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 interface OrderDetailsModalProps {
   orderId: string | null;
@@ -59,7 +60,8 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ orderId, isOpen, 
     {
       title: 'Product Name',
       dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      render: (_: any, record: {key: string, name: string}) => <Link to={`/courses/${record.key}`}>{record.name}</Link>
     },
     {
       title: 'Thumbnail',

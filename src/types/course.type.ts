@@ -25,6 +25,7 @@ export interface ICourse extends IBase {
   price: number;
   finalPrice: number;
   access: AccessStatus;
+  isBought?: boolean;
   level: CourseLevel;
   thumbnail: string;
   courseSlug: string;

@@ -1,7 +1,8 @@
 @import '../../../assets/sass/admin-base';
 .dashboard {
+  height: 100%;
   &__summary {
-    height: 34rem;
+    height: 50%;
     background-color: #fff;
     margin-top: 1rem;
     &-row {

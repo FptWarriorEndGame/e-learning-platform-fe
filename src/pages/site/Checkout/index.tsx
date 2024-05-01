@@ -59,52 +59,52 @@ const Checkout = () => {
       children: <p>{text}</p>,
       style: panelStyle
     },
-    {
-      key: '2',
-      label: (
-        <div>
-          <Radio
-            value='Credit/Debit Card'
-            checked={selectedPaymentMethod === 'Credit/Debit Card'}
-            onChange={() => {
-              if (expandedPanel.includes('2')) {
-                setExpandedPanel([]);
-              } else {
-                setExpandedPanel(['2']);
-              }
-              setSelectedPaymentMethod('Credit/Debit Card');
-            }}
-          >
-            Credit/Debit Card
-          </Radio>
-        </div>
-      ),
-      children: <p>{text}</p>,
-      style: panelStyle
-    },
-    {
-      key: '3',
-      label: (
-        <div>
-          <Radio
-            value='Paypal'
-            checked={selectedPaymentMethod === 'Paypal'}
-            onChange={() => {
-              if (expandedPanel.includes('3')) {
-                setExpandedPanel([]);
-              } else {
-                setExpandedPanel(['3']);
-              }
-              setSelectedPaymentMethod('Paypal');
-            }}
-          >
-            Paypal
-          </Radio>
-        </div>
-      ),
-      children: <p>{text}</p>,
-      style: panelStyle
-    },
+    // {
+    //   key: '2',
+    //   label: (
+    //     <div>
+    //       <Radio
+    //         value='Credit/Debit Card'
+    //         checked={selectedPaymentMethod === 'Credit/Debit Card'}
+    //         onChange={() => {
+    //           if (expandedPanel.includes('2')) {
+    //             setExpandedPanel([]);
+    //           } else {
+    //             setExpandedPanel(['2']);
+    //           }
+    //           setSelectedPaymentMethod('Credit/Debit Card');
+    //         }}
+    //       >
+    //         Credit/Debit Card
+    //       </Radio>
+    //     </div>
+    //   ),
+    //   children: <p>{text}</p>,
+    //   style: panelStyle
+    // },
+    // {
+    //   key: '3',
+    //   label: (
+    //     <div>
+    //       <Radio
+    //         value='Paypal'
+    //         checked={selectedPaymentMethod === 'Paypal'}
+    //         onChange={() => {
+    //           if (expandedPanel.includes('3')) {
+    //             setExpandedPanel([]);
+    //           } else {
+    //             setExpandedPanel(['3']);
+    //           }
+    //           setSelectedPaymentMethod('Paypal');
+    //         }}
+    //       >
+    //         Paypal
+    //       </Radio>
+    //     </div>
+    //   ),
+    //   children: <p>{text}</p>,
+    //   style: panelStyle
+    // },
     {
       key: '4',
       label: (

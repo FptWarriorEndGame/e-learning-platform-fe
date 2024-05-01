@@ -59,8 +59,8 @@ const Header = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log("authStateGlobal", authStateGlobal)
-  }, [authStateGlobal])
+    console.log('authStateGlobal', authStateGlobal);
+  }, [authStateGlobal]);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const menubtnRef = useRef<HTMLSpanElement>(null);
@@ -150,8 +150,7 @@ const Header = () => {
     }
   ];
 
-  const notificationItems: MenuProps['items'] = [
-  ];
+  const notificationItems: MenuProps['items'] = [];
 
   const wishlistItems: MenuProps['items'] = [
     {
@@ -168,12 +167,12 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const handleOk = () => {
-    dispatch(resetAuthState())
+    dispatch(resetAuthState());
     dispatch(closeAuthModal());
   };
 
   const handleCancel = () => {
-    dispatch(resetAuthState())
+    dispatch(resetAuthState());
     dispatch(closeAuthModal());
   };
 
@@ -292,8 +291,13 @@ const Header = () => {
                 </Link>
               </li>
               <li className='header__nav-item'>
-                <DropDownMenu />
+                <Link to='/blog' className='block hover:opacity-50'>
+                  Blog
+                </Link>
               </li>
+              {/* <li className='header__nav-item'>
+                <DropDownMenu />
+              </li> */}
               <div className='overlay'></div>
 
               <div className='header__auth header__auth-mobile'>

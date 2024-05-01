@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import { RootState } from '../../../store/store';
 import { useGetSummaryReportsQuery, useGetTopUsersQuery, useGetTopOrdersQuery } from '../report.service';
 import { useGetAllBlogsQuery } from '../../site/client.service';
+import { useGetBlogsQuery } from '../Blog/blog.service';
 import { useGetCouponsQuery } from '../Coupons/coupon.service';
 import { selectPreviousDays, showChart } from '../report.slice';
 import './Dashboard.scss';
@@ -37,6 +38,8 @@ const Dashboard: React.FC = () => {
   const { data: topOrdersData } = useGetTopOrdersQuery();
 
   const { data: allBlogsData } = useGetAllBlogsQuery({});
+
+  const { data: allBlogsDataAdmin } = useGetBlogsQuery({ _limit: 999999 });
 
   const { data: couponData } = useGetCouponsQuery({});
 
@@ -111,7 +114,7 @@ const Dashboard: React.FC = () => {
                     options={[
                       { value: '7', label: 'Last 7 days' },
                       { value: '30', label: 'Last 30 days' },
-                      { value: '60', label: 'Last 60 days' },
+                      { value: '60', label: 'Last 60 days' }
                       // { value: 'all', label: 'All' }
                     ]}
                   />
@@ -141,9 +144,9 @@ const Dashboard: React.FC = () => {
                   <Statistic
                     className='dashboard__statistic-item'
                     valueStyle={statisticItemStyle}
-                    title='Conversation'
-                    value={`${summaryReportsData?.reports.conversions || 0}%`}
-                    prefix={<RetweetOutlined />}
+                    title='Total Posts'
+                    value={allBlogsDataAdmin?.blogs.length || 0}
+                    prefix={<ReadOutlined />}
                   />
                 </Col>
                 <Col md={8}>

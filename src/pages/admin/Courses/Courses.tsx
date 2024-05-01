@@ -155,7 +155,7 @@ const Courses = () => {
 
   const [params, setParams] = useState({
     _q: '',
-    _author: adminRole === UserRole.ADMIN ? 'all' : adminId,
+    _author: adminRole === UserRole.ADMIN  || adminRole === UserRole.EMPLOYEE ?  'all' : adminId,
     _category: '',
     _page: 1,
     _limit: 8
@@ -163,7 +163,7 @@ const Courses = () => {
 
   const [allCoursesParams, setAllCoursesParams] = useState({
     _q: '',
-    _author: adminRole === UserRole.ADMIN ? 'all' : adminId
+    _author: adminRole === UserRole.ADMIN || adminRole === UserRole.EMPLOYEE ? 'all' : adminId
   });
 
   const [courseData, setCourseData] = useState<DataCourseType[]>();

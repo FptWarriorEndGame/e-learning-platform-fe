@@ -274,7 +274,7 @@ const RouterHooks = () => {
             },
             {
               path: 'permission',
-              element: adminRole === UserRole.ADMIN ? <Permission /> : <Navigate to='/error' />
+              element: adminRole === UserRole.ADMIN || adminRole === UserRole.EMPLOYEE ? <Permission /> : <Navigate to='/error' />
             }
           ]
         },
@@ -283,7 +283,7 @@ const RouterHooks = () => {
           children: [
             {
               index: true,
-              element: adminRole === UserRole.ADMIN ? <Orders /> : <Navigate to='/error' />
+              element: adminRole === UserRole.ADMIN || adminRole === UserRole.EMPLOYEE ? <Orders /> : <Navigate to='/error' />
             }
           ]
         },
@@ -292,7 +292,7 @@ const RouterHooks = () => {
           children: [
             {
               index: true,
-              element: adminRole === UserRole.ADMIN ? <TransactionsPage /> : <Navigate to='/error' />
+              element: adminRole === UserRole.ADMIN || adminRole === UserRole.EMPLOYEE ? <TransactionsPage /> : <Navigate to='/error' />
             }
           ]
         },
@@ -311,7 +311,7 @@ const RouterHooks = () => {
             {
               index: true,
               path: 'list',
-              element: adminRole === UserRole.ADMIN ? <Feedbacks /> : <Navigate to='/error' />
+              element: adminRole === UserRole.ADMIN || adminRole === UserRole.EMPLOYEE ? <Feedbacks /> : <Navigate to='/error' />
             }
           ]
         },

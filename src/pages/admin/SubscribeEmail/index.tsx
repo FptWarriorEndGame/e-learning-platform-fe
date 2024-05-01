@@ -63,7 +63,7 @@ const SubscribeEmail = () => {
       <Table
         dataSource={filteredData}
         columns={columns}
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 10 }}
         scroll={{ x: 'min-content' }}
         loading={isFetchingSubscribe}
       />

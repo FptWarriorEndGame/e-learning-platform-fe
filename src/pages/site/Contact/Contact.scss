@@ -3,7 +3,8 @@
 
 .contact {
     margin-top: $header-height;
-    
+    padding: 8rem 0;
+    height: 80rem;
     &__title {
         @include h-style("h2");
     }

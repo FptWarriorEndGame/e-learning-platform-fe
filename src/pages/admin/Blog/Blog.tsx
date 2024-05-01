@@ -17,7 +17,7 @@ const { Option } = Select;
 
 const Blogs = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(999999);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [authorSearch, setAuthorSearch] = useState('');

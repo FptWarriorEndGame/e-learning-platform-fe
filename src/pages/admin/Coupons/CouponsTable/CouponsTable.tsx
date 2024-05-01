@@ -214,7 +214,7 @@ const CouponsTable: React.FC = () => {
   };
 
   return (
-    <div className='coupons-table'>
+    <div className='coupons-table mt-4'>
       <div className='search-bar-container'>
         <Button onClick={showCreateDrawer} type='primary' icon={<PlusOutlined />} className='add-coupon-type-button'>
           New Coupon

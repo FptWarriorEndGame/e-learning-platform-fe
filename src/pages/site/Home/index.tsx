@@ -91,7 +91,7 @@ const HomePage = () => {
   });
 
   const [userCoursesParams, setUserCoursesParams] = useState({
-    _limit: 4,
+    _limit: 999,
     _page: 1,
     userId: userId
   });
@@ -137,7 +137,7 @@ const HomePage = () => {
   const suggestedCourses = userSuggestedCoursesData?.suggestedCourses;
 
   // users courses
-  const usersCourses = userCoursesData?.courses;
+  const usersCourses = userCoursesData?.courses.filter((item) => item.isBought);
 
   // const popularCourses = data?.courses
   const popularCourses = popularCoursesData?.courses;

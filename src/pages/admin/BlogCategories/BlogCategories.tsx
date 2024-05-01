@@ -20,7 +20,7 @@ type ParamsType = {
 
 const BlogCategories = () => {
   const [params, setParams] = useState<ParamsType>({
-    _limit: 10,
+    _limit: 99999,
     _page: 1,
     _q: ''
   });
@@ -106,7 +106,7 @@ const BlogCategories = () => {
             </Select>
           </Space>
         </div>
-        <div className='blog-categories__content'>
+        <div className='blog-categories__content mt-4'>
           {isFetchingCategories ? (
             <Skeleton />
           ) : (
