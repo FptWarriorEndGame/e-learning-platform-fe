@@ -1,5 +1,6 @@
 import { IBase } from './base.type';
 import { ICategoryBlogs } from './categoryBlogs.type';
+import { IUser } from './user.type';
 
 export interface Blog extends IBase {
   _id: string;
@@ -11,7 +12,7 @@ export interface Blog extends IBase {
   readTime: string;
   datePublished: string;
   content: string;
-  userId: string;
+  userId: IUser;
   thumbnail: string;
   categoryId: ICategoryBlogs;
   __v: number;

@@ -110,7 +110,7 @@ const PagePost = () => {
                 <CustomCard
                   key={blog._id}
                   blogImg={blog.blogImg}
-                  author={blog.author}
+                  author={blog.userId?.name}
                   content={blog.content}
                   technology={blog.technology}
                   readTime={blog.createdAt ? calculateTimeSinceRead(new Date(blog.createdAt)) : 'Unknown'}

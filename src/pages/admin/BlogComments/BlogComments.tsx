@@ -96,7 +96,7 @@ const BlogComments = () => {
               New Blog Comments
             </Button>
             <Search
-              placeholder='Search categories'
+              placeholder='Search blog comments...'
               onSearch={onSearchHandler}
               style={{ width: 200 }}
               className='search-wrap'

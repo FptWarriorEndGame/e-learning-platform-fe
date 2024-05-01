@@ -29,7 +29,7 @@ export default function Blog() {
                 <div className='flex'>
                   <div className='flex mb-4 flex-col mr-12'>
                     <div>
-                      <div className='inline text-3xl'>{data?.blog.author}</div>
+                      <div className='inline text-3xl'>{data?.blog.userId?.name}</div>
                       <hr className='my-3' />
                     </div>
                   </div>
@@ -44,7 +44,7 @@ export default function Blog() {
                       <div className='blog_Avatar flex justify-between'>
                         <div className='blog_Avatar-user'>
                           <Avatar src={data?.blog.blogImg} className='w-16 h-16' />
-                          <div className='inline ml-3 text-3xl'>{data?.blog.author}</div>
+                          <div className='inline ml-3 text-3xl'>{data?.blog.userId?.name}</div>
                         </div>
                         {/* <div className='blog_Avatar-icon'>
                           <div className='bookOutLine inline mr-4'>

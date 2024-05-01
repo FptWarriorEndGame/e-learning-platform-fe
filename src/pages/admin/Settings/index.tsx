@@ -114,7 +114,7 @@ const Settings = () => {
                   name='role'
                   rules={[{ required: true, message: 'Please input your role!' }]}
                 >
-                  <Input placeholder='Enter your role' />
+                  <Input disabled placeholder='Enter your role' />
                 </Form.Item>
                 <Form.Item
                   className='setting-group-item'
@@ -122,7 +122,7 @@ const Settings = () => {
                   name='username'
                   rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                  <Input placeholder='Enter your username' />
+                  <Input disabled placeholder='Enter your username' />
                 </Form.Item>
               </div>
               <div className='setting-group'>
@@ -157,6 +157,7 @@ const Settings = () => {
                 rules={[{ required: true, message: 'Please select your language!' }]}
               >
                 <Select placeholder='Select a language'>
+                  <Option value='en'>Vietnamese</Option>
                   <Option value='en'>English</Option>
                   <Option value='es'>Spanish</Option>
                   <Option value='pt'>Portuguese</Option>

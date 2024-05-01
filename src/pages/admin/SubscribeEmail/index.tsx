@@ -28,14 +28,8 @@ const SubscribeEmail = () => {
       title: 'Created at',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: createdAt => transformDate(createdAt ? createdAt : new Date().toISOString()),
+      render: (createdAt: string | Date) => transformDate(createdAt ? createdAt : new Date().toISOString()),
     },
-    // {
-    //   title: 'Actions',
-    //   dataIndex: 'actions',
-    //   key: 'actions',
-    //   // render: createdAt => transformDate(createdAt ? createdAt : new Date().toISOString()),
-    // },
   ];
 
   return (

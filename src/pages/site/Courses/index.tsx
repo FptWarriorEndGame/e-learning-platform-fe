@@ -389,19 +389,19 @@ const Courses = () => {
                     <Radio.Group onChange={filterRatingsHandler} value={filterParams._avgRatings}>
                       <Space direction='vertical'>
                         <Radio value={4.5}>
-                          <Rate allowHalf defaultValue={4.5} />
+                          <Rate allowHalf disabled defaultValue={4.5} />
                           <span className='ml-2 font-normal'> 4.5 & up</span>
                         </Radio>
                         <Radio value={4.0}>
-                          <Rate allowHalf defaultValue={4.0} />
+                          <Rate allowHalf disabled defaultValue={4.0} />
                           <span className='ml-2 font-normal'> 4.0 & up</span>
                         </Radio>
                         <Radio value={3.5}>
-                          <Rate allowHalf defaultValue={3.5} />
+                          <Rate allowHalf disabled defaultValue={3.5} />
                           <span className='ml-2 font-normal'> 3.5 & up</span>
                         </Radio>
                         <Radio value={3}>
-                          <Rate allowHalf defaultValue={3} />
+                          <Rate allowHalf disabled defaultValue={3} />
                           <span className='ml-2 font-normal'> 3 & up</span>
                         </Radio>
                       </Space>
