@@ -37,7 +37,7 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
     if (props.courseId) {
       const data = {
         name: formData.name,
-        access: formData.access,
+        access: 'PAID',
         courseId: props.courseId,
         description: formData.description
       };
@@ -85,18 +85,6 @@ const AddSection: React.FC<AddSectionProps> = (props) => {
                 <Col span={24}>
                   <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter user name' }]}>
                     <Input placeholder='Please enter the section name here' />
-                  </Form.Item>
-                </Col>
-                <Col span={24}>
-                  <Form.Item name='access' label='Access' rules={[{ required: true, message: 'Please enter url' }]}>
-                    <Radio.Group onChange={onChange} value={value}>
-                      <Space direction='vertical'>
-                        <Radio value='DRAFT'>DRAFT</Radio>
-                        <Radio value='SOON'>SOON</Radio>
-                        <Radio value='FREE'>FREE</Radio>
-                        <Radio value='PAID'>PAID</Radio>
-                      </Space>
-                    </Radio.Group>
                   </Form.Item>
                 </Col>
               </Row>

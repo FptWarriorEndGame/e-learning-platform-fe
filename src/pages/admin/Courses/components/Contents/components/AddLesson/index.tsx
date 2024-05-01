@@ -206,7 +206,7 @@ const AddLesson: React.FC<AddLessonProps> = ({sectionId}) => {
                     <Radio.Group onChange={onuploadMethodChange} value={uploadMethod}>
                       <Radio value='linkYoutube'>Link</Radio>
                       <Radio value='uploadVideo'>Upload Video</Radio>
-                      <Radio value='uploadPdf'>Upload PDF</Radio>
+                      {/* <Radio value='uploadPdf'>Upload PDF</Radio> */}
                     </Radio.Group>
                   </Form.Item>
                   {uploadMethod === 'linkYoutube' && (
@@ -261,8 +261,6 @@ const AddLesson: React.FC<AddLessonProps> = ({sectionId}) => {
                   <Form.Item name='access' label='Access' rules={[{ required: true, message: 'Please enter url' }]}>
                     <Radio.Group onChange={onChange} value={value}>
                       <Space direction='vertical'>
-                        <Radio value='DRAFT'>DRAFT</Radio>
-                        <Radio value='SOON'>SOON</Radio>
                         <Radio value='FREE'>FREE</Radio>
                         <Radio value='PAID'>PAID</Radio>
                       </Space>
