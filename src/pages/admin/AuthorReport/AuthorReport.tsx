@@ -33,6 +33,7 @@ import { selectPreviousDays, showChart } from '../report.slice';
 import Chart from '../Dashboard/components/Chart';
 import { DatePicker, Space } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
+import moment from 'moment';
 const { RangePicker } = DatePicker;
 const statisticItemStyle = {};
 enum Access {
@@ -116,7 +117,8 @@ const AuthorReport = () => {
       dataIndex: 'createdAt',
       key: 'createdAt',
       ellipsis: true,
-      width: 300
+      width: 300,
+      render: (createdAt: string) => moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
     },
     {
       title: 'Total Earning ($)',
@@ -191,7 +193,7 @@ const AuthorReport = () => {
         />
       </div>
       {/* Filter section */}
-      <div className='filter-section'>
+      {/* <div className='filter-section'>
         <Form layout='inline' form={form} className='bg-white p-4'>
           <Col span='12' className='mb-4'>
             <Form.Item className='mb-2' name='rangeDate' label='Select Range of Date'>
@@ -209,7 +211,7 @@ const AuthorReport = () => {
             </Form.Item>
           </Col>
         </Form>
-      </div>
+      </div> */}
 
       {/* Author report content */}
       <div className='author-report-content mt-8'>

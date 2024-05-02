@@ -281,7 +281,7 @@ const SideBar = () => {
     ])) as MenuItem,
     (isViewReportModule && 
       getItem('Reports Center', 'reports', <BarChartOutlined />, [
-        (adminRole === UserRole.ADMIN || adminRole === UserRole.EMPLOYEE && isViewUserProgress && getItem('User Progress', 'reports/users-progress')),
+        (isViewUserProgress && getItem('User Progress', 'reports/users-progress')),
         (isViewCourseInsight && getItem('Course Insights', 'reports/course-insights')),
         (isViewReviewCenter && getItem('Review center', 'reports/reviews-center'))
       ])) as MenuItem,

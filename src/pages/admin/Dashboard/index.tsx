@@ -311,7 +311,7 @@ const Dashboard: React.FC = () => {
                         </h4>
                         <div className='latest-blogs__item-meta' style={{ fontSize: '14px' }}>
                           <span className='latest-blogs__item-author'>
-                            <UserOutlined /> {blog.author}
+                            <UserOutlined /> {blog?.userId?.name}
                           </span>
                           <span className='latest-blogs__item-date' style={{ marginLeft: '15px' }}>
                             <CalendarOutlined /> {moment(blog.datePublished).format('DD/MM/YYYY')}
